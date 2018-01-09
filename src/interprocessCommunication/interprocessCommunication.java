@@ -1,4 +1,4 @@
-package interproccessCommunication;
+package interprocessCommunication;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileWriter;
-import processesmanagment.ProcessesManagement;
+import processesmanagement.ProcessesManagement;
 import syncMethod.Lock;
-import processesmanagment.Process;
+import processesmanagement.Process;
 
 
 public class interprocessCommunication
