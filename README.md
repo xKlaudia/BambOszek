@@ -3,7 +3,7 @@ BambOSzki
 Operating System Project.
 
 Credits:<br />
-Processor Management: [Emil Ossowski](https://github.com/BenekAtomowy) <br />
+Processor Dispatching: [Emil Ossowski](https://github.com/BenekAtomowy) <br />
 Synchronization Methods: [Remigiusz Wróblewski](https://github.com/remeq7)<br />
 Memory Management: [Paweł Świerczyński](https://github.com/pawelswierczynski)<br />
 Process Management: [Jakub Szczepaniak](https://github.com/Szczepcio)<br />
