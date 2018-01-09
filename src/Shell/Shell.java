@@ -12,7 +12,7 @@ import fileSystem.FAT;
 	public  FAT fat;	
 		
 		
-		public Shell() {
+		public Shell() throws Exception {
 			this.processManagement=new ProcessesManagement(virtualMemory);
 			this.fat=new FAT();
 		Dzialaj();	
