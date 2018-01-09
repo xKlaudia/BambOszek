@@ -12,13 +12,13 @@ import fileSystem.FAT;
 	public  FAT fat;	
 		
 		
-		public Shell() {
+		public Shell() throws Exception {
 			this.processManagement=new ProcessesManagement(virtualMemory);
 			this.fat=new FAT();
 		Dzialaj();	
 		}
 	public static boolean d=true;
-		public void Dzialaj() {
+		public void Dzialaj() throws Exception {
 		
 			while(d) {
 			String komenda; 
@@ -43,7 +43,7 @@ import fileSystem.FAT;
 		
 		 case("cf"):{
 			 if(arr.length>2) {
-				String content;
+				String content = "";
 				for(int i=2;i<arr.length;i++) { content=content+' '+arr[i];}
 				 fat.CreateNewFile(arr[1],content);} 
 			if(arr.length==2) {fat.CreateEmptyFile(arr[1]);} 
@@ -69,7 +69,7 @@ import fileSystem.FAT;
 		 //shell
 		 
 		 case("echo"):{
-			 String content;
+			 String content = "";
 				for(int i=2;i<arr.length;i++) { content=content+' '+arr[i];}
 				System.out.println(content);
 		 }
