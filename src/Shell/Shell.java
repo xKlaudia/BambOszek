@@ -1,12 +1,9 @@
 package Shell;
 
-	import java.util.Scanner;
-        import processesmanagement.ProcessesManagement;
-        import memoryManagement.VirtualMemory;
-        import fileSystem.FAT;
-
-import fileSystem.FAT;
+import java.util.Scanner;
 import processesmanagement.ProcessesManagement;
+import memoryManagement.VirtualMemory;
+import fileSystem.FAT;
 
 	public class Shell {
 		//TUTAJ MUSZA SIE ZNALEZC OBIEKTY KLAS DO WYWOLYWANIA FUNKCJI
