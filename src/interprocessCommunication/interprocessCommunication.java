@@ -29,11 +29,11 @@ public class interprocessCommunication
 
     //-------------------------KONSTRUKTORY------------------------------------
 
-    public interprocessCommunication(Lock lock)
+    public interprocessCommunication()
     {
         //this.lock = lock;
         //processesmanagment = new ProcessesManagement();
-        lock = new Lock(process.GetName());
+        this.lock = new Lock(process.GetName());
     }
 
     //-------------------------FUNKCJE-----------------------------------------
