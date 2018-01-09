@@ -2,6 +2,9 @@ package Shell;
 
 	import java.util.Scanner;
 
+import fileSystem.FAT;
+import processesmanagement.ProcessesManagement;
+
 	public class Shell {
 		//TUTAJ MUSZA SIE ZNALEZC OBIEKTY KLAS DO WYWOLYWANIA FUNKCJI
 	public	ProcessesManagement processManagement;
