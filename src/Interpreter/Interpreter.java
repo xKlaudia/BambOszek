@@ -264,7 +264,7 @@ public class Interpreter {
 
         case "JX": // Skok do rozkazu, je�li rejestr != 0
             if(GetValue(P1)!=0) {
-                CMDCounter = Integer.parseInt(P2) + Running.GetPCB().getCommandCounter();
+                CMDCounter = Integer.parseInt(P2) + Running.GetCommandCounter();
             }
             break;
 
@@ -347,13 +347,13 @@ public class Interpreter {
 
 //-------------------------------------------------------------------------------------------------------------------
 
-    private void ReturnToPCB(PCB Running) {
-            Running.setA(procesor.Get_A());
-            Running.setB(procesor.Get_B());
-            Running.setC(procesor.Get_C());
-            Running.setD(procesor.Get_D());
+    private void ReturnToPCB(Process Running) {
+            Running.SetRegA(procesor.Get_A());
+            Running.SetRegB(procesor.Get_B());
+            Running.SetRegC(procesor.Get_C());
+            Running.SetRegD(procesor.Get_D());
 
-            Running.setCommandCounter(CMDCounter);
+            Running.SetCommandCounter(CMDCounter);
     }
 
 //-------------------------------------------------------------------------------------------------------------------
