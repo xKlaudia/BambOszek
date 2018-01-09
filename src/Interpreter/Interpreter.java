@@ -23,18 +23,19 @@ public class Interpreter {
     private ProcessesManagement manager;
     private FAT filesystem;
     private PCB PCB;            //Zmienna do kopii PCB procesu
+    private Process process;
     private int CMDCounter;     //Licznik rozkazu do czytania z pami�ci
     private int CCKCounter;     //licznik do sprawdzania czy program się skończył
 
 //-------------------------------------------------------------------------------------------------------------------
 
-    public Interpreter(CPUDispatcher processor, VirtualMemory memory, interprocessCommunication communication, ProcessesManagement manager, FAT filesystem, PCB PCB, int CMDCounter, int CCKCounter) {
+    public Interpreter(CPUDispatcher processor, VirtualMemory memory, interprocessCommunication communication, ProcessesManagement manager, FAT filesystem, Process process, int CMDCounter, int CCKCounter) {
         this.processor = processor;
         this.memory = memory;
         this.communication = communication;
         this.manager = manager;
         this.filesystem = filesystem;
-        this.PCB = PCB;
+        this.process = process;
         this.CMDCounter = CMDCounter;
         this.CCKCounter = CCKCounter;
     }
@@ -51,7 +52,7 @@ public class Interpreter {
 //-------------------------------------------------------------------------------------------------------------------
 
     public int RUN(Process Running) throws Exception {
-        this.PCB=Running.GetPCB();
+        this.process=Running;
         interprocessCommunication communication = new interprocessCommunication();
 
         CCKCounter = 0;
@@ -73,7 +74,7 @@ public class Interpreter {
         Instruction = GetInstruction(Running.GetPCB());   //Zmienna pomocnicza do �adowania instrukcji z pami�ci
         Execute(Instruction,Running);
 
-        ReturnToPCB(Running.GetPCB());
+        ReturnToPCB(Running);
         //Running.SetPCB();
         return 0;
     }
