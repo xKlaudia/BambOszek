@@ -16,7 +16,7 @@ import processesmanagement.Process;
 public class DispatcherTest {
     public static void test() throws InterruptedException, IOException {
       
-        CPUDispatcher procesor = new CPUDispatcher();
+       /* CPUDispatcher procesor = new CPUDispatcher();
         Process proc = new Process();
         Process proc1 = new Process();
         Process proc2 = new Process();
@@ -48,6 +48,6 @@ public class DispatcherTest {
         queues.addProcess(proc8);
         
         procesor.startDispatcher();
-      
+      */
         }
 }
