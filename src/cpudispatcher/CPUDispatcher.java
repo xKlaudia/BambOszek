@@ -35,7 +35,8 @@ public class CPUDispatcher {
                     //Thread.sleep(1000);
                     exec.SetState(4);
                     System.out.println("Zmieniono stan na " + +exec.GetState());
-                     System.out.println("---------------------------------------------");
+                    System.out.println("---------------------------------------------");
+                     
                     queues.aging();
                     System.out.println("---------------------------------------------");
                     queues.printPriorities();

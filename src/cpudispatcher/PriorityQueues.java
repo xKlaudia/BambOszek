@@ -64,11 +64,12 @@ public class PriorityQueues {
             while(queues[i].isEmpty()!=true){
                 Process buff;
                 buff  = (Process) queues[i].remove();
+                buff.SetHowLongWaiting(buff.GetHowLongWaiting()+1);
             
-                if (buff.GetCurrentPriority() == 31)
+                if (buff.GetCurrentPriority() >= 31)
                     buff.SetCurrentPriority(31);
                 else
-                    buff.SetCurrentPriority(buff.GetCurrentPriority()+1);
+                    buff.SetCurrentPriority(buff.GetCurrentPriority()+buff.GetHowLongWaiting());
             
                 System.out.println("Postarzono " + buff.GetName() + " z " + (buff.GetBasePriority()) + " na " + buff.GetCurrentPriority());
                 queues[buff.GetCurrentPriority()].add(buff);
