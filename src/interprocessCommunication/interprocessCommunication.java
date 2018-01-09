@@ -25,15 +25,15 @@ public class interprocessCommunication
     //-------------------------ZMIENNE-----------------------------------------
 
     //private ProcessesManagement processesmanagment;
-    //private Lock lock;
+    private Lock lock;
 
     //-------------------------KONSTRUKTORY------------------------------------
 
-    public interprocessCommunication(/*Process process, *//*Lock lock*/)
+    public interprocessCommunication(Lock lock)
     {
         //this.lock = lock;
         //processesmanagment = new ProcessesManagement();
-        //lock = new Lock(process.GetName());
+        lock = new Lock(process.GetName());
     }
 
     //-------------------------FUNKCJE-----------------------------------------
@@ -42,7 +42,7 @@ public class interprocessCommunication
     public void write(String message, Process process)
     {
 
-       // lock.lock(process);
+       lock.lock(process);
         try
         {
             File file = new File(FILE_NAME);
@@ -71,14 +71,14 @@ public class interprocessCommunication
         {
             System.out.println("Error: " + ex.getMessage());
         }
-        //lock.unlock(process);
+        lock.unlock(process);
     }
 
     //zczytuje wiadomość z pliku
     public String read(Process process)
     {
 
-        //lock.lock(process);
+        lock.lock(process);
         String message = "";
         try
         {
@@ -93,7 +93,7 @@ public class interprocessCommunication
             }
             reader.close();
             out.close();
-            //lock.unlock(process);
+            lock.unlock(process);
 
             if(messages_array.isEmpty())
             {
