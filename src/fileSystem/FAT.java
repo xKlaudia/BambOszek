@@ -22,7 +22,7 @@ public class FAT {
 	private boolean[] FreeBlocks;
 	private Vector<File> mainCatalog;
 	
-	FAT() {
+	public FAT() {
 		try {
 			disk = new char[DISK_SIZE];
 			FAT = new int[BLOCKS];

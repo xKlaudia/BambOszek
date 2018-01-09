@@ -9,7 +9,7 @@ package Shell;
 		//TUTAJ MUSZA SIE ZNALEZC OBIEKTY KLAS DO WYWOLYWANIA FUNKCJI
 	public	ProcessesManagement processManagement;
         public  VirtualMemory virtualMemory;
-	public FAT fat;	
+	public  FAT fat;	
 		
 		
 		public Shell() {
