@@ -1,6 +1,9 @@
 package Shell;
 
 	import java.util.Scanner;
+        import processesmanagement.ProcessesManagement;
+        import memoryManagement.VirtualMemory;
+        import fileSystem.FAT;
 
 import fileSystem.FAT;
 import processesmanagement.ProcessesManagement;
@@ -8,11 +11,12 @@ import processesmanagement.ProcessesManagement;
 	public class Shell {
 		//TUTAJ MUSZA SIE ZNALEZC OBIEKTY KLAS DO WYWOLYWANIA FUNKCJI
 	public	ProcessesManagement processManagement;
-	public FAT fat;	
+        public  VirtualMemory virtualMemory;
+	public  FAT fat;	
 		
 		
 		public Shell() {
-			this.processManagement=new ProcessesManagement();
+			this.processManagement=new ProcessesManagement(virtualMemory);
 			this.fat=new FAT();
 		Dzialaj();	
 		}
@@ -22,7 +26,7 @@ import processesmanagement.ProcessesManagement;
 			while(d) {
 			String komenda; 
 			System.out.print("$>");
-		    Scanner odczyt = new Scanner(System.in); //obiekt do odebrania danych od u¿ytkownika
+		    Scanner odczyt = new Scanner(System.in); //obiekt do odebrania danych od uï¿½ytkownika
 		 
 		      komenda = odczyt.nextLine();
 		      String[] arr = komenda.split(" ");
