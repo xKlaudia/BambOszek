@@ -63,7 +63,7 @@ import fileSystem.FAT;
 		 
 		 case("pn"):{processManagement.getProcess(arr[1]);break;} // proces po nazwie
 		
-		 case("kill"):{int id = Integer.parseInt(arr[1]); processManagement.DeleteProcessWithID(arr[1]);break;} //zabija proces po id
+		 case("kill"):{int id = Integer.parseInt(arr[1]); processManagement.DeleteProcessWithID(id);break;} //zabija proces po id
 		 
 		 case("nice"):{break;} //zmiana priorytetu procesu
 		 //shell
