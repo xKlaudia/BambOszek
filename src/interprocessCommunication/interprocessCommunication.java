@@ -25,7 +25,7 @@ public class interprocessCommunication
     //-------------------------ZMIENNE-----------------------------------------
 
     //private ProcessesManagement processesmanagment;
-    private Lock lock;
+    //private Lock lock;
 
     //-------------------------KONSTRUKTORY------------------------------------
 
@@ -33,7 +33,7 @@ public class interprocessCommunication
     {
         //this.lock = lock;
         //processesmanagment = new ProcessesManagement();
-        this.lock = new Lock(process.GetName());
+        //this.lock = new Lock(process.GetName())
     }
 
     //-------------------------FUNKCJE-----------------------------------------
