@@ -1,10 +1,12 @@
+package fileSystem;
+
 import syncMethod.Lock;
 
 public class File {
 	private final int BLOCK_ERROR = -1;
 	
 	private String name, extension;
-	private int firstBlock, nextBlock, size;
+	private int firstBlock, size;
 	
 	protected Lock lock;
 	
@@ -29,7 +31,6 @@ public class File {
 	protected File() {
 		this.name = "#";
 		this.firstBlock = -1;
-		this.nextBlock = -1;
 		this.size = -1;
 	}
 	
@@ -38,15 +39,10 @@ public class File {
 		this.extension = file.extension;
 		this.size = file.size;
 		this.firstBlock = file.firstBlock;
-		this.nextBlock = file.nextBlock;
 	}
 	
 	protected int GetFirstBlock() {
 		return this.firstBlock;
-	}
-	
-	protected int GetNextBlock() {
-		return this.nextBlock;
 	}
 	
 	protected int SetFirstBlock(int firstBlock) {
