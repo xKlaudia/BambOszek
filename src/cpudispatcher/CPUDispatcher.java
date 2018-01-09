@@ -10,7 +10,7 @@ package cpudispatcher;
  * @author Osa
  */
 
-import processesmanagment.Process;
+import processesmanagement.Process;
 
         
 public class CPUDispatcher {
