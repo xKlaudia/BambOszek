@@ -6,7 +6,7 @@
 package cpudispatcher;
 
 import static cpudispatcher.CPUDispatcher.queues;
-import processesmanagment.Process;
+import processesmanagement.Process;
 
 /**
  *

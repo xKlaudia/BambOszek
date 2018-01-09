@@ -7,7 +7,7 @@ package cpudispatcher;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import processesmanagment.Process;
+import processesmanagement.Process;
 
 /**
  *
