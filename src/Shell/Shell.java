@@ -5,6 +5,9 @@ package Shell;
         import memoryManagement.VirtualMemory;
         import fileSystem.FAT;
 
+import fileSystem.FAT;
+import processesmanagement.ProcessesManagement;
+
 	public class Shell {
 		//TUTAJ MUSZA SIE ZNALEZC OBIEKTY KLAS DO WYWOLYWANIA FUNKCJI
 	public	ProcessesManagement processManagement;

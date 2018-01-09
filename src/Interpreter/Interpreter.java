@@ -55,12 +55,12 @@ public class Interpreter {
         interprocessCommunication communication = new interprocessCommunication();
 
         CCKCounter = 0;
-        CMDCounter = Running.GetPCB().getCommandCounter(); //Pobieranie licznika rozkar�w
+        CMDCounter = Running.GetCommandCounter(); //Pobieranie licznika rozkar�w
 
-        this.Reg_A = Running.GetPCB().getA(); //Pobieranie stanu rejestru A
-        this.Reg_B = Running.GetPCB().getB(); //Pobieranie stanu rejestru B
-        this.Reg_C = Running.GetPCB().getC();//Pobieranie stanu rejestru C
-        this.Reg_D = Running.GetPCB().getD();//Pobieranie stanu rejestru D 
+        this.Reg_A = Running.GetRegA(); //Pobieranie stanu rejestru A
+        this.Reg_B = Running.GetRegB(); //Pobieranie stanu rejestru B
+        this.Reg_C = Running.GetRegC();//Pobieranie stanu rejestru C
+        this.Reg_D = Running.GetRegD();//Pobieranie stanu rejestru D 
 
         
         procesor.Set_A(Reg_A);          //Ustawianie wartosci rejestru A do pami�ci

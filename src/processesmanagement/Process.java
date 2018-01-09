@@ -211,5 +211,15 @@ public class Process {
 			
 		pcb.D = reg;
 	}
+        
+        public int GetCommandCounter() {
+			
+		return pcb.commandCounter;
+	}
+		
+	public void SetCommandCounter(int licznik) {
+			
+		pcb.commandCounter = licznik;
+	}
 
 }
