@@ -319,8 +319,8 @@ public class Interpreter {
 
         case "XC": // -- tworzenie procesu (P1,P2);
             //if(manager.createprocess(P1,P2)==1) {
-            memory.loadProcess(P1, P2, Integer.getInteger(P3));
-            manager.NewProcess_XC(P1);
+            //memory.loadProcess(P1, P2, Integer.getInteger(P3));
+            manager.NewProcess_XC(P1, Integer.getInteger(P2));
             //}
             //else {
             //    Running.Setstan(2);
