@@ -2,15 +2,17 @@ package Shell;
 
 	import java.util.Scanner;
         import processesmanagement.ProcessesManagement;
+        import memoryManagement.VirtualMemory;
 
 	public class Shell {
 		//TUTAJ MUSZA SIE ZNALEZC OBIEKTY KLAS DO WYWOLYWANIA FUNKCJI
 	public	ProcessesManagement processManagement;
+        public  VirtualMemory virtualMemory;
 	public FAT fat;	
 		
 		
 		public Shell() {
-			this.processManagement=new ProcessesManagement();
+			this.processManagement=new ProcessesManagement(virtualMemory);
 			this.fat=new FAT();
 		Dzialaj();	
 		}
