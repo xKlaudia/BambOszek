@@ -209,7 +209,7 @@ public class FAT {
 	/* zwraca czy nazwa jest poprawna */
 	private boolean CheckFileName(String input) {
 		/* format nazwy: nazwa.txt, gdzie nazwa max. 8 znakow */
-		String pattern = "^[a-zA-Z0-9]{1,8}[.]txt";
+		String pattern = "^[a-zA-Z0-9]{1,8}";
 		Pattern p = Pattern.compile(pattern);
 		Matcher matcher = p.matcher(input);
 		boolean matches = matcher.matches();
@@ -310,6 +310,7 @@ public class FAT {
 		}
 		return firstBlock;
 	}
+	
 	private void RefreshSize(String fullName) throws Exception {
 		if(!DoesFileExist(fullName)) throw new Exception("Brak pliku");
 		else {
