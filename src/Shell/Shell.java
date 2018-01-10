@@ -41,16 +41,18 @@ import fileSystem.FAT;
 		 
 		 case("ls"):{ break;} //wyswietla zawartosc katalogu
 		*/
-		 case("cf"):{
+		 case("cf"):{if(arr[1]!=null) {
 			 if(arr.length>2) {
 				String content = "";
 				for(int i=2;i<arr.length;i++) { content=content+' '+arr[i];}
 				 fat.CreateNewFile(arr[1],content);
 				//System.out.println("utworzono plik o nazwie: "+arr[1]+ "i zawartosci"+ content); 
 			 } 
-			if(arr.length==2) {fat.CreateEmptyFile(arr[1]);
+			if(arr.length==2) {if(arr[1]!=null) {
+				fat.CreateEmptyFile(arr[1]);
+			}
 			//System.out.println("utworzono plik o nazwie: "+arr[1]);
-			} 
+			} }
 				 break;} //utworz plik o nazwie
 		
 		 case("find"):{if(arr[1]!=null) {
