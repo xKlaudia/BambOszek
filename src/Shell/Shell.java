@@ -1,16 +1,19 @@
 package Shell;
 
 import java.util.Scanner;
+
+import processesmanagement.Process;
 import processesmanagement.ProcessesManagement;
 import memoryManagement.VirtualMemory;
 import fileSystem.FAT;
+import Interpreter.Interpreter;
 
 	public class Shell {
 		//TUTAJ MUSZA SIE ZNALEZC OBIEKTY KLAS DO WYWOLYWANIA FUNKCJI
 	public	ProcessesManagement processManagement;
         public  VirtualMemory virtualMemory;
 	public  FAT fat;	
-		
+		public Interpreter interpreter;
 		
 		public Shell() throws Exception {
 			this.processManagement=new ProcessesManagement(virtualMemory);
@@ -54,10 +57,16 @@ import fileSystem.FAT;
 			//System.out.println("utworzono plik o nazwie: "+arr[1]);
 			} }
 				 break;} //utworz plik o nazwie
-		
+		 	case("go"):{
+		 		
+		 	//	interpreter.RUN(processManagement.);
+			 
+			 break;
+		 	}
 		 case("find"):{if(arr[1]!=null) {
 			 fat.DoesFileExist(arr[1]);
 		 }
+		 
 		// System.out.println("sprawdzam plik o nazwie: "+arr[1]+" istnieje");
 		 break;} //sprawdz czy plik instnieje
 		
@@ -74,7 +83,7 @@ import fileSystem.FAT;
 		 break;} //usuniecie pliku
 		 //case("cp"):{System.out.println(komenda); break;} //kopiowanie pliku
 		 //procesy
-		 case("pd"):{
+		 case("df"):{
 			 fat.PrintDisk();
 		 //System.out.println("wyswietlanie dysku: ");
 		 break;}
