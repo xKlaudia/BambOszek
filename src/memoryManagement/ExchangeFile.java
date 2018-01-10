@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 
 public class ExchangeFile {
-    public ExchangeFile() throws IOException {
+    public void makeExchangeFile() throws IOException {
         PrintWriter printWriter = new PrintWriter("exchange_file.txt", "UTF-8");
         printWriter.close();
     }
