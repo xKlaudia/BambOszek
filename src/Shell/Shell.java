@@ -33,39 +33,72 @@ import fileSystem.FAT;
 		     //}
 		 switch(arr[0]) {
 		 //katalogi
-		 case("cd"):{break;} //zmiana katalogu
+		/* case("cd"):{break;} //zmiana katalogu
 		 
 		 case("mkdir"):{break;} //utworz katalog
 		 
 		 case("rmdir"):{break;}//usun katalog
 		 
 		 case("ls"):{ break;} //wyswietla zawartosc katalogu
-		
+		*/
 		 case("cf"):{
 			 if(arr.length>2) {
 				String content = "";
 				for(int i=2;i<arr.length;i++) { content=content+' '+arr[i];}
-				 fat.CreateNewFile(arr[1],content);} 
-			if(arr.length==2) {fat.CreateEmptyFile(arr[1]);} 
+				 fat.CreateNewFile(arr[1],content);
+				//System.out.println("utworzono plik o nazwie: "+arr[1]+ "i zawartosci"+ content); 
+			 } 
+			if(arr.length==2) {fat.CreateEmptyFile(arr[1]);
+			//System.out.println("utworzono plik o nazwie: "+arr[1]);
+			} 
 				 break;} //utworz plik o nazwie
 		
-		 case("find"):{fat.DoesFileExist(arr[1]);break;} //sprawdz czy plik instnieje
+		 case("find"):{if(arr[1]!=null) {
+			 fat.DoesFileExist(arr[1]);
+		 }
+		// System.out.println("sprawdzam plik o nazwie: "+arr[1]+" istnieje");
+		 break;} //sprawdz czy plik instnieje
 		
-		 case("cat"):{fat.PrintFilesContent(arr[1]);break;} //wypisz zawartosc pliku
+		 case("cat"):{
+			 if(arr[1]!=null) {
+			 fat.PrintFilesContent(arr[1]);
+		 System.out.println("wyswietlam zawartosc pliku o nazwie: "+arr[1]);}
+		 break;} //wypisz zawartosc pliku
 		 
-		 case("rm"):{fat.DeleteFile(arr[2]);break;} //usuniecie pliku
+		 case("rm"):{if(arr[1]!=null) {
+			 fat.DeleteFile(arr[1]);
+		 System.out.println("usuwam plik o nazwie: "+arr[1]);}
+		 break;} //usuniecie pliku
 		 //case("cp"):{System.out.println(komenda); break;} //kopiowanie pliku
 		 //procesy
 		
-		 case("ps"):{processManagement.printProcessListInformations();break;} //wyswietla procesy
+		 case("ps"):{processManagement.printProcessListInformations();
+		 System.out.println("wyswietlam liste procesow");
+		 break;} //wyswietla procesy
 		 
-		 case("pi"):{int id = Integer.parseInt(arr[1]);processManagement.printProcessInformations(id);break;} //informacje o procesie po id
+		 case("pi"):{if(arr[1]!=null) {
+			 int id = Integer.parseInt(arr[1]);processManagement.printProcessInformations(id);
+		 System.out.println("dane procesu o id: "+id);}
+		 break;} //informacje o procesie po id
 		 
-		 case("pn"):{processManagement.getProcess(arr[1]);break;} // proces po nazwie
+		 case("pn"):{if(arr[1]!=null) {
+			 processManagement.getProcess(arr[1]);
+		 System.out.println("dane procesu o nazwie: "+arr[1]);}
+		 break;} // proces po nazwie
 		
-		 case("kill"):{int id = Integer.parseInt(arr[1]); processManagement.DeleteProcessWithID(id);break;} //zabija proces po id
+		 case("kill"):{
+			 if(arr[1]!=null) {
+			 int id = Integer.parseInt(arr[1]); processManagement.DeleteProcessWithID(id);
+		 System.out.println("usuniecie procesu o nazwie: "+arr[1]);
+			 }
+		 break;} //zabija proces po id
 		 
-		 case("nice"):{break;} //zmiana priorytetu procesu
+		 case("nice"):{if(arr[1]!=null) {
+			 int id = Integer.parseInt(arr[1]);
+			 int priorytet = Integer.parseInt(arr[2]);
+			 processManagement.SetCurrentPririty(id, priorytet);
+			 System.out.println("zmiana priorytetu procesu o nazwie: "+arr[1]);}
+			 break;} //zmiana priorytetu procesu
 		 //shell
 		 
 		 case("echo"):{
