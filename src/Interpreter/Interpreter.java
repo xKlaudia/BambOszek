@@ -82,7 +82,7 @@ public class Interpreter {
 //-------------------------------------------------------------------------------------------------------------------
 
     void Execute(String Instruction, Process Running) throws Exception {
-        int x = 0;  //takie co� do sprawdzania czy by�a spacja
+        int x = 0;  //takie cos do sprawdzania czy byla spacja
         int i = 1;  //licznik do podzialu rozkazu na segmenty
         String CMD = "";
         String P1 = "";
@@ -165,7 +165,7 @@ public class Interpreter {
 //-----------------------------------------------------------------------   ARYTMETYKA
 
         switch (CMD) {
-        case "AD": // Dodawanie warto�ci
+        case "AD": // Dodawanie wartosci
             if (What) {
                 procesor.SetValue(P1, GetValue(P1) + GetValue(P2));
             } else {
@@ -173,7 +173,7 @@ public class Interpreter {
             }
             break;
 
-        case "SB": // Odejmowanie warto�ci
+        case "SB": // Odejmowanie wartosci
             if (What) {
                 procesor.SetValue(P1, GetValue(P1) - GetValue(P2));
             } else {
@@ -181,7 +181,7 @@ public class Interpreter {
             }
             break;
 
-        case "ML": // Mno�enie warto�ci
+        case "ML": // Mnozenie wartosci
             if (What) {
                 procesor.SetValue(P1, GetValue(P1) * GetValue(P2));
             } else {
@@ -189,7 +189,7 @@ public class Interpreter {
             }
             break;
 
-        case "MV": // Umieszczenie warto�ci
+        case "MV": // Umieszczenie wartosci
             if (What) {
                 procesor.SetValue(P1, GetValue(P2));
             } else {
