@@ -5,14 +5,13 @@ import syncMethod.Lock;
 public class File {
 	private final int BLOCK_ERROR = -1;
 	
-	private String name, extension;
+	private String name;
 	private int firstBlock, size;
 	
 	protected Lock lock;
 	
-	File(String fullName, int firstBlock, int size) throws Exception {
-		this.name = fullName.substring(0, fullName.length()-4);
-		this.extension = fullName.substring(fullName.length()-3, fullName.length());
+	File(String name, int firstBlock, int size) throws Exception {
+		this.name = name;
 		if(firstBlock < 0 || firstBlock > (FAT.BLOCKS-1)) {
 			throw new Exception("Niepoprawny nr bloku");
 		}
@@ -36,7 +35,6 @@ public class File {
 	
 	protected File(File file) {
 		this.name = file.name;
-		this.extension = file.extension;
 		this.size = file.size;
 		this.firstBlock = file.firstBlock;
 	}
@@ -58,7 +56,7 @@ public class File {
 	}
 	
 	public String GetFullName(){
-		return this.name + '.' + this.extension;
+		return this.name;
 	}
 	
 	public int GetSize() {

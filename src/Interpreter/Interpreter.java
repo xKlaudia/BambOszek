@@ -4,6 +4,7 @@ package Interpreter;
 import java.util.ArrayList;
 //import memorymanagement.Memory;
 import fileSystem.FAT;
+import fileSystemExceptions.*;
 import interprocessCommunication.interprocessCommunication;
 import processesmanagement.ProcessesManagement;
 import processesmanagement.Process;
@@ -200,15 +201,25 @@ public class Interpreter {
 //-----------------------------------------------------------------------   PLIKI
 
         case "CE": // Tworzenie pliku
-            if(filesystem.CreateEmptyFile(P1)==true) {
-                //filesystem.createEmptyFile(P1);
-            }
-            else {
-                Running.SetState(2);
-            }
+        	if(What) {
+        		try  {
+                	filesystem.CreateEmptyFile(P1);
+                }
+                catch(IllegalFileNameException ex) {
+                	System.out.println("BLAD NAZWY PLIKU: " + ex.getMessage());
+                	Running.SetState(2);
+                }
+                catch(OutOfBlocksException ex2) {
+                	System.out.println("BLAD PAMIECI: " + ex2.getMessage());
+                	Running.SetState(2);
+                }
+                catch(Exception ex3) {
+                	System.out.println("BLAD TYPU NIEOKRESLONEGO: " + ex3.getMessage());
+                }
+        	} 
             break;
 
-        case "CF": // Tworzenie pliku z zawartoscia
+       /* case "CF": // Tworzenie pliku z zawartoscia
             if (What) {
                 if(filesystem.CreateNewFile(P1,Integer.toString(GetValue(P2)))==true) {
                     //filesystem.CreateNewFile(P1,Integer.toString(GetValue(P2)));
@@ -226,11 +237,11 @@ public class Interpreter {
             }
             break;
 
-        /*case "WF": // Dopisanie do pliku
+        case "WF": // Dopisanie do pliku
             filesystem.OpenFile(P1);
             if (What) {
-                if(filesystem.appendToFile(P1,Integer.toString(GetValue(P2)))==1){
-                    filesystem.appendToFile(P1,Integer.toString(GetValue(P2)));
+                if(filesystem.AppendToFile(P1,Integer.toString(GetValue(P2)))==1){
+                    filesystem.AppendToFile(P1,Integer.toString(GetValue(P2)));
                 }
                 else {
                     Running.Setstan(2);
@@ -248,7 +259,7 @@ public class Interpreter {
             break;
 
         case "DF": // Usuwanie pliku
-            filesystem.openFile(P1);
+            filesystem.OpenFile(P1);
             if((filesystem.deleteFile(P1))==1) {
                 filesystem.deleteFile(P1);
             }
@@ -338,12 +349,8 @@ public class Interpreter {
 //-------------------------------------------------------------------------------------------------------------------
 
     private boolean CheckP2(String P2) {
-        if(P2 == "A" || P2 == "B" || P2 == "C") {
-            return true;
-        }
-        else {
-            return false;
-        }
+        if(P2 == "A" || P2 == "B" || P2 == "C" || P2 == "D") return true;
+        else return false;
     }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -369,7 +376,7 @@ public class Interpreter {
             Instruction += memory.readMemory(CMDCounter);
             CMDCounter++;
             Counter++;
-        }while (Instruction.charAt(Counter)!=',' && Instruction.charAt(Counter)!=';');
+        }while (Instruction.charAt(Counter) != ',' && Instruction.charAt(Counter) != ';');
         return Instruction;
     }
 
