@@ -69,11 +69,15 @@ import fileSystem.FAT;
 		 
 		 case("rm"):{if(arr[1]!=null) {
 			 fat.DeleteFile(arr[1]);
-		 System.out.println("usuwam plik o nazwie: "+arr[1]);}
+		// System.out.println("usuwam plik o nazwie: "+arr[1]);
+			 }
 		 break;} //usuniecie pliku
 		 //case("cp"):{System.out.println(komenda); break;} //kopiowanie pliku
 		 //procesy
-		
+		 case("pd"):{
+			 fat.PrintDisk();
+		 //System.out.println("wyswietlanie dysku: ");
+		 break;}
 		 case("ps"):{processManagement.printProcessListInformations();
 		 System.out.println("wyswietlam liste procesow");
 		 break;} //wyswietla procesy
