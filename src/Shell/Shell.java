@@ -57,10 +57,17 @@ import Interpreter.Interpreter;
 			//System.out.println("utworzono plik o nazwie: "+arr[1]);
 			} }
 				 break;} //utworz plik o nazwie
+                                 
+                        case("cp"):{
+                          processManagement.NewProcess_XC("p1", 2);
+                          virtualMemory.loadProcess("p1", "lol", 10);
+                          break;
+                        }
 		 	case("go"):{
 		 		
 		 	//	interpreter.RUN(processManagement.);
-			 
+			interpreter.RUN(processManagement.getProcess(arr[1]));
+                        
 			 break;
 		 	}
 		 case("find"):{if(arr[1]!=null) {
@@ -72,7 +79,7 @@ import Interpreter.Interpreter;
 		
 		 case("cat"):{
 			 if(arr[1]!=null) {
-			 fat.PrintFilesContent(arr[1]);
+			 System.out.println(fat.PrintFilesContent(arr[1]));
 		 System.out.println("wyswietlam zawartosc pliku o nazwie: "+arr[1]);}
 		 break;} //wypisz zawartosc pliku
 		 
@@ -118,8 +125,9 @@ import Interpreter.Interpreter;
 		 
 		 case("echo"):{
 			 String content = "";
-				for(int i=2;i<arr.length;i++) { content=content+' '+arr[i];}
+				for(int i=1;i<arr.length;i++) { content=content+arr[i]+' ';}
 				System.out.println(content);
+                                break;
 		 }
 		 
 		 case("quit"):{d=false;break;}

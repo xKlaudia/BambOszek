@@ -2,9 +2,10 @@ package memoryManagement;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.File;
 
 public class ExchangeFile {
-    public long getExchangeFileLength() throws IOException {
+        public long getExchangeFileLength() throws IOException {
         RandomAccessFile randomAccessFile = new RandomAccessFile("exchange_file.txt", "r");
         long length = randomAccessFile.length();
         randomAccessFile.close();
