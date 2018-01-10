@@ -16,6 +16,7 @@ import Interpreter.Interpreter;
 		public Interpreter interpreter;
 		
 		public Shell() throws Exception {
+                        this.virtualMemory = new VirtualMemory();
 			this.processManagement=new ProcessesManagement(virtualMemory);
 			this.fat=new FAT();
 		Dzialaj();	
@@ -60,7 +61,8 @@ import Interpreter.Interpreter;
                                  
                         case("cp"):{
                           processManagement.NewProcess_XC("p1", 2);
-                          virtualMemory.loadProcess("p1", "lol", 10);
+                          processManagement.SetHowManyPagesWithID(0,((45 - 1) / 16 + 1));
+                          virtualMemory.loadProcess("p1", "2222222222222222222222222222222222", 45);
                           break;
                         }
 		 	case("go"):{
