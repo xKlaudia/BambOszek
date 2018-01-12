@@ -341,8 +341,24 @@ public class Interpreter {
         case "XZ": // -- wstrzymanie procesu
             Running.SetState(1);
             break;
+            
+//-----------------------------------------------------------------------   PAMIĘĆ WIRTUALNA
+            
+        case "XA": // -- wczytywanie procesu do pliku wymiany
+            memory.loadProcess(P1, P2, Integer.parseInt(P3));
+            break;
+            
+        case "XF": // -- usuwanie procesu z pamięci
+            memory.deleteProcess(P1);
+            break;
+            
+        case "WM": // -- pisanie do pamięci
+            for (int j = 0; j < P2.length(); j++) {
+                memory.writeMemory(Integer.parseInt(P1) + j, P2.charAt(j));
+            }
+            break;
         }
-
+        
         }
 
 
@@ -366,7 +382,7 @@ public class Interpreter {
 
 //-------------------------------------------------------------------------------------------------------------------
 
-    private String GetInstruction(PCB Running) throws IOException {
+    private String GetInstruction(PCB Running) throws Exception, IOException {
         String Instruction = "";
         int Counter=0;
 
