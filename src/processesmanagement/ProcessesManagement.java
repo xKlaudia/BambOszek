@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import memoryManagement.VirtualMemory;
 
-public class ProcessesManagement extends Process {
+public class ProcessesManagement extends Process{
 
 	// TO JEST KLASA Z METODAMI DLA WAS
 	
@@ -18,7 +18,7 @@ public class ProcessesManagement extends Process {
 	
 	private List<Integer> finishedProcessList;
 	
-	VirtualMemory RAM = new VirtualMemory();
+	VirtualMemory RAM; //= new VirtualMemory();
 	
 	private int processNumber;
 

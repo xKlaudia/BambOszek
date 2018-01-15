@@ -12,7 +12,9 @@ import Interpreter.Interpreter;
 		//TUTAJ MUSZA SIE ZNALEZC OBIEKTY KLAS DO WYWOLYWANIA FUNKCJI
 	public	ProcessesManagement processManagement;
         public  VirtualMemory virtualMemory;
-	public  FAT fat;	
+	public  FAT fat;
+        public static String currentProcess = "";
+        public int counter = 0; //liczy kwanty wykonywanych rozkazów
 		public Interpreter interpreter;
 		
 		public Shell() throws Exception {
@@ -66,9 +68,14 @@ import Interpreter.Interpreter;
                           break;
                         }
 		 	case("go"):{
-		 		
 		 	//	interpreter.RUN(processManagement.);
-			interpreter.RUN(processManagement.getProcess(arr[1]));
+			interpreter.RUN(processManagement.getProcess(currentProcess));
+                        if(counter<2) counter++;
+                        else 
+                        {
+                            counter = 0;
+                            //dodać funkcje z procesora, która ustala aktualnie wykonywany proces
+                        }
                         
 			 break;
 		 	}
