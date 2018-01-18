@@ -14,8 +14,8 @@ public class VirtualMemory {
     private LinkedList<PageTable> pageTables = new LinkedList<>();
     private Queue<SecondChanceElement> secondChance = new LinkedList<>();
     private ExchangeFile exchangeFile = new ExchangeFile();
+    private String currentProcess = "";
     
-    public String currentProcess = "test"; //zmienna testowa
     
     /*Konstruktor*/
     public VirtualMemory() throws IOException {
@@ -27,6 +27,10 @@ public class VirtualMemory {
             freeFrames[i] = true;
         //Tworzenie i czyszczenie pliku wymiany
         exchangeFile.makeExchangeFile();
+    }
+    
+    public void setCurrentProcess(String currentProcess) {
+        this.currentProcess = currentProcess;
     }
     
     /*Czytanie z pamięci wirtualnej*/

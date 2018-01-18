@@ -72,6 +72,7 @@ public class Interpreter {
                 }
             }
             manager.processesList.get(highestProcessNumber).SetState(2);
+            memory.setCurrentProcess(manager.GetNameWithID(highestProcessNumber));
         
             for(int i=0; i<manager.processesList.size(); i++)
             {
