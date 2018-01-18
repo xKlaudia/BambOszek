@@ -6,7 +6,7 @@ public class File {
 	private final int BLOCK_ERROR = -1;
 	
 	private String name;
-	private int firstBlock, size;
+	private int firstBlock, size, readChars;
 	
 	protected Lock lock;
 	
@@ -25,6 +25,7 @@ public class File {
 			this.size = size;
 		}
 		lock = new Lock("");
+		readChars = 0;
 	}
 	
 	protected File() {
@@ -39,27 +40,25 @@ public class File {
 		this.firstBlock = file.firstBlock;
 	}
 	
-	protected int GetFirstBlock() {
-		return this.firstBlock;
-	}
+	protected int GetFirstBlock() { return this.firstBlock; }
 	
-	protected int SetFirstBlock(int firstBlock) {
-		if(firstBlock < 0 || firstBlock > (FAT.BLOCKS-1)) return BLOCK_ERROR;
+	protected int GetReadChars() { return readChars; }
+	
+	protected void SetFirstBlock(int firstBlock) throws Exception {
+		if(firstBlock < 0 || firstBlock > (FAT.BLOCKS-1)) throw new Exception("BLAD PRZYDZIALU BLOKU");
 		else {
 			this.firstBlock = firstBlock;
-			return firstBlock;
 		}
 	}
 	
-	protected void SetSize(int size) {
-		this.size = size;
+	protected void SetReadChars(int x) throws Exception {
+		if(x<0 || (readChars+x)>size) throw new Exception("Blad wskaznika odczytu pliku");
+		else readChars += x;
 	}
 	
-	public String GetFullName(){
-		return this.name;
-	}
+	protected void SetSize(int size) { this.size = size; }
 	
-	public int GetSize() {
-		return this.size;
-	}
+	public String GetFullName() { return this.name; }
+	
+	public int GetSize() { return this.size; }
 }

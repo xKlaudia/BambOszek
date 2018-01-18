@@ -236,43 +236,63 @@ public class Interpreter {
 
             case "CE": // Tworzenie pliku
                     if(What) {
-                            try  {
-                            filesystem.CreateEmptyFile(P1);
-                    }
-                    catch(IllegalFileNameException ex) {
+                    	try  {
+                    		filesystem.CreateEmptyFile(P1);
+                    	}
+                    	catch(IllegalFileNameException ex) {
                             System.out.println("BLAD NAZWY PLIKU: " + ex.getMessage());
                             Running.SetState(2);
-                    }
-                    catch(OutOfBlocksException ex2) {
-                            System.out.println("BLAD PAMIECI: " + ex2.getMessage());
+                    	}
+                    	catch(OutOfBlocksException ex2) {
+                    		System.out.println("BLAD PAMIECI: " + ex2.getMessage());
                             Running.SetState(2);
-                    }
-                    catch(Exception ex3) {
+                    	}
+                    	catch(Exception ex3) {
                             System.out.println("BLAD TYPU NIEOKRESLONEGO: " + ex3.getMessage());
-                    }
+                            Running.SetState(2);
+                    	}
                     } 
                 break;
 
+<<<<<<< HEAD
+            case "CF": // Tworzenie pliku z zawartoscia
+=======
            case "CF": // Tworzenie pliku z zawartoscia
+>>>>>>> dafb7f1002bad5d09e31b87dde7dc3cba07dec5c
                 if (What) {
-                    if(filesystem.CreateNewFile(P1,Integer.toString(GetValue(P2)))==true) {
-                        //filesystem.CreateNewFile(P1,Integer.toString(GetValue(P2)));
-                    }
-                    else{
-                        Running.SetState(2);
-                    }
-                } else {
-                    if(filesystem.CreateNewFile(P1, P2)==true) {
-                        //filesystem.createFile(P1, P2);
-                    }
-                    else {
-                        Running.SetState(2);
+                	if (What) {
+                		try {
+                			filesystem.CreateNewFile(P1,Integer.toString(GetValue(P2)));
+                		}
+                		catch (Exception ex) {
+                			System.out.println("Blad: " + ex.getMessage());
+                			Running.SetState(2);
+                		}
+                    } else {
+                    	try {
+                			filesystem.CreateNewFile(P1,P2);
+                		}
+                		catch (Exception ex) {
+                			System.out.println("Blad: " + ex.getMessage());
+                			Running.SetState(2);
+                		}
                     }
                 }
-                break;
+                break;   
 
+<<<<<<< HEAD
+            case "WF": // Dopisanie do pliku
+            	try {
+            		filesystem.OpenFile(P1, process);
+            	}
+            	catch(Exception ex) {
+            		System.out.println("BLAD OTWIERANIA: " + ex.getMessage());
+            	}
+                
+=======
             /*case "WF": // Dopisanie do pliku
                 filesystem.OpenFile(P1);
+>>>>>>> dafb7f1002bad5d09e31b87dde7dc3cba07dec5c
                 if (What) {
                     if(filesystem.AppendToFile(P1,Integer.toString(GetValue(P2)))==1){
                         filesystem.AppendToFile(P1,Integer.toString(GetValue(P2)));
