@@ -82,33 +82,7 @@ import Interpreter.Interpreter;
 	                    
 			 break;
 		 	}
-			 case("find"):{if(arr[1]!=null) {
-				Boolean exist = fat.DoesFileExist(arr[1]);
-		                    
-		                    if(exist==true) System.out.println("Plik istnieje");
-		                    else System.out.println("Plik o podanej nazwie nie istnieje");
-			 }
-			 
-			// System.out.println("sprawdzam plik o nazwie: "+arr[1]+" istnieje");
-			 break;} //sprawdz czy plik instnieje
 			
-			 case("cat"):{
-				 if(arr[1]!=null) {
-				 System.out.println(fat.PrintFilesContent(arr[1]));
-			 System.out.println("wyswietlam zawartosc pliku o nazwie: "+arr[1]);}
-			 break;} //wypisz zawartosc pliku
-			 
-			 case("rm"):{if(arr[1]!=null) {
-				 fat.DeleteFile(arr[1]);
-			// System.out.println("usuwam plik o nazwie: "+arr[1]);
-				 }
-			 break;} //usuniecie pliku
-			 //case("cp"):{System.out.println(komenda); break;} //kopiowanie pliku
-			 //procesy
-			 case("df"):{
-				 fat.PrintDisk();
-			 //System.out.println("wyswietlanie dysku: ");
-			 break;}
 			 case("ps"):{processManagement.printProcessListInformations();
 			 System.out.println("wyswietlam liste procesow");
 			 break;} //wyswietla procesy
@@ -152,9 +126,16 @@ import Interpreter.Interpreter;
 			 //-------------------------------------------------PLIKI I KATALOGI
 			 case("pd"): { 		
 				 fat.PrintDisk();
+				 break;
 			 }
 			 case("sf"): {
-				 fat.ShowFileInfo(arr[1]);
+				 try {
+					 fat.ShowFileInfo(arr[1]);
+				 }
+				 catch(Exception ex) {
+					 System.out.println("BLAD OTWIERANIA PLIKU " + ex.getMessage());
+				 }
+				 break;
 			 }
 			 case("cf"):{
 				 if(arr[1]!=null) {
@@ -173,6 +154,33 @@ import Interpreter.Interpreter;
 				} 
 				break;
 			}
+			case("cat"):{
+				if(arr[1]!=null) {
+					System.out.println(fat.PrintFilesContent(arr[1]));
+			System.out.println("wyswietlam zawartosc pliku o nazwie: "+arr[1]);}
+			break;
+			}
+			case("find"):{if(arr[1]!=null) {
+				Boolean exist = fat.DoesFileExist(arr[1]);
+			    	if(exist==true) System.out.println("Plik istnieje");
+                    else System.out.println("Plik o podanej nazwie nie istnieje");
+				}
+				 
+				// System.out.println("sprawdzam plik o nazwie: "+arr[1]+" istnieje");
+				break;} //sprawdz czy plik instnieje
+				 
+			case("rm"):{if(arr[1]!=null) {
+				try {
+					fat.DeleteFile(arr[1]);
+				}
+				catch(Exception ex) {
+					System.out.println("BLAD USUWANIA PLIKU: " + ex.getMessage());
+				}				
+			}
+			break;} //usuniecie pliku
+				 //case("cp"):{System.out.println(komenda); break;} //kopiowanie pliku
+				 //procesy
+		 //-------------------------------------------------------------------------
 		 }
 			
 		 }catch(Exception e)
