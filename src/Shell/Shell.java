@@ -83,25 +83,33 @@ import Interpreter.Interpreter;
 			 break;
 		 	}
 			
-			 case("ps"):{processManagement.printProcessListInformations();
-			 System.out.println("wyswietlam liste procesow");
-			 break;} //wyswietla procesy
+			 case("ps"):
+                         {
+                            System.out.println("wyswietlam liste procesow");
+                            processManagement.printProcessListInformations();			 
+                            break;
+                         } //wyswietla procesy
 			 
 			 case("pi"):{if(arr[1]!=null) {
 				 int id = Integer.parseInt(arr[1]);processManagement.printProcessInformations(id);
 			 System.out.println("dane procesu o id: "+id);}
 			 break;} //informacje o procesie po id
 			 
-			 case("pn"):{if(arr[1]!=null) {
-				 processManagement.getProcess(arr[1]);
-			 System.out.println("dane procesu o nazwie: "+arr[1]);}
-			 break;} // proces po nazwie
+			 case("pn"):
+                         {
+                            if(arr[1]!=null) 
+                            {
+				processManagement.getProcess(arr[1]).printInformations();
+                                System.out.println("dane procesu o nazwie: "+arr[1]);
+                            }
+                            break;
+                         } // proces po nazwie
 			
 			 case("kill"):{
 				 if(arr[1]!=null) {
 				 int id = Integer.parseInt(arr[1]); 
 		                     processManagement.DeleteProcessWithID(id);
-			 System.out.println("usuniecie procesu o id: "+arr[1]);
+                                System.out.println("usuniecie procesu o id: "+arr[1]);
 				 }
 			 break;} //zabija proces po id
 			 
