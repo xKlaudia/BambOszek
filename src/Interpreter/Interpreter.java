@@ -254,11 +254,8 @@ public class Interpreter {
                     } 
                 break;
 
-<<<<<<< HEAD
-            case "CF": // Tworzenie pliku z zawartoscia
-=======
+
            case "CF": // Tworzenie pliku z zawartoscia
->>>>>>> dafb7f1002bad5d09e31b87dde7dc3cba07dec5c
                 if (What) {
                 	if (What) {
                 		try {
@@ -280,7 +277,7 @@ public class Interpreter {
                 }
                 break;   
 
-<<<<<<< HEAD
+
             case "WF": // Dopisanie do pliku
             	try {
             		filesystem.OpenFile(P1, process);
@@ -289,7 +286,7 @@ public class Interpreter {
             		System.out.println("BLAD OTWIERANIA: " + ex.getMessage());
             	}
                 
-=======
+
             /*case "WF": // Dopisanie do pliku
                 filesystem.OpenFile(P1);
 >>>>>>> dafb7f1002bad5d09e31b87dde7dc3cba07dec5c
