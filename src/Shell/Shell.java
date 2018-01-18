@@ -62,108 +62,120 @@ import Interpreter.Interpreter;
 		 case("rmdir"):{break;}//usun katalog
 		 
 		 case("ls"):{ break;} //wyswietla zawartosc katalogu
-		*/
-		 case("cf"):{if(arr[1]!=null) {
-			 if(arr.length>2) {
-				String content = "";
-				for(int i=2;i<arr.length;i++) { content=content+' '+arr[i];}
-				 fat.CreateNewFile(arr[1],content);
-				//System.out.println("utworzono plik o nazwie: "+arr[1]+ "i zawartosci"+ content); 
-			 } 
-			if(arr.length==2) {if(arr[1]!=null) {
-				fat.CreateEmptyFile(arr[1]);
-			}
-			//System.out.println("utworzono plik o nazwie: "+arr[1]);
-			} }
-				 break;} //utworz plik o nazwie
-                                 
-                        case("cp"):{
-                          processManagement.NewProcess_XC("p1", 2);
-                          processManagement.SetHowManyPagesWithID(0,((45 - 1) / 16 + 1));
-                          virtualMemory.loadProcess("p1", "Silnia.txt", 45);
-                          break;
-                        }
+		*/                   
+            case("cp"):{
+              processManagement.NewProcess_XC("p1", 2);
+              processManagement.SetHowManyPagesWithID(0,((45 - 1) / 16 + 1));
+              virtualMemory.loadProcess("p1", "Silnia.txt", 45);
+              break;
+            }
 		 	case("go"):{
 		 	//	interpreter.RUN(processManagement.);
 			interpreter.RUN(processManagement.getProcess(currentProcess));
-                        setCurrentProcess();
-                        if(counter<2) counter++;
-                        else 
-                        {
-                            counter = 0;
-                            interpreter.CPU();                      
-                        }
-                        
+	                    setCurrentProcess();
+	                    if(counter<2) counter++;
+	                    else 
+	                    {
+	                        counter = 0;
+	                        interpreter.CPU();                      
+	                    }
+	                    
 			 break;
 		 	}
-		 case("find"):{if(arr[1]!=null) {
-			Boolean exist = fat.DoesFileExist(arr[1]);
-                        
-                        if(exist==true) System.out.println("Plik istnieje");
-                        else System.out.println("Plik o podanej nazwie nie istnieje");
-		 }
-		 
-		// System.out.println("sprawdzam plik o nazwie: "+arr[1]+" istnieje");
-		 break;} //sprawdz czy plik instnieje
-		
-		 case("cat"):{
-			 if(arr[1]!=null) {
-			 System.out.println(fat.PrintFilesContent(arr[1]));
-		 System.out.println("wyswietlam zawartosc pliku o nazwie: "+arr[1]);}
-		 break;} //wypisz zawartosc pliku
-		 
-		 case("rm"):{if(arr[1]!=null) {
-			 fat.DeleteFile(arr[1]);
-		// System.out.println("usuwam plik o nazwie: "+arr[1]);
+			 case("find"):{if(arr[1]!=null) {
+				Boolean exist = fat.DoesFileExist(arr[1]);
+		                    
+		                    if(exist==true) System.out.println("Plik istnieje");
+		                    else System.out.println("Plik o podanej nazwie nie istnieje");
 			 }
-		 break;} //usuniecie pliku
-		 //case("cp"):{System.out.println(komenda); break;} //kopiowanie pliku
-		 //procesy
-		 case("df"):{
-			 fat.PrintDisk();
-		 //System.out.println("wyswietlanie dysku: ");
-		 break;}
-		 case("ps"):{processManagement.printProcessListInformations();
-		 System.out.println("wyswietlam liste procesow");
-		 break;} //wyswietla procesy
-		 
-		 case("pi"):{if(arr[1]!=null) {
-			 int id = Integer.parseInt(arr[1]);processManagement.printProcessInformations(id);
-		 System.out.println("dane procesu o id: "+id);}
-		 break;} //informacje o procesie po id
-		 
-		 case("pn"):{if(arr[1]!=null) {
-			 processManagement.getProcess(arr[1]);
-		 System.out.println("dane procesu o nazwie: "+arr[1]);}
-		 break;} // proces po nazwie
-		
-		 case("kill"):{
-			 if(arr[1]!=null) {
-			 int id = Integer.parseInt(arr[1]); 
-                         processManagement.DeleteProcessWithID(id);
-		 System.out.println("usuniecie procesu o id: "+arr[1]);
+			 
+			// System.out.println("sprawdzam plik o nazwie: "+arr[1]+" istnieje");
+			 break;} //sprawdz czy plik instnieje
+			
+			 case("cat"):{
+				 if(arr[1]!=null) {
+				 System.out.println(fat.PrintFilesContent(arr[1]));
+			 System.out.println("wyswietlam zawartosc pliku o nazwie: "+arr[1]);}
+			 break;} //wypisz zawartosc pliku
+			 
+			 case("rm"):{if(arr[1]!=null) {
+				 fat.DeleteFile(arr[1]);
+			// System.out.println("usuwam plik o nazwie: "+arr[1]);
+				 }
+			 break;} //usuniecie pliku
+			 //case("cp"):{System.out.println(komenda); break;} //kopiowanie pliku
+			 //procesy
+			 case("df"):{
+				 fat.PrintDisk();
+			 //System.out.println("wyswietlanie dysku: ");
+			 break;}
+			 case("ps"):{processManagement.printProcessListInformations();
+			 System.out.println("wyswietlam liste procesow");
+			 break;} //wyswietla procesy
+			 
+			 case("pi"):{if(arr[1]!=null) {
+				 int id = Integer.parseInt(arr[1]);processManagement.printProcessInformations(id);
+			 System.out.println("dane procesu o id: "+id);}
+			 break;} //informacje o procesie po id
+			 
+			 case("pn"):{if(arr[1]!=null) {
+				 processManagement.getProcess(arr[1]);
+			 System.out.println("dane procesu o nazwie: "+arr[1]);}
+			 break;} // proces po nazwie
+			
+			 case("kill"):{
+				 if(arr[1]!=null) {
+				 int id = Integer.parseInt(arr[1]); 
+		                     processManagement.DeleteProcessWithID(id);
+			 System.out.println("usuniecie procesu o id: "+arr[1]);
+				 }
+			 break;} //zabija proces po id
+			 
+			 case("nice"):{if(arr[1]!=null) {
+				 int id = Integer.parseInt(arr[1]);
+				 int priorytet = Integer.parseInt(arr[2]);
+				 processManagement.SetCurrentPririty(id, priorytet);
+				 System.out.println("zmiana priorytetu procesu o id: "+arr[1]);}
+				 break;} //zmiana priorytetu procesu
+			 //shell
+			 
+			 case("echo"):{
+				 String content = "";
+					for(int i=1;i<arr.length;i++) { content=content+arr[i]+' ';}
+					System.out.println(content);
+		                            break;
 			 }
-		 break;} //zabija proces po id
-		 
-		 case("nice"):{if(arr[1]!=null) {
-			 int id = Integer.parseInt(arr[1]);
-			 int priorytet = Integer.parseInt(arr[2]);
-			 processManagement.SetCurrentPririty(id, priorytet);
-			 System.out.println("zmiana priorytetu procesu o id: "+arr[1]);}
-			 break;} //zmiana priorytetu procesu
-		 //shell
-		 
-		 case("echo"):{
-			 String content = "";
-				for(int i=1;i<arr.length;i++) { content=content+arr[i]+' ';}
-				System.out.println(content);
-                                break;
+			 
+			 case("quit"):{d=false;break;}
+			 
+			 
+			 //-------------------------------------------------PLIKI I KATALOGI
+			 case("pd"): { 		
+				 fat.PrintDisk();
+			 }
+			 case("sf"): {
+				 fat.ShowFileInfo(arr[1]);
+			 }
+			 case("cf"):{
+				 if(arr[1]!=null) {
+				 }
+				 if(arr.length>2) {
+					String content = "";
+					for(int i=2;i<arr.length;i++) { content=content+' '+arr[i];}
+					 fat.CreateNewFile(arr[1],content);
+					//System.out.println("utworzono plik o nazwie: "+arr[1]+ "i zawartosci"+ content); 
+				 } 
+				if(arr.length==2) {
+					if(arr[1]!=null) {
+					fat.CreateEmptyFile(arr[1]);
+					}
+				//System.out.println("utworzono plik o nazwie: "+arr[1]);
+				} 
+				break;
+			}
 		 }
-		 
-		 case("quit"):{d=false;break;}
-		 }
-		    
-		}catch(Exception e)
+			
+		 }catch(Exception e)
                 {
                     e.printStackTrace();
                 }

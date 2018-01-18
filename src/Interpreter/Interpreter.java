@@ -7,6 +7,7 @@ import fileSystemExceptions.*;
 import interprocessCommunication.interprocessCommunication;
 import processesmanagement.ProcessesManagement;
 import processesmanagement.Process;
+import processesmanagement.ProcessStateOverseer;
 import processesmanagement.PCB;
 import memoryManagement.VirtualMemory;
 import cpudispatcher.CPUDispatcher;
@@ -15,6 +16,12 @@ import java.io.IOException;
 public class Interpreter {
 
     private int Reg_A=0, Reg_B=0, Reg_C=0, Reg_D = 0;
+    public static final int NEWBIE = ProcessStateOverseer.newbie,
+    						READY = ProcessStateOverseer.ready,
+    						ACTIVE = ProcessStateOverseer.active,
+    						WAITING = ProcessStateOverseer.waiting,
+    						FINISHED = ProcessStateOverseer.finished;
+    						
     //private bool Flag_E = 0;      //Flaga do bledu wykonywania rozkazu
     private Procesor procesor;
     private CPUDispatcher processor;
@@ -24,8 +31,8 @@ public class Interpreter {
     private FAT filesystem;
     private PCB PCB;            //Zmienna do kopii PCB procesu
     private Process process;
-    private int CMDCounter;     //Licznik rozkazu do czytania z pami�ci
-    private int CCKCounter;     //licznik do sprawdzania czy program się skończył
+    private int CMDCounter;     //Licznik rozkazu do czytania z pamieci
+    private int CCKCounter;     //licznik do sprawdzania czy program sie skonczyl
 
 //-------------------------------------------------------------------------------------------------------------------
 
@@ -64,14 +71,14 @@ public class Interpreter {
                     highestProcessNumber = i;
                 }
             }
-            manager.processesList.get(highestProcessNumber).SetState(2);
+            manager.processesList.get(highestProcessNumber).SetState(ACTIVE);
         
             for(int i=0; i<manager.processesList.size(); i++)
             {
                 if(i!=highestProcessNumber)
                 {
                     if(manager.processesList.get(i).GetCurrentPriority()<15) manager.processesList.get(i).SetCurrentPriority(manager.processesList.get(i).GetCurrentPriority()+1);
-                    if(manager.processesList.get(i).GetState()==2) manager.processesList.get(i).SetState(3);
+                    if(manager.processesList.get(i).GetState()==2) manager.processesList.get(i).SetState(WAITING);
                 }
             }
         }
@@ -89,18 +96,18 @@ public class Interpreter {
 
         this.Reg_A = Running.GetRegA(); //Pobieranie stanu rejestru A
         this.Reg_B = Running.GetRegB(); //Pobieranie stanu rejestru B
-        this.Reg_C = Running.GetRegC();//Pobieranie stanu rejestru C
-        this.Reg_D = Running.GetRegD();//Pobieranie stanu rejestru D 
+        this.Reg_C = Running.GetRegC(); //Pobieranie stanu rejestru C
+        this.Reg_D = Running.GetRegD(); //Pobieranie stanu rejestru D 
 
         
-        procesor.Set_A(Reg_A);          //Ustawianie wartosci rejestru A do pami�ci
-        procesor.Set_B(Reg_B);          //Ustawianie wartosci rejestru B do pami�ci
-        procesor.Set_C(Reg_C);
-        procesor.Set_D(Reg_D);  //Ustawianie wartosci rejestru C do pami�ci
+        procesor.Set_A(Reg_A);          //Ustawianie wartosci rejestru A do pamieci
+        procesor.Set_B(Reg_B);          //Ustawianie wartosci rejestru B do pamieci
+        procesor.Set_C(Reg_C);			
+        procesor.Set_D(Reg_D); 		    //Ustawianie wartosci rejestru D do pamieci
 
         String Instruction = "";
 
-        //Instruction = GetInstruction(Running.GetPCB());   //Zmienna pomocnicza do �adowania instrukcji z pami�ci
+        //Instruction = GetInstruction(Running.GetPCB());   //Zmienna pomocnicza do ladowania instrukcji z pamieci
         for (;;) {
             Instruction += memory.readMemory(CMDCounter);
             CMDCounter++;
@@ -132,7 +139,6 @@ public class Interpreter {
                     CMD += Instruction.charAt(x);
                     CCKCounter++;
                     x++;
-
                 }
                 if(Instruction.charAt(x)==' '){
                     i++;
@@ -234,47 +240,48 @@ public class Interpreter {
 
     //-----------------------------------------------------------------------   PLIKI
 
-            case "CE": // Tworzenie pliku
-                    if(What) {
-                    	try  {
-                    		filesystem.CreateEmptyFile(P1);
-                    	}
-                    	catch(IllegalFileNameException ex) {
-                            System.out.println("BLAD NAZWY PLIKU: " + ex.getMessage());
-                            Running.SetState(2);
-                    	}
-                    	catch(OutOfBlocksException ex2) {
-                    		System.out.println("BLAD PAMIECI: " + ex2.getMessage());
-                            Running.SetState(2);
-                    	}
-                    	catch(Exception ex3) {
-                            System.out.println("BLAD TYPU NIEOKRESLONEGO: " + ex3.getMessage());
-                            Running.SetState(2);
-                    	}
-                    } 
+            case "CE": // Tworzenie pliku pustego
+                if(What) {
+                	try  {
+                		filesystem.CreateEmptyFile(P1);
+                	}
+                	catch(IllegalFileNameException ex) {
+                        System.out.println("BLAD NAZWY PLIKU: " + ex.getMessage());
+                        Running.SetState(ACTIVE);
+                	}
+                	catch(OutOfBlocksException ex2) {
+                		System.out.println("BLAD PAMIECI: " + ex2.getMessage());
+                        Running.SetState(ACTIVE);
+                	}
+                	catch(Exception ex3) {
+                        System.out.println("BLAD TYPU NIEOKRESLONEGO: " + ex3.getMessage());
+                        Running.SetState(ACTIVE);
+                	}
+                } 
                 break;
 
 
            case "CF": // Tworzenie pliku z zawartoscia
-                if (What) {
-                	if (What) {
-                		try {
-                			filesystem.CreateNewFile(P1,Integer.toString(GetValue(P2)));
-                		}
-                		catch (Exception ex) {
-                			System.out.println("Blad: " + ex.getMessage());
-                			Running.SetState(2);
-                		}
-                    } else {
-                    	try {
-                			filesystem.CreateNewFile(P1,P2);
-                		}
-                		catch (Exception ex) {
-                			System.out.println("Blad: " + ex.getMessage());
-                			Running.SetState(2);
-                		}
-                    }
+        	   	filesystem.OpenFile(P1, Running);
+    	   		if (What) {
+            		try {
+            			filesystem.CreateNewFile(P1,Integer.toString(GetValue(P2)));
+            		}
+            		catch (Exception ex) {
+            			System.out.println("Blad: " + ex.getMessage());
+            			Running.SetState(ACTIVE);
+            		}
+                } 
+            	else {
+                	try {
+            			filesystem.CreateNewFile(P1,P2);
+            		}
+            		catch (Exception ex) {
+            			System.out.println("Blad: " + ex.getMessage());
+            			Running.SetState(ACTIVE);
+            		}
                 }
+    	   		filesystem.CloseFile(P1, Running);
                 break;   
 
 
@@ -284,40 +291,43 @@ public class Interpreter {
             	}
             	catch(Exception ex) {
             		System.out.println("BLAD OTWIERANIA: " + ex.getMessage());
+            		Running.SetState(ACTIVE);
+            		break;
             	}
-                
-
-            /*case "WF": // Dopisanie do pliku
-                filesystem.OpenFile(P1);
->>>>>>> dafb7f1002bad5d09e31b87dde7dc3cba07dec5c
-                if (What) {
-                    if(filesystem.AppendToFile(P1,Integer.toString(GetValue(P2)))==1){
-                        filesystem.AppendToFile(P1,Integer.toString(GetValue(P2)));
-                    }
-                    else {
-                        Running.Setstan(2);
-                    }
-                }
-                else {
-                    if(filesystem.appendToFile(P1,P2)==1) {
-                        filesystem.appendToFile(P1, P2);
-                    }
-                    else {
-                        Running.Setstan(2);
-                    }
-                }
-                filesystem.closeFile(P1);
-                break;
-
+            	if(What) {
+            		try {
+            			filesystem.AppendToFile(P1, P2);
+            		}
+            		catch(Exception ex2) {
+            			System.out.println("BLAD DOPISYWANIA: " + ex2.getMessage());
+            			Running.SetState(ACTIVE);
+            			break;
+            		}            		
+            	}
+            	else {
+            		Running.SetState(ACTIVE);
+            	}
+            	try {
+            		filesystem.CloseFile(P1, process);
+            	}
+            	catch(Exception ex2) {
+            		System.out.println("BLAD ZAMYKANIA PLIKU: " + ex2.getMessage());
+            		Running.SetState(ACTIVE);
+            	}
+            	
+            	break;
+            	
             case "DF": // Usuwanie pliku
-                filesystem.OpenFile(P1);
-                if((filesystem.DeleteFile(P1)==1) {
+                filesystem.OpenFile(P1, Running);
+                try {
                     filesystem.DeleteFile(P1);
                 }
-                else {
-                    Running.Setstan(2);
+                catch(Exception ex) {
+                	System.out.println("BLAD USUWANIA PLIKU: " + ex.getMessage());
+                    Running.SetState(ACTIVE);
                 }
-                break;*/
+                break;
+                
 
     //-----------------------------------------------------------------------   JUMPY I KONCZENIE
 
@@ -332,7 +342,7 @@ public class Interpreter {
                 break;
 
             case "EX": // Koniec programu
-                Running.SetState(4);
+                Running.SetState(FINISHED);
                 break;
 
     //-----------------------------------------------------------------------   PROCESY
@@ -390,7 +400,7 @@ public class Interpreter {
                 break;
 
             case "XZ": // -- wstrzymanie procesu
-                Running.SetState(1);
+                Running.SetState(READY);
                 break;
 
     //-----------------------------------------------------------------------   PAMIĘĆ WIRTUALNA
@@ -443,7 +453,7 @@ public class Interpreter {
         int Counter=0;
 
         do{
-            //Instruction += Running.PageTable.readFromMemory(CMDCounter); //pobieranie z pami�ci znaku o danym numerze, oraz nale��cego do danego procesu
+            //Instruction += Running.PageTable.readFromMemory(CMDCounter); //pobieranie z pamieci znaku o danym numerze, oraz nalezacego do danego procesu
 
             Instruction += memory.readMemory(CMDCounter);
             CMDCounter++;

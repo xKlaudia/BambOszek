@@ -10,7 +10,8 @@ public class Process {
 
 		private PriorityOverseer priorityOverseer = new PriorityOverseer();
 		
-		private ProcessStateOverseer stateOverseer = new ProcessStateOverseer();
+		//private ProcessStateOverseer stateOverseer = new ProcessStateOverseer();
+		//~Klaudia
 		
 		private int basePriority;
 
@@ -26,7 +27,7 @@ public class Process {
 		pcb.BaseProcessPriority = priority;		
 		pcb.CurrentProcessPriority = priority;                
             }
-            pcb.ProcessState = stateOverseer.newbie;		
+            pcb.ProcessState = ProcessStateOverseer.newbie;		//Klaudia
             pcb.ProcessID = ID;		
             pcb.ProcessName = name;	
             pcb.blocked = false;
@@ -36,7 +37,7 @@ public class Process {
             pcb.C = 0;		
             pcb.D = 0;			
             pcb.commandCounter = 0;	
-            pcb.ProcessState = stateOverseer.ready;		
+            pcb.ProcessState = ProcessStateOverseer.ready;		//tu tez
             pcb.howLongWaiting = 0;                
             ExchangeFile E = new ExchangeFile();
             pcb.firstPageNumber = E.getExchangeFileLength()/16;                

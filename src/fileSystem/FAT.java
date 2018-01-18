@@ -14,10 +14,10 @@ public class FAT {
 	private static final char EMPTY_BYTE = '#';
 	private static final File EMPTY_FILE = new File();
 	
-	private char[] disk;
-	private int[] FAT;
-	private boolean[] FreeBlocks;
-	private Vector<File> mainCatalog;
+	private static char[] disk;
+	private static int[] FAT;
+	private static boolean[] FreeBlocks;
+	private static Vector<File> mainCatalog;
 	
 	public FAT() {
 		try {
@@ -80,6 +80,15 @@ public class FAT {
 		}
 		RefreshSize(fullName);
 		return true;
+	}
+	
+	public void CloseFile(String fullName, Process process) throws Exception {
+		if(!DoesFileExist(fullName)) throw new Exception("Brak podanego pliku");
+		else {
+			for(File file : mainCatalog) {
+				if(file.GetFullName().equals(fullName)) file.lock.unlock(process);
+			}
+		}
 	}
 	
 	public boolean CreateEmptyFile(String fullName) throws Exception {
@@ -156,14 +165,7 @@ public class FAT {
 	public boolean[] GetFreeBlocks() {
 		return FreeBlocks;
 	}
-	public void OpenFile(String fullName, Process process) throws Exception {
-		if(!DoesFileExist(fullName)) throw new Exception("Brak podanego pliku");
-		else {
-			for(File file : mainCatalog) {
-				if(file.GetFullName().equals(fullName)) file.lock.lock(process);
-			}
-		}
-	}
+	
 	public void PrintDisk() {
 		int blockNr = 1;
 		System.out.println("Ilosc wolnego miejsca na dysku " + CountFreeBlocks()*BLOCK_SIZE);
@@ -176,6 +178,16 @@ public class FAT {
 		}
 		System.out.println(" ");
 	}
+	
+	public void OpenFile(String fullName, Process process) throws Exception {
+		if(!DoesFileExist(fullName)) throw new Exception("Brak podanego pliku");
+		else {
+			for(File file : mainCatalog) {
+				if(file.GetFullName().equals(fullName)) file.lock.lock(process);
+			}
+		}
+	}
+	
 	public String PrintFilesContent(String fullName) throws Exception {
 		if(DoesFileExist(fullName)) {
 			int blockToRead = FilesFirstBlock(fullName);
@@ -195,6 +207,27 @@ public class FAT {
 		else throw new Exception("Plik nie istnieje");
 	}
 	
+	public void ShowFileInfo(String fullName) throws Exception {
+		if(DoesFileExist(fullName)) {
+			File file;
+			try {
+				file = GetFile(fullName);
+			} catch (Exception e) {
+				throw e;
+			}
+			try {
+				int sizeAtDisk = CountFilesBlocks(file.GetFirstBlock());
+				System.out.println("Nazwa pliku: " + file.GetFullName()
+						+ "\nZawartosc: " + PrintFilesContent(fullName) 
+						+ "\nBlok pierwszy: " + file.GetFirstBlock()
+						+ "\nRozmiar: " + file.GetSize()
+						+ "\nRozmiar na dysku: " + sizeAtDisk);
+			} catch (Exception e) {
+				throw e;
+			}
+		}
+		else throw new Exception("Brak pliku");
+	}
 	/* zwraca czy nazwa jest poprawna */
 	private boolean CheckFileName(String input) {
 		/* format nazwy: nazwa.txt, gdzie nazwa max. 3 znaki */
@@ -209,6 +242,14 @@ public class FAT {
 		else return true;
 	}
 	
+	private int CountFilesBlocks(int firstBlock) {
+		int counter = 0;
+		while(firstBlock != LAST_BLOCK) {
+			firstBlock = FAT[firstBlock];
+			counter++;
+		}
+		return counter;
+	}
 	private int CountFreeBlocks(){
 		int countFreeBlocks = 0;
 		for(int i=0; i<FreeBlocks.length; i++) {
@@ -314,24 +355,5 @@ public class FAT {
 			
 			GetFile(fullName).SetSize(size);
 		}
-	}
-	
-	protected void ShowFileInfo(String fullName) throws Exception {
-		if(DoesFileExist(fullName)) {
-			File file;
-			try {
-				file = GetFile(fullName);
-			} catch (Exception e) {
-				throw e;
-			}
-			try {
-				System.out.println("Nazwa pliku: " + file.GetFullName()
-						+ "\nZawartosc: " + PrintFilesContent(fullName) 
-						+ "\n Blok pierwszy " + file.GetFirstBlock());
-			} catch (Exception e) {
-				throw e;
-			}
-		}
-		else throw new Exception("Brak pliku");
 	}
 }
