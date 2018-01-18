@@ -72,7 +72,6 @@ public class Interpreter {
                 }
             }
             manager.processesList.get(highestProcessNumber).SetState(2);
-            memory.setCurrentProcess(manager.GetNameWithID(highestProcessNumber));
         
             for(int i=0; i<manager.processesList.size(); i++)
             {
@@ -103,8 +102,8 @@ public class Interpreter {
         
         procesor.Set_A(Reg_A);          //Ustawianie wartosci rejestru A do pamieci
         procesor.Set_B(Reg_B);          //Ustawianie wartosci rejestru B do pamieci
-        procesor.Set_C(Reg_C);			
-        procesor.Set_D(Reg_D); 		    //Ustawianie wartosci rejestru D do pamieci
+        procesor.Set_C(Reg_C);		//Ustawianie wartosci rejestru C do pamieci	
+        procesor.Set_D(Reg_D); 		//Ustawianie wartosci rejestru D do pamieci
 
         String Instruction = "";
 
@@ -115,6 +114,7 @@ public class Interpreter {
             if (Instruction.charAt(Instruction.length() - 1) == ';')
                 break;
         }
+        System.out.println("Wczytano instrukcję: " + Instruction);
         Execute(Instruction,Running);
 
         ReturnToPCB(Running);

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.lang.StringBuilder;
 import java.util.LinkedList;
 import java.util.Queue;
+import Shell.Shell;
 
 public class VirtualMemory {
     private char virtualMemory[] = new char[128];
@@ -14,7 +15,6 @@ public class VirtualMemory {
     private LinkedList<PageTable> pageTables = new LinkedList<>();
     private Queue<SecondChanceElement> secondChance = new LinkedList<>();
     private ExchangeFile exchangeFile = new ExchangeFile();
-    private String currentProcess = "";
     
     
     /*Konstruktor*/
@@ -29,10 +29,6 @@ public class VirtualMemory {
         exchangeFile.makeExchangeFile();
     }
     
-    public void setCurrentProcess(String currentProcess) {
-        this.currentProcess = currentProcess;
-    }
-    
     /*Czytanie z pamięci wirtualnej*/
     public char readMemory(int logicalAddress) throws Exception, IOException {
         if (logicalAddress < 0)
@@ -41,7 +37,7 @@ public class VirtualMemory {
         int firstPageNumber = 0;
         //Wyszukiwanie indeksu tablicy stronic po nazwie procesu
         for (int i = 0; i < processesNames.size(); i++) {
-            if (processesNames.get(i).equals(currentProcess)) {
+            if (processesNames.get(i).equals(Shell.currentProcess)) {
                 if (logicalAddress > pageTables.get(i).getLength() * 16)
                     throw new Exception("Podano nieprawidłowy adres logiczny!");
                 pageTableIndex = i;
@@ -138,7 +134,7 @@ public class VirtualMemory {
         int firstPageNumber = 0;
         //Wyszukiwanie indeksu tablicy stronic po nazwie procesu
         for (int i = 0; i < processesNames.size(); i++) {
-            if (processesNames.get(i).equals(currentProcess)) {
+            if (processesNames.get(i).equals(Shell.currentProcess)) {
                 if (logicalAddress > pageTables.get(i).getLength() * 16)
                     throw new Exception("Podano nieprawidłowy adres logiczny!");
                 pageTableIndex = i;
