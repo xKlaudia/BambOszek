@@ -97,14 +97,14 @@ public class Process {
 		return pcb.CurrentProcessPriority;
 	}
         
-        public void SetCommandCounter(int licznik) 
+        public void SetCommandCounter(int commandCounter) 
         {
-		pcb.BaseProcessPriority = licznik;
+		pcb.commandCounter = commandCounter;
 	}
 
 	public int GetCommandCounter() 
         {	
-		return pcb.CurrentProcessPriority;
+		return pcb.commandCounter;
 	}
 		
 	public void SetCurrentPriority(int Priority) 

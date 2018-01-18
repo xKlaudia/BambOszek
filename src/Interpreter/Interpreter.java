@@ -114,6 +114,8 @@ public class Interpreter {
             if (Instruction.charAt(Instruction.length() - 1) == ';')
                 break;
         }
+        if (Instruction.startsWith(" "))
+            Instruction = Instruction.substring(1);
         System.out.println("Wczytano instrukcję: " + Instruction);
         Execute(Instruction,Running);
 
@@ -202,7 +204,8 @@ public class Interpreter {
         }
         CCKCounter++;
 
-        Boolean What = CheckP2(P2);
+        boolean What = CheckP2(P2);
+        System.out.println(What);
 
 //-----------------------------------------------------------------------   ARYTMETYKA
 
@@ -338,7 +341,7 @@ public class Interpreter {
 
             case "JX": // Skok do rozkazu, je�li rejestr != 0
                 if(GetValue(P1)!=0) {
-                    CMDCounter = Integer.parseInt(P2) + Running.GetCommandCounter();
+                    CMDCounter = Integer.parseInt(P2);
                 }
                 break;
 
@@ -426,14 +429,16 @@ public class Interpreter {
                     System.out.println();
                 }
                 break;
+                
+            default:
+                System.out.println("Wczytano nieprawidłową instrukcję!");
             }
         }
 
 //-------------------------------------------------------------------------------------------------------------------
 
     private boolean CheckP2(String P2) {
-        if(P2 == "A" || P2 == "B" || P2 == "C" || P2 == "D") return true;
-        else return false;
+        return P2.equals("A") || P2.equals("B") || P2.equals("C") || P2.equals("D");
     }
 
 //-------------------------------------------------------------------------------------------------------------------
