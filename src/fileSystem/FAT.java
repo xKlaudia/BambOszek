@@ -174,6 +174,7 @@ public class FAT {
 			}
 			System.out.print(disk[i]);
 		}
+		System.out.println(" ");
 	}
 	public String PrintFilesContent(String fullName) throws Exception {
 		if(DoesFileExist(fullName)) {
@@ -185,7 +186,7 @@ public class FAT {
 					content += disk[i+blockToRead*BLOCK_SIZE];
 					fileSize--;
 				}
-				if(FAT[blockToRead] != LAST_BLOCK && fileSize !=0) {
+				if(FAT[blockToRead] != LAST_BLOCK && fileSize != 0) {
 					blockToRead = FAT[blockToRead];
 				}
 			} while (fileSize != 0);
