@@ -38,7 +38,7 @@ public class Lock
 		} else {
 			//zamek jest zamkniety wiec proces wedruje do kolejki i ustawiany jest jego bit blocked
 			queueWaitingProcesses.offer(procesWhichCloses);
-			procesWhichCloses.SetBlocked(true);
+			procesWhichCloses.SetLocked();
 			procesWhichCloses.SetState(3);
 			
 		}
@@ -51,7 +51,7 @@ public class Lock
 			this.lockingProces = null;
 			if(!queueWaitingProcesses.isEmpty()) {
 				queueWaitingProcesses.peek().SetState(1);
-				queueWaitingProcesses.poll().SetBlocked(false);
+				queueWaitingProcesses.poll().SetUnlocked();
 			}
 		}
 	}

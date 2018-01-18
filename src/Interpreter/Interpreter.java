@@ -16,11 +16,11 @@ import java.io.IOException;
 public class Interpreter {
 
     private int Reg_A=0, Reg_B=0, Reg_C=0, Reg_D = 0;
-    public static final int NEWBIE = ProcessStateOverseer.newbie,
+    /*public static final int NEWBIE = ProcessStateOverseer.newbie,
     						READY = ProcessStateOverseer.ready,
     						ACTIVE = ProcessStateOverseer.active,
     						WAITING = ProcessStateOverseer.waiting,
-    						FINISHED = ProcessStateOverseer.finished;
+    						FINISHED = ProcessStateOverseer.finished;*/
     						
     //private bool Flag_E = 0;      //Flaga do bledu wykonywania rozkazu
     private Procesor procesor;
@@ -71,14 +71,14 @@ public class Interpreter {
                     highestProcessNumber = i;
                 }
             }
-            manager.processesList.get(highestProcessNumber).SetState(ACTIVE);
+            manager.processesList.get(highestProcessNumber).SetState(2);
         
             for(int i=0; i<manager.processesList.size(); i++)
             {
                 if(i!=highestProcessNumber)
                 {
                     if(manager.processesList.get(i).GetCurrentPriority()<15) manager.processesList.get(i).SetCurrentPriority(manager.processesList.get(i).GetCurrentPriority()+1);
-                    if(manager.processesList.get(i).GetState()==2) manager.processesList.get(i).SetState(WAITING);
+                    if(manager.processesList.get(i).GetState()==2) manager.processesList.get(i).SetState(3);
                 }
             }
         }
@@ -247,15 +247,15 @@ public class Interpreter {
                 	}
                 	catch(IllegalFileNameException ex) {
                         System.out.println("BLAD NAZWY PLIKU: " + ex.getMessage());
-                        Running.SetState(ACTIVE);
+                        Running.SetState(2);
                 	}
                 	catch(OutOfBlocksException ex2) {
                 		System.out.println("BLAD PAMIECI: " + ex2.getMessage());
-                        Running.SetState(ACTIVE);
+                        Running.SetState(2);
                 	}
                 	catch(Exception ex3) {
                         System.out.println("BLAD TYPU NIEOKRESLONEGO: " + ex3.getMessage());
-                        Running.SetState(ACTIVE);
+                        Running.SetState(2);
                 	}
                 } 
                 break;
@@ -269,7 +269,7 @@ public class Interpreter {
             		}
             		catch (Exception ex) {
             			System.out.println("Blad: " + ex.getMessage());
-            			Running.SetState(ACTIVE);
+            			Running.SetState(2);
             		}
                 } 
             	else {
@@ -278,7 +278,7 @@ public class Interpreter {
             		}
             		catch (Exception ex) {
             			System.out.println("Blad: " + ex.getMessage());
-            			Running.SetState(ACTIVE);
+            			Running.SetState(2);
             		}
                 }
     	   		filesystem.CloseFile(P1, Running);
@@ -291,7 +291,7 @@ public class Interpreter {
             	}
             	catch(Exception ex) {
             		System.out.println("BLAD OTWIERANIA: " + ex.getMessage());
-            		Running.SetState(ACTIVE);
+            		Running.SetState(2);
             		break;
             	}
             	if(What) {
@@ -300,19 +300,19 @@ public class Interpreter {
             		}
             		catch(Exception ex2) {
             			System.out.println("BLAD DOPISYWANIA: " + ex2.getMessage());
-            			Running.SetState(ACTIVE);
+            			Running.SetState(2);
             			break;
             		}            		
             	}
             	else {
-            		Running.SetState(ACTIVE);
+            		Running.SetState(2);
             	}
             	try {
             		filesystem.CloseFile(P1, process);
             	}
             	catch(Exception ex2) {
             		System.out.println("BLAD ZAMYKANIA PLIKU: " + ex2.getMessage());
-            		Running.SetState(ACTIVE);
+            		Running.SetState(2);
             	}
             	
             	break;
@@ -324,7 +324,7 @@ public class Interpreter {
                 }
                 catch(Exception ex) {
                 	System.out.println("BLAD USUWANIA PLIKU: " + ex.getMessage());
-                    Running.SetState(ACTIVE);
+                    Running.SetState(2);
                 }
                 break;
                 
@@ -342,7 +342,7 @@ public class Interpreter {
                 break;
 
             case "EX": // Koniec programu
-                Running.SetState(FINISHED);
+                Running.SetState(4);
                 break;
 
     //-----------------------------------------------------------------------   PROCESY
@@ -400,7 +400,7 @@ public class Interpreter {
                 break;
 
             case "XZ": // -- wstrzymanie procesu
-                Running.SetState(READY);
+                Running.SetState(1);
                 break;
 
     //-----------------------------------------------------------------------   PAMIĘĆ WIRTUALNA
