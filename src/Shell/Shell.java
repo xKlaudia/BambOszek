@@ -15,18 +15,34 @@ import Interpreter.Interpreter;
 	public  FAT fat;
         public static String currentProcess = "";
         public int counter = 0; //liczy kwanty wykonywanych rozkazów
-		public Interpreter interpreter;
+        public Interpreter interpreter;
 		
 		public Shell() throws Exception {
                         this.virtualMemory = new VirtualMemory();
 			this.processManagement=new ProcessesManagement(virtualMemory);
 			this.fat=new FAT();
+                        this.interpreter=new Interpreter(this.processManagement, this.fat, this.virtualMemory);
 		Dzialaj();	
 		}
 	public static boolean d=true;
+        
+            public void setCurrentProcess()
+            {
+                for(Process p : processManagement.processesList)
+                {
+                    if(p.GetState()==2)
+                    {
+                        currentProcess = p.GetName();
+                        break;
+                    }
+                }
+            }
+        
 		public void Dzialaj() throws Exception {
 		
 			while(d) {
+                            try
+                            {
 			String komenda; 
 			System.out.print("$>");
 		    Scanner odczyt = new Scanner(System.in); //obiekt do odebrania danych od u�ytkownika
@@ -64,17 +80,18 @@ import Interpreter.Interpreter;
                         case("cp"):{
                           processManagement.NewProcess_XC("p1", 2);
                           processManagement.SetHowManyPagesWithID(0,((45 - 1) / 16 + 1));
-                          virtualMemory.loadProcess("p1", "2222222222222222222222222222222222", 45);
+                          virtualMemory.loadProcess("p1", "Procesy.txt", 45);
                           break;
                         }
 		 	case("go"):{
 		 	//	interpreter.RUN(processManagement.);
 			interpreter.RUN(processManagement.getProcess(currentProcess));
+                        setCurrentProcess();
                         if(counter<2) counter++;
                         else 
                         {
                             counter = 0;
-                            //dodać funkcje z procesora, która ustala aktualnie wykonywany proces
+                            interpreter.CPU();                      
                         }
                         
 			 break;
@@ -119,7 +136,8 @@ import Interpreter.Interpreter;
 		
 		 case("kill"):{
 			 if(arr[1]!=null) {
-			 int id = Integer.parseInt(arr[1]); processManagement.DeleteProcessWithID(id);
+			 int id = Integer.parseInt(arr[1]); 
+                         processManagement.DeleteProcessWithID(id);
 		 System.out.println("usuniecie procesu o nazwie: "+arr[1]);
 			 }
 		 break;} //zabija proces po id
@@ -142,7 +160,11 @@ import Interpreter.Interpreter;
 		 case("quit"):{d=false;break;}
 		 }
 		    
+		}catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
 		}
-			System.out.println("Zegnam");
-		}
+                        System.out.println("Zegnam");
+                }
 }

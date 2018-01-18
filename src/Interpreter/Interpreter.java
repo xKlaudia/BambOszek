@@ -49,6 +49,35 @@ public class Interpreter {
         procesor=new Procesor();
     }
 
+    public void CPU() throws Exception
+    {
+        if(manager.processesList.size()!=0)
+        {
+            int max = manager.processesList.get(0).GetCurrentPriority();
+            int highestProcessNumber = 0;
+            
+            for(int i=0; i<manager.processesList.size(); i++)
+            {
+                if(manager.processesList.get(i).GetCurrentPriority()>max)
+                {
+                    max = manager.processesList.get(i).GetCurrentPriority();
+                    highestProcessNumber = i;
+                }
+            }
+            manager.processesList.get(highestProcessNumber).SetState(2);
+        
+            for(int i=0; i<manager.processesList.size(); i++)
+            {
+                if(i!=highestProcessNumber)
+                {
+                    if(manager.processesList.get(i).GetCurrentPriority()<15) manager.processesList.get(i).SetCurrentPriority(manager.processesList.get(i).GetCurrentPriority()+1);
+                    if(manager.processesList.get(i).GetState()==2) manager.processesList.get(i).SetState(3);
+                }
+            }
+        }
+        else throw new Exception("Processes list is empty");
+    }
+    
 //-------------------------------------------------------------------------------------------------------------------
 
     public int RUN(Process Running) throws Exception {
@@ -225,7 +254,11 @@ public class Interpreter {
                     } 
                 break;
 
+<<<<<<< HEAD
             case "CF": // Tworzenie pliku z zawartoscia
+=======
+           case "CF": // Tworzenie pliku z zawartoscia
+>>>>>>> dafb7f1002bad5d09e31b87dde7dc3cba07dec5c
                 if (What) {
                 	if (What) {
                 		try {
@@ -247,6 +280,7 @@ public class Interpreter {
                 }
                 break;   
 
+<<<<<<< HEAD
             case "WF": // Dopisanie do pliku
             	try {
             		filesystem.OpenFile(P1, process);
@@ -255,6 +289,10 @@ public class Interpreter {
             		System.out.println("BLAD OTWIERANIA: " + ex.getMessage());
             	}
                 
+=======
+            /*case "WF": // Dopisanie do pliku
+                filesystem.OpenFile(P1);
+>>>>>>> dafb7f1002bad5d09e31b87dde7dc3cba07dec5c
                 if (What) {
                     if(filesystem.AppendToFile(P1,Integer.toString(GetValue(P2)))==1){
                         filesystem.AppendToFile(P1,Integer.toString(GetValue(P2)));
@@ -276,8 +314,8 @@ public class Interpreter {
 
             case "DF": // Usuwanie pliku
                 filesystem.OpenFile(P1);
-                if((filesystem.deleteFile(P1))==1) {
-                    filesystem.deleteFile(P1);
+                if((filesystem.DeleteFile(P1)==1) {
+                    filesystem.DeleteFile(P1);
                 }
                 else {
                     Running.Setstan(2);
