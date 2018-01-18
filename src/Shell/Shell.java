@@ -80,7 +80,7 @@ import Interpreter.Interpreter;
                         case("cp"):{
                           processManagement.NewProcess_XC("p1", 2);
                           processManagement.SetHowManyPagesWithID(0,((45 - 1) / 16 + 1));
-                          virtualMemory.loadProcess("p1", "Procesy.txt", 45);
+                          virtualMemory.loadProcess("p1", "Silnia.txt", 45);
                           break;
                         }
 		 	case("go"):{
@@ -97,7 +97,10 @@ import Interpreter.Interpreter;
 			 break;
 		 	}
 		 case("find"):{if(arr[1]!=null) {
-			 fat.DoesFileExist(arr[1]);
+			Boolean exist = fat.DoesFileExist(arr[1]);
+                        
+                        if(exist==true) System.out.println("Plik istnieje");
+                        else System.out.println("Plik o podanej nazwie nie istnieje");
 		 }
 		 
 		// System.out.println("sprawdzam plik o nazwie: "+arr[1]+" istnieje");
@@ -138,7 +141,7 @@ import Interpreter.Interpreter;
 			 if(arr[1]!=null) {
 			 int id = Integer.parseInt(arr[1]); 
                          processManagement.DeleteProcessWithID(id);
-		 System.out.println("usuniecie procesu o nazwie: "+arr[1]);
+		 System.out.println("usuniecie procesu o id: "+arr[1]);
 			 }
 		 break;} //zabija proces po id
 		 
@@ -146,7 +149,7 @@ import Interpreter.Interpreter;
 			 int id = Integer.parseInt(arr[1]);
 			 int priorytet = Integer.parseInt(arr[2]);
 			 processManagement.SetCurrentPririty(id, priorytet);
-			 System.out.println("zmiana priorytetu procesu o nazwie: "+arr[1]);}
+			 System.out.println("zmiana priorytetu procesu o id: "+arr[1]);}
 			 break;} //zmiana priorytetu procesu
 		 //shell
 		 
