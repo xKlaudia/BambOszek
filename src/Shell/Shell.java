@@ -39,8 +39,16 @@ import Interpreter.Interpreter;
             }
         
 		public void Dzialaj() throws Exception {
-		
+                
 			while(d) {
+                                for(Process p : processManagement.processesList)
+                {
+                    if(p.GetState()==2)
+                    {
+                        currentProcess = p.GetName();
+                        break;
+                    }
+                }
                             try
                             {
 			String komenda; 
@@ -62,7 +70,8 @@ import Interpreter.Interpreter;
 		 case("rmdir"):{break;}//usun katalog
 		 
 		 case("ls"):{ break;} //wyswietla zawartosc katalogu
-		*/                   
+		*/
+                
             case("cp"):{
               processManagement.NewProcess_XC("p1", 2);
               processManagement.SetHowManyPagesWithID(0,((46 - 1) / 16 + 1));
@@ -120,7 +129,16 @@ import Interpreter.Interpreter;
 				 System.out.println("zmiana priorytetu procesu o id: "+arr[1]);}
 				 break;} //zmiana priorytetu procesu
 			 //shell
-			 
+                         
+                         case("state"):{if(arr[1]!=null) {
+				 int id = Integer.parseInt(arr[1]);
+				 int stan = Integer.parseInt(arr[2]);
+				 processManagement.SetState(id, stan);
+				 System.out.println("zmiana stanu procesu o id: "+arr[1]);}
+				 break;}
+			 case("current"):{
+                                processManagement.getProcess(currentProcess).printInformations();
+				 break;}
 			 case("echo"):{
 				 String content = "";
 					for(int i=1;i<arr.length;i++) { content=content+arr[i]+' ';}
