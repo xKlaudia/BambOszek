@@ -205,7 +205,6 @@ public class Interpreter {
         CCKCounter++;
 
         boolean What = CheckP2(P2);
-        System.out.println(What);
 
 //-----------------------------------------------------------------------   ARYTMETYKA
 
