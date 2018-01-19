@@ -86,7 +86,10 @@ public class FAT {
 		if(!DoesFileExist(fullName)) throw new Exception("Brak podanego pliku");
 		else {
 			for(File file : mainCatalog) {
-				if(file.GetFullName().equals(fullName)) file.lock.unlock(process);
+				if(file.GetFullName().equals(fullName)) {
+					file.lock.unlock(process);
+					file.SetReadChars(0);
+				}
 			}
 		}
 	}

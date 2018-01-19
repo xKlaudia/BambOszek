@@ -3,7 +3,7 @@ package fileSystem;
 import syncMethod.Lock;
 
 public class File {
-	private final int BLOCK_ERROR = -1;
+	//private final int BLOCK_ERROR = -1;
 	
 	private String name;
 	private int firstBlock, size, readChars;
@@ -52,7 +52,7 @@ public class File {
 	}
 	
 	protected void SetReadChars(int x) throws Exception {
-		if(x<0 || (readChars+x)>size) throw new Exception("Blad wskaznika odczytu pliku");
+		if(x < 0 || (readChars+x) > size) throw new Exception("Blad wskaznika odczytu pliku");
 		else readChars += x;
 	}
 	
