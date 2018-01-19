@@ -14,7 +14,7 @@ import Interpreter.Interpreter;
         public  VirtualMemory virtualMemory;
 	public  FAT fat;
         public static String currentProcess = "";
-        public int counter = 0; //liczy kwanty wykonywanych rozkazów
+        public static int counter = 0; //liczy kwanty wykonywanych rozkazów
         public Interpreter interpreter;
 		
 		public Shell() throws Exception {
@@ -73,23 +73,29 @@ import Interpreter.Interpreter;
 		*/
                 
             case("cp"):{
-              processManagement.NewProcess_XC("p1", 2);
+              /*processManagement.NewProcess_XC("p1", 2);
               processManagement.SetHowManyPagesWithID(0,((46 - 1) / 16 + 1));
-              virtualMemory.loadProcess("p1", "Silnia.txt", 46);
+              virtualMemory.loadProcess("p1", "Silnia.txt", 46);*/
+              processManagement.NewProcess_XC(arr[1], Integer.parseInt(arr[3]));
+              processManagement.SetHowManyPagesWithID(0,((Integer.parseInt(arr[4]) - 1) / 16 + 1));
+              virtualMemory.loadProcess(arr[1], arr[2] + ".txt", Integer.parseInt(arr[4]));
               break;
             }
 		 	case("go"):{
 		 	//	interpreter.RUN(processManagement.);
-			interpreter.RUN(processManagement.getProcess(currentProcess));
-	                    setCurrentProcess();
-	                    if(counter<2) counter++;
-	                    else 
+                            if (currentProcess.equals(""))
+                                interpreter.CPU();
+                            setCurrentProcess();
+                            System.out.println("Nazwa aktualnie wykonywanego procesu: " + currentProcess);
+                            interpreter.RUN(processManagement.getProcess(currentProcess));
+	                    if (counter < 1)
+                                counter++;
+	                    else
 	                    {
 	                        counter = 0;
 	                        interpreter.CPU();                      
 	                    }
-	                    
-			 break;
+                            break;
 		 	}
 			
 			 case("ps"):

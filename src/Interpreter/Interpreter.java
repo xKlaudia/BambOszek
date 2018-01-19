@@ -12,6 +12,7 @@ import processesmanagement.PCB;
 import memoryManagement.VirtualMemory;
 import cpudispatcher.CPUDispatcher;
 import java.io.IOException;
+import Shell.Shell;
 
 public class Interpreter {
 
@@ -346,6 +347,7 @@ public class Interpreter {
 
             case "EX": // Koniec programu
                 Running.SetState(4);
+                Shell.counter = 0;
                 break;
 
     //-----------------------------------------------------------------------   PROCESY
