@@ -206,6 +206,8 @@ import Interpreter.Interpreter;
 			break;} //usuniecie pliku
 				 //case("cp"):{System.out.println(komenda); break;} //kopiowanie pliku
 				 //procesy
+                        default:
+                            System.out.println("Podano nieprawidłową komendę!");
 		 //-------------------------------------------------------------------------
 		 }
 			
