@@ -431,6 +431,7 @@ public class Interpreter {
                 
             default:
                 System.out.println("Wczytano nieprawidłową instrukcję!");
+                break;
             }
         }
 

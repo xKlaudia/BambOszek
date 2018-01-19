@@ -208,6 +208,7 @@ import Interpreter.Interpreter;
 				 //procesy
                         default:
                             System.out.println("Podano nieprawidłową komendę!");
+                            break;
 		 //-------------------------------------------------------------------------
 		 }
 			
