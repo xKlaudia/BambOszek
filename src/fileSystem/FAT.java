@@ -108,6 +108,7 @@ public class FAT {
 			else {
 				File file = new File(fullName, freeBlock, 0);
 				FAT[freeBlock] = LAST_BLOCK;
+                                FreeBlocks[freeBlock] = false;
 				mainCatalog.add(file);			
 			}
 		}
@@ -219,7 +220,7 @@ public class FAT {
 				throw e;
 			}
 			try {
-				int sizeAtDisk = CountFilesBlocks(file.GetFirstBlock());
+				int sizeAtDisk = CountFilesBlocks(file.GetFirstBlock()) * BLOCK_SIZE;
 				System.out.println("Nazwa pliku: " + file.GetFullName()
 						+ "\nZawartosc: " + PrintFilesContent(fullName) 
 						+ "\nBlok pierwszy: " + file.GetFirstBlock()

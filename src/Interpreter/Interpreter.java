@@ -61,12 +61,12 @@ public class Interpreter {
     {
         if(manager.processesList.size()!=0)
         {
-            int max = manager.processesList.get(0).GetCurrentPriority();
+            int max = 0; //manager.processesList.get(0).GetCurrentPriority();
             int highestProcessNumber = 0;
             
             for(int i=0; i<manager.processesList.size(); i++)
             {
-                if(manager.processesList.get(i).GetCurrentPriority()>max)
+                if(manager.processesList.get(i).GetCurrentPriority()>max && manager.processesList.get(i).GetState() != 4)
                 {
                     max = manager.processesList.get(i).GetCurrentPriority();
                     highestProcessNumber = i;
@@ -347,6 +347,7 @@ public class Interpreter {
 
             case "EX": // Koniec programu
                 Running.SetState(4);
+                CPU();
                 Shell.counter = 0;
                 break;
 
