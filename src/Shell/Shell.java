@@ -46,11 +46,14 @@ import java.io.BufferedWriter;
                     if(processManagement.processesList.size()==0)
                     {
                         File file = new File("idle.txt");
-                        FileWriter writer = new FileWriter(file, true);
-                        BufferedWriter in = new BufferedWriter(writer);
-                        in.write("JP 0;");
-                        in.close();
-                        writer.close();
+                        if(!file.isFile())
+                        {
+                            FileWriter writer = new FileWriter(file, true);
+                            BufferedWriter in = new BufferedWriter(writer);
+                            in.write("JP 0;");
+                            in.close();
+                            writer.close();
+                        }
                         processManagement.NewIdleProcess();
                         processManagement.SetHowManyPagesWithID(0,1);
                         virtualMemory.loadProcess("Idle","idle.txt",6);
