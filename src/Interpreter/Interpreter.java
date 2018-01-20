@@ -115,8 +115,14 @@ public class Interpreter {
             if (Instruction.charAt(Instruction.length() - 1) == ';')
                 break;
         }
-        if (Instruction.startsWith(" "))
-            Instruction = Instruction.substring(1);
+        for (;;) {
+            if (Instruction.startsWith(" ")) {
+                Instruction = Instruction.substring(1);
+            }
+            else {
+                break;
+            }
+        }
         System.out.println("Wczytano instrukcję: " + Instruction);
         Execute(Instruction,Running);
 
@@ -437,27 +443,23 @@ public class Interpreter {
                 if (What) {
                     String registerValue = Integer.toString(GetValue(P2));
                     for (int j = 0; j < registerValue.length(); j++) {
-                        memory.writeMemory(Integer.parseInt(P1) + j, P2.charAt(j));
+                        memory.writeMemory(Integer.parseInt(P1) + j, registerValue.charAt(j));
                     }
                 }
                 else {
-                    for (int j = 0; j < P2.length(); j++) {
-                        memory.writeMemory(Integer.parseInt(P1) + j, P2.charAt(j));
-                    }
-                    for (int j = 0; j < P3.length(); j++) {
-                        memory.writeMemory(Integer.parseInt(P1) + j + P2.length() + 1, P3.charAt(j));
-                    }
-                    for (int j = 0; j < P4.length(); j++) {
-                        memory.writeMemory(Integer.parseInt(P1) + j + P2.length() + P3.length() + 2, P4.charAt(j));
+                    String text = Instruction.substring(P1.length() + P2.length() + 2, Instruction.length() - 1);
+                    for (int j = 0; j < text.length(); j++) {
+                        memory.writeMemory(Integer.parseInt(P1) + j, text.charAt(j));
                     }
                 }
                 break;
                 
             case "RM": // -- czytanie z pamięci
+                System.out.print("Wczytano z pamięci: ");
                 for (int j = 0; j < Integer.parseInt(P2); j++) {
                     System.out.print(memory.readMemory(Integer.parseInt(P1) + j));
-                    System.out.println();
                 }
+                System.out.println();
                 break;
                 
             default:
