@@ -1,12 +1,15 @@
 package Shell;
 
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileWriter;
 
 import processesmanagement.Process;
 import processesmanagement.ProcessesManagement;
 import memoryManagement.VirtualMemory;
 import fileSystem.FAT;
 import Interpreter.Interpreter;
+import java.io.BufferedWriter;
 
 	public class Shell {
 		//TUTAJ MUSZA SIE ZNALEZC OBIEKTY KLAS DO WYWOLYWANIA FUNKCJI
@@ -42,6 +45,12 @@ import Interpreter.Interpreter;
 		public void Dzialaj() throws Exception {
                     if(processManagement.processesList.size()==0)
                     {
+                        File file = new File("idle.txt");
+                        FileWriter writer = new FileWriter(file, true);
+                        BufferedWriter in = new BufferedWriter(writer);
+                        in.write("JP 0;");
+                        in.close();
+                        writer.close();
                         processManagement.NewIdleProcess();
                         processManagement.SetHowManyPagesWithID(0,1);
                         virtualMemory.loadProcess("Idle","idle.txt",6);
@@ -84,7 +93,6 @@ import Interpreter.Interpreter;
               /*processManagement.NewProcess_XC("p1", 2);
               processManagement.SetHowManyPagesWithID(0,((46 - 1) / 16 + 1));
               virtualMemory.loadProcess("p1", "Silnia.txt", 46);*/
-              
               processManagement.NewProcess_XC(arr[1], Integer.parseInt(arr[3]));
               processManagement.SetHowManyPagesWithID(id,((Integer.parseInt(arr[4]) - 1) / 16 + 1));
               virtualMemory.loadProcess(arr[1], arr[2] + ".txt", Integer.parseInt(arr[4]));

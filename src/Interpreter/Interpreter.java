@@ -78,7 +78,7 @@ public class Interpreter {
             {
                 if(i!=highestProcessNumber)
                 {
-                    if(manager.processesList.get(i).GetCurrentPriority()<15) manager.processesList.get(i).SetCurrentPriority(manager.processesList.get(i).GetCurrentPriority()+1);
+                    if(manager.processesList.get(i).GetCurrentPriority()<15 && !manager.processesList.get(i).GetName().equals("Idle")) manager.processesList.get(i).SetCurrentPriority(manager.processesList.get(i).GetCurrentPriority()+1);
                     if(manager.processesList.get(i).GetState()==2) manager.processesList.get(i).SetState(3);
                 }
             }
