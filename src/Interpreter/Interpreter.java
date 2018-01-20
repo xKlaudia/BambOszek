@@ -138,7 +138,7 @@ public class Interpreter {
 
 //-----------------------------------------------------------------------
 
-        while(i < 5) {
+        while(i < 6) {
             if(i == 1) {
                 while(Instruction.charAt(x)!=' ' && Instruction.charAt(x)!=',' && Instruction.charAt(x)!=';') {
                     CMD += Instruction.charAt(x);
@@ -193,6 +193,23 @@ public class Interpreter {
             else if(i == 4) {
                 while(Instruction.charAt(x)!=' ' && Instruction.charAt(x)!=',' && Instruction.charAt(x)!=';') {
                     P3 += Instruction.charAt(x);
+                    CCKCounter++;
+                    x++;
+                }
+                if(Instruction.charAt(x)==' '){
+                    i++;
+                    x++;
+                }
+                else if(Instruction.charAt(x)==','){
+                    break;
+                }
+                else if(Instruction.charAt(x)==';'){
+                    break;
+                }
+            }
+            else if(i == 5) {
+                while(Instruction.charAt(x)!=' ' && Instruction.charAt(x)!=',' && Instruction.charAt(x)!=';') {
+                    P4 += Instruction.charAt(x);
                     CCKCounter++;
                     x++;
                 }
@@ -417,8 +434,16 @@ public class Interpreter {
                 break;
 
             case "WM": // -- pisanie do pamięci
-                for (int j = 0; j < P2.length(); j++) {
-                    memory.writeMemory(Integer.parseInt(P1) + j, P2.charAt(j));
+                if (What) {
+                    String registerValue = Integer.toString(GetValue(P2));
+                    for (int j = 0; j < registerValue.length(); j++) {
+                        memory.writeMemory(Integer.parseInt(P1) + j, P2.charAt(j));
+                    }
+                }
+                else {
+                    for (int j = 0; j < P2.length(); j++) {
+                        memory.writeMemory(Integer.parseInt(P1) + j, P2.charAt(j));
+                    }
                 }
                 break;
                 
