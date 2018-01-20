@@ -216,7 +216,7 @@ import java.io.BufferedWriter;
 			}
 			case("cat"):{
 				if(arr[1]!=null) {
-					System.out.println(fat.PrintFilesContent(arr[1]));
+					System.out.println(fat.GetFilesContent(arr[1]));
 			System.out.println("wyswietlam zawartosc pliku o nazwie: "+arr[1]);}
 			break;
 			}

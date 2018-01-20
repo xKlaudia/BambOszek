@@ -192,7 +192,7 @@ public class FAT {
 		}
 	}
 	
-	public String PrintFilesContent(String fullName) throws Exception {
+	public String GetFilesContent(String fullName) throws Exception {
 		if(DoesFileExist(fullName)) {
 			int blockToRead = FilesFirstBlock(fullName);
 			String content = "";
@@ -210,6 +210,34 @@ public class FAT {
 		}
 		else throw new Exception("Plik nie istnieje");
 	}
+        
+        public String GetFilesContent(String fullName, int howManyChars) throws Exception {
+            if(DoesFileExist(fullName)) {
+                        int currentReadChars = GetFile(fullName).GetReadChars();
+			int blockToRead = FilesFirstBlock(fullName);
+			String content = "";
+			int fileSize = GetFile(fullName).GetSize();
+                        
+                        if((howManyChars + currentReadChars) > fileSize)
+                            throw new Exception("Liczba znakow do przeczytania przekracza rozmiar pliku");
+                        while(currentReadChars >= BLOCK_SIZE) {
+                            blockToRead = FAT[blockToRead];
+                            currentReadChars -= BLOCK_SIZE;
+                        }
+			do {
+				for(int i=0; i<BLOCK_SIZE && fileSize!=0 && howManyChars!=0; i++) {
+					content += disk[i+blockToRead*BLOCK_SIZE];
+					fileSize--;
+                                        howManyChars--;
+				}
+				if(FAT[blockToRead] != LAST_BLOCK && fileSize != 0 && howManyChars!=0) {
+					blockToRead = FAT[blockToRead];
+				}
+			} while (howManyChars != 0);
+			return content;
+		}
+		else throw new Exception("Plik nie istnieje");
+        } 
 	
 	public void ShowFileInfo(String fullName) throws Exception {
 		if(DoesFileExist(fullName)) {
@@ -222,7 +250,7 @@ public class FAT {
 			try {
 				int sizeAtDisk = CountFilesBlocks(file.GetFirstBlock()) * BLOCK_SIZE;
 				System.out.println("Nazwa pliku: " + file.GetFullName()
-						+ "\nZawartosc: " + PrintFilesContent(fullName) 
+						+ "\nZawartosc: " + GetFilesContent(fullName) 
 						+ "\nBlok pierwszy: " + file.GetFirstBlock()
 						+ "\nRozmiar: " + file.GetSize()
 						+ "\nRozmiar na dysku: " + sizeAtDisk);
