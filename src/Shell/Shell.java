@@ -13,6 +13,7 @@ import Interpreter.Interpreter;
 	public	ProcessesManagement processManagement;
         public  VirtualMemory virtualMemory;
 	public  FAT fat;
+        private int id=1;
         public static String currentProcess = "";
         public static int counter = 0; //liczy kwanty wykonywanych rozkazów
         public Interpreter interpreter;
@@ -39,6 +40,12 @@ import Interpreter.Interpreter;
             }
         
 		public void Dzialaj() throws Exception {
+                    if(processManagement.processesList.size()==0)
+                    {
+                        processManagement.NewIdleProcess();
+                        processManagement.SetHowManyPagesWithID(0,1);
+                        virtualMemory.loadProcess("Idle","idle.txt",6);
+                    }
                 
 			while(d) {
                                 for(Process p : processManagement.processesList)
@@ -49,6 +56,7 @@ import Interpreter.Interpreter;
                         break;
                     }
                 }
+                                processManagement.CheckStates();
                             try
                             {
 			String komenda; 
@@ -78,12 +86,14 @@ import Interpreter.Interpreter;
               virtualMemory.loadProcess("p1", "Silnia.txt", 46);*/
               
               processManagement.NewProcess_XC(arr[1], Integer.parseInt(arr[3]));
-              processManagement.SetHowManyPagesWithID(0,((Integer.parseInt(arr[4]) - 1) / 16 + 1));
+              processManagement.SetHowManyPagesWithID(id,((Integer.parseInt(arr[4]) - 1) / 16 + 1));
               virtualMemory.loadProcess(arr[1], arr[2] + ".txt", Integer.parseInt(arr[4]));
+              id++;
               break;
             }
 		 	case("go"):{
 		 	//	interpreter.RUN(processManagement.);
+                            processManagement.CheckStates();
                             if (currentProcess.equals(""))
                                 interpreter.CPU();
                             setCurrentProcess();
