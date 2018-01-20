@@ -12,6 +12,11 @@ public class Lock
 	private Process lockingProces;
 	private Queue<Process> queueWaitingProcesses;
 	
+        public void addToQueue(Process process)
+        {
+            queueWaitingProcesses.add(process);
+        }
+        
 	public Lock(String name) {
 		this.name = name;
 		this.setState(false);

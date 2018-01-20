@@ -10,11 +10,13 @@ import memoryManagement.VirtualMemory;
 import fileSystem.FAT;
 import Interpreter.Interpreter;
 import java.io.BufferedWriter;
+import syncMethod.Lock;
 
 	public class Shell {
 		//TUTAJ MUSZA SIE ZNALEZC OBIEKTY KLAS DO WYWOLYWANIA FUNKCJI
 	public	ProcessesManagement processManagement;
         public  VirtualMemory virtualMemory;
+        public Lock lock;
 	public  FAT fat;
         private int id=1;
         public static String currentProcess = "";
@@ -105,6 +107,10 @@ import java.io.BufferedWriter;
 		 	case("go"):{
 		 	//	interpreter.RUN(processManagement.);
                             processManagement.CheckStates();
+                            /*if(processManagement.GetStateWithName(currentProcess)==3)
+                            {
+                                lock.addToQueue(processManagement.getProcess(currentProcess));
+                            }*/
                             if (currentProcess.equals("") || currentProcess.equals("Idle") || processManagement.processesList.size() < 2) {
                                 interpreter.CPU();
                                 counter = 0;
