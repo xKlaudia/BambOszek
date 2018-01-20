@@ -11,7 +11,7 @@ public class ExchangeFile {
         printWriter.close();
     }
     
-    /*Otrzymywanie długości pliku wymiany*/
+    /*Otrzymywanie dlugosci pliku wymiany*/
     public long getExchangeFileLength() throws IOException {
         RandomAccessFile randomAccessFile = new RandomAccessFile("exchange_file.txt", "r");
         long length = randomAccessFile.length();

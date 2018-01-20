@@ -435,11 +435,11 @@ public class Interpreter {
                 memory.loadProcess(P1, P2, Integer.parseInt(P3));
                 break;
 
-            case "XF": // -- usuwanie procesu z pamięci
+            case "XF": // -- usuwanie procesu z pamieci
                 memory.deleteProcess(P1);
                 break;
 
-            case "WM": // -- pisanie do pamięci
+            case "WM": // -- pisanie do pamieci
                 if (What) {
                     String registerValue = Integer.toString(GetValue(P2));
                     for (int j = 0; j < registerValue.length(); j++) {
@@ -454,8 +454,8 @@ public class Interpreter {
                 }
                 break;
                 
-            case "RM": // -- czytanie z pamięci
-                System.out.print("Wczytano z pamięci: ");
+            case "RM": // -- czytanie z pamieci
+                System.out.print("Wczytano z pamieci: ");
                 for (int j = 0; j < Integer.parseInt(P2); j++) {
                     System.out.print(memory.readMemory(Integer.parseInt(P1) + j));
                 }
@@ -463,7 +463,7 @@ public class Interpreter {
                 break;
                 
             default:
-                System.out.println("Wczytano nieprawidłową instrukcję!");
+                System.out.println("Wczytano nieprawidlowa instrukcje!");
                 break;
             }
         }

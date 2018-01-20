@@ -179,7 +179,24 @@ import java.io.BufferedWriter;
 					System.out.println(content);
 		                            break;
 			 }
-			 
+                         
+                        case("pm"):{
+                            if (arr.length < 3) {
+                                virtualMemory.printVirtualMemory(0, 128);
+                            }
+                            else {
+                                virtualMemory.printVirtualMemory(Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
+                            }
+                            break;
+                        } //Wyswietla pamiec wirtualna
+                        
+                        case("ppt"):{
+                            if (arr[1] != null) {
+                                virtualMemory.printPageTable(arr[1]);
+                            }
+                            break;
+                        } //Wyswietla tablice stronic
+                        
 			 case("quit"):{d=false;break;}
 			 
 			 
