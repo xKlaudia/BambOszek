@@ -225,11 +225,15 @@ public class VirtualMemory {
     
     /*Wyswietlanie pamieci wirtualnej*/
     public void printVirtualMemory(int address, int numberOfCharacters) throws Exception {
-        if (address < 0 || address > 127 || numberOfCharacters < 0 || address + numberOfCharacters > 127)
+        if (address < 0 || address > 127 || numberOfCharacters < 0 || address + numberOfCharacters > 128)
             throw new Exception("Podano nieprawidlowe argumenty!");
-        System.out.println("Pamiec wirtualna od adresu " + address + " do adresu " + (address + numberOfCharacters) + ": ");
-        for (int i = 0; i < numberOfCharacters; i++) {
-            System.out.print(virtualMemory[address + i]);
+        System.out.println("Pamiec wirtualna od adresu " + address + " do adresu " + (address + numberOfCharacters - 1) + ": ");
+        for (int i = 0; i < address % 16; i++)
+            System.out.print("   ");
+        for (int i = address; i < numberOfCharacters + address; i++) {
+            System.out.print("[" + virtualMemory[address + i] + "]");
+            if (i % 16 == 15 && i != numberOfCharacters + address - 1)
+                System.out.println();
         }
         System.out.println();
     }
