@@ -206,7 +206,9 @@ import java.io.BufferedWriter;
 				 break;
 			 }
 			 case("smc"): {
+				 System.out.println("ZAWARTOSC DYSKU: ");
 				 fat.ShowMainCatalog();
+				 break;
 			 }
 			 case("sf"): {
 				 try {

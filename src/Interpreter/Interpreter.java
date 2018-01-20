@@ -267,95 +267,94 @@ public class Interpreter {
                 break;
 
     //-----------------------------------------------------------------------   PLIKI
-
-            case "CE": // Tworzenie pliku pustego
-                if(What) {
-                	try  {
-                		filesystem.CreateEmptyFile(P1);
-                	}
-                	catch(IllegalFileNameException ex) {
-                        System.out.println("BLAD NAZWY PLIKU: " + ex.getMessage());
-                        Running.SetState(2);
-                	}
-                	catch(OutOfBlocksException ex2) {
-                		System.out.println("BLAD PAMIECI: " + ex2.getMessage());
-                        Running.SetState(2);
-                	}
-                	catch(Exception ex3) {
-                        System.out.println("BLAD TYPU NIEOKRESLONEGO: " + ex3.getMessage());
-                        Running.SetState(2);
-                	}
-                } 
-                break;
-
-
-           case "CF": // Tworzenie pliku z zawartoscia
-        	   	filesystem.OpenFile(P1, Running);
-    	   		if (What) {
-            		try {
-            			filesystem.CreateNewFile(P1,Integer.toString(GetValue(P2)));
-            		}
-            		catch (Exception ex) {
-            			System.out.println("Blad: " + ex.getMessage());
-            			Running.SetState(2);
-            		}
-                } 
-            	else {
-                	try {
-            			filesystem.CreateNewFile(P1,P2);
-            		}
-            		catch (Exception ex) {
-            			System.out.println("Blad: " + ex.getMessage());
-            			Running.SetState(2);
-            		}
-                }
-    	   		filesystem.CloseFile(P1, Running);
-                break;   
-
-
-            case "WF": // Dopisanie do pliku
+            case "OF": {	// Open File
             	try {
-            		filesystem.OpenFile(P1, process);
+            		filesystem.OpenFile(P1, Running);
             	}
             	catch(Exception ex) {
             		System.out.println("BLAD OTWIERANIA: " + ex.getMessage());
-            		Running.SetState(2);
+            		//Running.SetState(2);
             		break;
             	}
-            	if(What) {
-            		try {
-            			filesystem.AppendToFile(P1, P2);
-            		}
-            		catch(Exception ex2) {
-            			System.out.println("BLAD DOPISYWANIA: " + ex2.getMessage());
-            			Running.SetState(2);
-            			break;
-            		}            		
-            	}
-            	else {
-            		Running.SetState(2);
-            	}
+            	break;
+            }
+            case "CF": {	// Close File
             	try {
-            		filesystem.CloseFile(P1, process);
+            		filesystem.CloseFile(P1, Running);
             	}
             	catch(Exception ex2) {
             		System.out.println("BLAD ZAMYKANIA PLIKU: " + ex2.getMessage());
-            		Running.SetState(2);
+            		//Running.SetState(2);
             	}
+            	break;
+            }
+            case "CE": // Create Empty File
+            	try  {
+            		filesystem.CreateEmptyFile(P1);
+            	}
+            	catch(IllegalFileNameException ex) {
+                    System.out.println("BLAD NAZWY PLIKU: " + ex.getMessage());   
+            	}
+            	catch(OutOfBlocksException ex2) {
+            		System.out.println("BLAD PAMIECI: " + ex2.getMessage()); 
+            	}
+            	catch(Exception ex3) {
+                    System.out.println("BLAD TYPU NIEOKRESLONEGO: " + ex3.getMessage());
+            	}
+            
+                break;
+
+
+           case "CFC": // Create File Content
+        		try {
+        			filesystem.CreateNewFile(P1,P2);
+        		}
+        		catch (Exception ex) {
+        			System.out.println("Blad: " + ex.getMessage());
+        		}
+            	try {
+        			filesystem.CreateNewFile(P1,P2);
+        		}
+        		catch (Exception ex) {
+        			System.out.println("Blad: " + ex.getMessage());
+        		}
+            
+                break;   
+
+
+            case "WF": // Write File
+        		try {
+        			filesystem.AppendToFile(P1, P2);
+        		}
+        		catch(Exception ex2) {
+        			System.out.println("BLAD DOPISYWANIA: " + ex2.getMessage());
+        			break;
+        		}  
             	
             	break;
             	
-            case "DF": // Usuwanie pliku
-                filesystem.OpenFile(P1, Running);
+            case "DF": // Delete File
                 try {
                     filesystem.DeleteFile(P1);
                 }
                 catch(Exception ex) {
                 	System.out.println("BLAD USUWANIA PLIKU: " + ex.getMessage());
-                    Running.SetState(2);
                 }
                 break;
-                
+            case "RF":	// Read File
+            	try {
+            		if(!P1.isEmpty() && P2.isEmpty()) {
+                		System.out.println(filesystem.GetFilesContent(P1));
+                	}
+                	else if(!P2.isEmpty()) {
+                		System.out.println(filesystem.GetFilesContent(P1, Integer.parseInt(P2)));		//czytanie kilku kolejnych znakow
+                	}
+            	}
+            	catch(Exception ex2) {
+            		System.out.println("BLAD: " + ex2.getMessage());
+            		break;
+            	}
+            	break;
 
     //-----------------------------------------------------------------------   JUMPY I KONCZENIE
 

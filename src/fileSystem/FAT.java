@@ -249,6 +249,7 @@ public class FAT {
 			}
 		}
     }
+    
 	public void ShowFileInfo(String fullName) throws Exception {
 		if(DoesFileExist(fullName)) {
 			File file;
