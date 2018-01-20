@@ -44,7 +44,7 @@ import Interpreter.Interpreter;
                     {
                         processManagement.NewIdleProcess();
                         processManagement.SetHowManyPagesWithID(0,1);
-                        virtualMemory.loadProcess("Idle","idle.txt",4);
+                        virtualMemory.loadProcess("Idle","idle.txt",6);
                     }
                 
 			while(d) {
