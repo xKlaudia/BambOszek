@@ -444,6 +444,12 @@ public class Interpreter {
                     for (int j = 0; j < P2.length(); j++) {
                         memory.writeMemory(Integer.parseInt(P1) + j, P2.charAt(j));
                     }
+                    for (int j = 0; j < P3.length(); j++) {
+                        memory.writeMemory(Integer.parseInt(P1) + j + P2.length() + 1, P3.charAt(j));
+                    }
+                    for (int j = 0; j < P4.length(); j++) {
+                        memory.writeMemory(Integer.parseInt(P1) + j + P2.length() + P3.length() + 2, P4.charAt(j));
+                    }
                 }
                 break;
                 
