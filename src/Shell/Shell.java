@@ -83,6 +83,7 @@ import Interpreter.Interpreter;
             }
 		 	case("go"):{
 		 	//	interpreter.RUN(processManagement.);
+                            processManagement.CheckStates();
                             if (currentProcess.equals(""))
                                 interpreter.CPU();
                             setCurrentProcess();
