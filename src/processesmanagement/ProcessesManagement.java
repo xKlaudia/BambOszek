@@ -73,9 +73,11 @@ public class ProcessesManagement extends Process {
 	public  Process NewIdleProcess() throws IOException 
         {
 		Process process = new Process();
-		process.CreateProcess(0, "Idle",0,-1);
+                int id = idoverseer.PickID();
+		process.CreateProcess(id, "Idle",0,0);
 		process.SetBasePriority(0);
 		process.SetCurrentPriority(0);
+                processesList.add(process); 
 		CheckStates();
 		return process;
 	}
