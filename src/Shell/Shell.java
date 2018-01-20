@@ -105,7 +105,7 @@ import java.io.BufferedWriter;
 		 	case("go"):{
 		 	//	interpreter.RUN(processManagement.);
                             processManagement.CheckStates();
-                            if (currentProcess.equals(""))
+                            if (currentProcess.equals("") || currentProcess.equals("Idle"))
                                 interpreter.CPU();
                             setCurrentProcess();
                             System.out.println("Nazwa aktualnie wykonywanego procesu: " + currentProcess);
