@@ -241,7 +241,7 @@ import java.io.BufferedWriter;
 				 //case("cp"):{System.out.println(komenda); break;} //kopiowanie pliku
 				 //procesy
                         default:
-                            System.out.println("Podano nieprawidłową komendę!");
+                            System.out.println("Podano nieprawidlowa komende");
                             break;
 		 //-------------------------------------------------------------------------
 		 }
