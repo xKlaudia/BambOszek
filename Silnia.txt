@@ -1,6 +1,8 @@
 MV A 1;
-MV B 4;
+MV B 10;
 ML A B;
 SB B 1;
 JX B 16;
+WM 64 A;
+RM 64 9;
 EX;
