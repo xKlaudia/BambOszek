@@ -188,6 +188,9 @@ import java.io.BufferedWriter;
 				 fat.PrintDisk();
 				 break;
 			 }
+			 case("smc"): {
+				 fat.ShowMainCatalog();
+			 }
 			 case("sf"): {
 				 try {
 					 fat.ShowFileInfo(arr[1]);

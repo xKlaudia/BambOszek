@@ -1,1 +1,1 @@
-JP 0;           
+JP 0;           CE pr1.txt; WF pr1.txt lubieplackibosapyszneismaczne; DF pr1.txt;                                               RF pr1.txt; RF pr1.txt;                                                                                         

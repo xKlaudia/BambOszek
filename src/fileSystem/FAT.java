@@ -117,7 +117,7 @@ public class FAT {
 		
 	public boolean CreateNewFile(String fullName, String content) throws Exception {
 		if(!CheckFileName(fullName)) {
-			throw new IllegalFileNameException("Podano nieprawidlowa nazwe. Nazwa musi zawierac 1 do 8 znakow (male, duze litery i cyfry) + kropke i nazwe rozszerzenia (txt)");
+			throw new IllegalFileNameException("Podano nieprawidlowa nazwe. Nazwa musi zawierac 1 do 3 znakow (male, duze litery i cyfry) + kropke i nazwe rozszerzenia (txt)");
 		}
 		else if(DoesFileExist(fullName)) {
 			throw new IllegalFileNameException("Istnieje plik o podanej nazwie");
@@ -211,34 +211,44 @@ public class FAT {
 		else throw new Exception("Plik nie istnieje");
 	}
         
-        public String GetFilesContent(String fullName, int howManyChars) throws Exception {
-            if(DoesFileExist(fullName)) {
-                        int currentReadChars = GetFile(fullName).GetReadChars();
+    public String GetFilesContent(String fullName, int howManyChars) throws Exception {
+        if(DoesFileExist(fullName)) {
+	        int currentReadChars = GetFile(fullName).GetReadChars();
 			int blockToRead = FilesFirstBlock(fullName);
 			String content = "";
 			int fileSize = GetFile(fullName).GetSize();
-                        
-                        if((howManyChars + currentReadChars) > fileSize)
-                            throw new Exception("Liczba znakow do przeczytania przekracza rozmiar pliku");
-                        while(currentReadChars >= BLOCK_SIZE) {
-                            blockToRead = FAT[blockToRead];
-                            currentReadChars -= BLOCK_SIZE;
-                        }
+	                    
+	                    if((howManyChars + currentReadChars) > fileSize)
+	                        throw new Exception("Liczba znakow do przeczytania przekracza rozmiar pliku");
+	                    while(currentReadChars >= BLOCK_SIZE) {
+	                        blockToRead = FAT[blockToRead];
+	                        currentReadChars -= BLOCK_SIZE;
+	                    }
 			do {
 				for(int i=0; i<BLOCK_SIZE && fileSize!=0 && howManyChars!=0; i++) {
 					content += disk[i+blockToRead*BLOCK_SIZE];
 					fileSize--;
-                                        howManyChars--;
+	                                    howManyChars--;
 				}
 				if(FAT[blockToRead] != LAST_BLOCK && fileSize != 0 && howManyChars!=0) {
 					blockToRead = FAT[blockToRead];
 				}
 			} while (howManyChars != 0);
 			return content;
-		}
-		else throw new Exception("Plik nie istnieje");
-        } 
+	    }
+        else throw new Exception("Plik nie istnieje");
+    } 
 	
+    public void ShowMainCatalog() {
+    	for(File file : mainCatalog) {
+    		try {
+				ShowFileInfo(file.GetFullName());
+				System.out.println("-----------------");
+			} catch (Exception e) {
+				System.out.println("Blad algorytmu przeszukiwania katalogu.");
+			}
+		}
+    }
 	public void ShowFileInfo(String fullName) throws Exception {
 		if(DoesFileExist(fullName)) {
 			File file;
