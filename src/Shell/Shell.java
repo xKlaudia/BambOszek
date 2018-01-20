@@ -56,6 +56,7 @@ import Interpreter.Interpreter;
                         break;
                     }
                 }
+                                processManagement.CheckStates();
                             try
                             {
 			String komenda; 
