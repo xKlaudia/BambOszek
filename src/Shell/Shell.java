@@ -144,9 +144,13 @@ import java.io.BufferedWriter;
 			
 			 case("kill"):{
 				 if(arr[1]!=null) {
-				 int id = Integer.parseInt(arr[1]); 
+				 int id = Integer.parseInt(arr[1]);
+                                 if(id!=0)
+                                 {
 		                     processManagement.DeleteProcessWithID(id);
                                 System.out.println("usuniecie procesu o id: "+arr[1]);
+                                 }
+                                 else System.out.println("You cannot delete Idle process!");
 				 }
 			 break;} //zabija proces po id
 			 
