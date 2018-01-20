@@ -115,8 +115,14 @@ public class Interpreter {
             if (Instruction.charAt(Instruction.length() - 1) == ';')
                 break;
         }
-        if (Instruction.startsWith(" "))
-            Instruction = Instruction.substring(1);
+        for (;;) {
+            if (Instruction.startsWith(" ")) {
+                Instruction = Instruction.substring(1);
+            }
+            else {
+                break;
+            }
+        }
         System.out.println("Wczytano instrukcję: " + Instruction);
         Execute(Instruction,Running);
 
@@ -134,10 +140,11 @@ public class Interpreter {
         String P1 = "";
         String P2 = "";
         String P3 = "";
+        String P4 = "";
 
 //-----------------------------------------------------------------------
 
-        while(i < 5) {
+        while(i < 6) {
             if(i == 1) {
                 while(Instruction.charAt(x)!=' ' && Instruction.charAt(x)!=',' && Instruction.charAt(x)!=';') {
                     CMD += Instruction.charAt(x);
@@ -192,6 +199,23 @@ public class Interpreter {
             else if(i == 4) {
                 while(Instruction.charAt(x)!=' ' && Instruction.charAt(x)!=',' && Instruction.charAt(x)!=';') {
                     P3 += Instruction.charAt(x);
+                    CCKCounter++;
+                    x++;
+                }
+                if(Instruction.charAt(x)==' '){
+                    i++;
+                    x++;
+                }
+                else if(Instruction.charAt(x)==','){
+                    break;
+                }
+                else if(Instruction.charAt(x)==';'){
+                    break;
+                }
+            }
+            else if(i == 5) {
+                while(Instruction.charAt(x)!=' ' && Instruction.charAt(x)!=',' && Instruction.charAt(x)!=';') {
+                    P4 += Instruction.charAt(x);
                     CCKCounter++;
                     x++;
                 }
@@ -396,13 +420,9 @@ public class Interpreter {
     //            break;
 
             case "XC": // -- tworzenie procesu (P1,P2);
-                //if(manager.createprocess(P1,P2)==1) {
-                //memory.loadProcess(P1, P2, Integer.getInteger(P3));
-                manager.NewProcess_XC(P1, Integer.getInteger(P2));
-                //}
-                //else {
-                //    Running.Setstan(2);
-                //}
+                manager.NewProcess_XC(P1, Integer.parseInt(P3));
+                manager.SetHowManyPagesWithID(Running.GetID(),((Integer.parseInt(P4) - 1) / 16 + 1));
+                memory.loadProcess(P1, P2 + ".txt", Integer.parseInt(P4));
                 break;
 
             case "XZ": // -- wstrzymanie procesu
@@ -420,16 +440,26 @@ public class Interpreter {
                 break;
 
             case "WM": // -- pisanie do pamięci
-                for (int j = 0; j < P2.length(); j++) {
-                    memory.writeMemory(Integer.parseInt(P1) + j, P2.charAt(j));
+                if (What) {
+                    String registerValue = Integer.toString(GetValue(P2));
+                    for (int j = 0; j < registerValue.length(); j++) {
+                        memory.writeMemory(Integer.parseInt(P1) + j, registerValue.charAt(j));
+                    }
+                }
+                else {
+                    String text = Instruction.substring(P1.length() + P2.length() + 2, Instruction.length() - 1);
+                    for (int j = 0; j < text.length(); j++) {
+                        memory.writeMemory(Integer.parseInt(P1) + j, text.charAt(j));
+                    }
                 }
                 break;
                 
             case "RM": // -- czytanie z pamięci
+                System.out.print("Wczytano z pamięci: ");
                 for (int j = 0; j < Integer.parseInt(P2); j++) {
                     System.out.print(memory.readMemory(Integer.parseInt(P1) + j));
-                    System.out.println();
                 }
+                System.out.println();
                 break;
                 
             default:

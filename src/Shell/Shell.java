@@ -105,8 +105,10 @@ import java.io.BufferedWriter;
 		 	case("go"):{
 		 	//	interpreter.RUN(processManagement.);
                             processManagement.CheckStates();
-                            if (currentProcess.equals(""))
+                            if (currentProcess.equals("") || currentProcess.equals("Idle") || processManagement.processesList.size() < 2) {
                                 interpreter.CPU();
+                                counter = 0;
+                            }
                             setCurrentProcess();
                             System.out.println("Nazwa aktualnie wykonywanego procesu: " + currentProcess);
                             interpreter.RUN(processManagement.getProcess(currentProcess));
@@ -136,17 +138,21 @@ import java.io.BufferedWriter;
                          {
                             if(arr[1]!=null) 
                             {
-				processManagement.getProcess(arr[1]).printInformations();
                                 System.out.println("dane procesu o nazwie: "+arr[1]);
+				processManagement.getProcess(arr[1]).printInformations();                                
                             }
                             break;
                          } // proces po nazwie
 			
 			 case("kill"):{
 				 if(arr[1]!=null) {
-				 int id = Integer.parseInt(arr[1]); 
+				 int id = Integer.parseInt(arr[1]);
+                                 if(id!=0)
+                                 {
 		                     processManagement.DeleteProcessWithID(id);
                                 System.out.println("usuniecie procesu o id: "+arr[1]);
+                                 }
+                                 else System.out.println("You cannot delete Idle process!");
 				 }
 			 break;} //zabija proces po id
 			 
