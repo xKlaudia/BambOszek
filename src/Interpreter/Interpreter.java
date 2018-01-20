@@ -134,6 +134,7 @@ public class Interpreter {
         String P1 = "";
         String P2 = "";
         String P3 = "";
+        String P4 = "";
 
 //-----------------------------------------------------------------------
 
@@ -396,13 +397,9 @@ public class Interpreter {
     //            break;
 
             case "XC": // -- tworzenie procesu (P1,P2);
-                //if(manager.createprocess(P1,P2)==1) {
-                //memory.loadProcess(P1, P2, Integer.getInteger(P3));
-                manager.NewProcess_XC(P1, Integer.getInteger(P2));
-                //}
-                //else {
-                //    Running.Setstan(2);
-                //}
+                manager.NewProcess_XC(P1, Integer.parseInt(P3));
+                manager.SetHowManyPagesWithID(Running.GetID(),((Integer.parseInt(P4) - 1) / 16 + 1));
+                memory.loadProcess(P1, P2 + ".txt", Integer.parseInt(P4));
                 break;
 
             case "XZ": // -- wstrzymanie procesu
