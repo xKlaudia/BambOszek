@@ -138,8 +138,8 @@ import java.io.BufferedWriter;
                          {
                             if(arr[1]!=null) 
                             {
-				processManagement.getProcess(arr[1]).printInformations();
                                 System.out.println("dane procesu o nazwie: "+arr[1]);
+				processManagement.getProcess(arr[1]).printInformations();                                
                             }
                             break;
                          } // proces po nazwie
