@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import processesmanagement.Process;
 import processesmanagement.ProcessesManagement;
 import memoryManagement.VirtualMemory;
+import interprocessCommunication.interprocessCommunication;
 import fileSystem.FAT;
 import Interpreter.Interpreter;
 import java.io.BufferedWriter;
@@ -16,6 +17,7 @@ import syncMethod.Lock;
 		//TUTAJ MUSZA SIE ZNALEZC OBIEKTY KLAS DO WYWOLYWANIA FUNKCJI
 	public	ProcessesManagement processManagement;
         public  VirtualMemory virtualMemory;
+        public interprocessCommunication interprocessCommunication;
         public Lock lock;
 	public  FAT fat;
         private int id=1;
@@ -25,9 +27,10 @@ import syncMethod.Lock;
 		
 		public Shell() throws Exception {
                         this.virtualMemory = new VirtualMemory();
+                        this.interprocessCommunication = new interprocessCommunication();
 			this.processManagement=new ProcessesManagement(virtualMemory);
 			this.fat=new FAT();
-                        this.interpreter=new Interpreter(this.processManagement, this.fat, this.virtualMemory);
+                        this.interpreter=new Interpreter(this.processManagement, this.fat, this.virtualMemory, this.interprocessCommunication);
 		Dzialaj();	
 		}
 	public static boolean d=true;

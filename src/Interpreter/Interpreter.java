@@ -50,7 +50,8 @@ public class Interpreter {
 
 
 
-    public Interpreter(ProcessesManagement manager, FAT filesystem, VirtualMemory memory) {                   //Memory memory, bez tego
+    public Interpreter(ProcessesManagement manager, FAT filesystem, VirtualMemory memory, interprocessCommunication communication) {                   //Memory memory, bez tego
+        this.communication=communication;
         this.memory=memory;
         this.manager=manager;
         this.filesystem=filesystem;
@@ -379,7 +380,7 @@ public class Interpreter {
             case "XR": // czytanie komunikatu;
                 //if(communication.read(manager.getProcess(P1)==1){
                     String pom = communication.read(manager.getProcess(P1));
-                    procesor.SetValue("B", Integer.parseInt(pom));
+                   // procesor.SetValue("B", Integer.parseInt(pom));
                 //}
                 //else {
                   //  Running.Setstan(2);
