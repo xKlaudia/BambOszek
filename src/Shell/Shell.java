@@ -160,7 +160,7 @@ import syncMethod.Lock;
                          } // proces po nazwie
 			case("pwp"):
                         {
-                            for(int i=0;i<processManagement.processesList.size()-1;i++)
+                            for(int i=0;i<processManagement.processesList.size();i++)
                             {
                                 if(processManagement.processesList.get(i).GetState()==3)
                                 {
