@@ -51,13 +51,13 @@ public class Lock
 	
 	public void unlock(Process procesWhichOpen) {
 		//odblokowuje zamek i jeoli kolejka nie jest pusta to zeruje bit blocked pierwszego oczekujacego procesu.
-		if(procesWhichOpen.GetID() == this.lockingProces.GetID()) {
+		//if(procesWhichOpen.GetID() == this.lockingProces.GetID()) {
 			this.setState(false);
 			this.lockingProces = null;
 			if(!queueWaitingProcesses.isEmpty()) {
 				queueWaitingProcesses.peek().SetState(1);
 				queueWaitingProcesses.poll().SetUnlocked();
-			}
+			//}
 		}
 	}
 }
