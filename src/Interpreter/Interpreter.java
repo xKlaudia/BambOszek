@@ -80,7 +80,7 @@ public class Interpreter {
                 if(i!=highestProcessNumber)
                 {
                     if(manager.processesList.get(i).GetCurrentPriority()<15 && !manager.processesList.get(i).GetName().equals("Idle")) manager.processesList.get(i).SetCurrentPriority(manager.processesList.get(i).GetCurrentPriority()+1);
-                    if(manager.processesList.get(i).GetState()==2) manager.processesList.get(i).SetState(3);
+                    if(manager.processesList.get(i).GetState()==2) manager.processesList.get(i).SetState(1);
                 }
             }
         }
@@ -284,7 +284,8 @@ public class Interpreter {
             		filesystem.CloseFile(P1, Running);
             	}
             	catch(Exception ex2) {
-            		System.out.println("BLAD ZAMYKANIA PLIKU: " + ex2.getMessage());
+            		//System.out.println("BLAD ZAMYKANIA PLIKU: " + ex2.getMessage());
+                        ex2.printStackTrace();
             		//Running.SetState(2);
             	}
             	break;

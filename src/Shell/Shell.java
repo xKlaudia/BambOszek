@@ -158,7 +158,16 @@ import syncMethod.Lock;
                             }
                             break;
                          } // proces po nazwie
-			
+			case("pwp"):
+                        {
+                            for(int i=0;i<processManagement.processesList.size()-1;i++)
+                            {
+                                if(processManagement.processesList.get(i).GetState()==3)
+                                {
+                                    System.out.println(processManagement.processesList.get(i).GetName());
+                                }
+                            }
+                        }
 			 case("kill"):{
 				 if(arr[1]!=null) {
 				 int id = Integer.parseInt(arr[1]);
