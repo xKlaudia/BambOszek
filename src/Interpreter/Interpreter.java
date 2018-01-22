@@ -379,8 +379,7 @@ public class Interpreter {
 
             case "XR": // czytanie komunikatu;
                 //if(communication.read(manager.getProcess(P1)==1){
-                    communication.read(manager.getProcess(P1));
-                    String pom = "";
+                    String pom = communication.read(manager.getProcess(P1));
                     procesor.SetValue("B", Integer.parseInt(pom));
                 //}
                 //else {
@@ -390,7 +389,7 @@ public class Interpreter {
 
             case "XS": // -- Wys�anie komunikatu;
                 //if(communication.writePipe(P1, P2)==1) {
-                    communication.write(P1,manager.getProcess(P2));
+                    communication.write(P1, manager.getProcess(P2));
                 //}
                 //else {
                   //  Running.Setstan(2);
