@@ -67,7 +67,7 @@ public class Interpreter {
             
             for(int i=0; i<manager.processesList.size(); i++)
             {
-                if(manager.processesList.get(i).GetCurrentPriority()>max && manager.processesList.get(i).GetState() != 4)
+                if(manager.processesList.get(i).GetCurrentPriority()>max && manager.processesList.get(i).GetState() != 4 && !manager.processesList.get(i).GetLocked())
                 {
                     max = manager.processesList.get(i).GetCurrentPriority();
                     highestProcessNumber = i;
