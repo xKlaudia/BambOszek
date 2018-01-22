@@ -122,7 +122,6 @@ import syncMethod.Lock;
                             {
                                 interpreter.CPU();
                                 counter = 0;
-                                
                             }
                             setCurrentProcess();
                             System.out.println("Nazwa aktualnie wykonywanego procesu: " + currentProcess);
