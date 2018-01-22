@@ -159,11 +159,12 @@ import syncMethod.Lock;
                          } // proces po nazwie
 			case("pwp"):
                         {
+                            System.out.println("Waiting processes:");
                             for(int i=0;i<processManagement.processesList.size();i++)
                             {
                                 if(processManagement.processesList.get(i).GetState()==3)
                                 {
-                                    System.out.println(processManagement.processesList.get(i).GetName());
+                                    System.out.println("ID: "+processManagement.processesList.get(i).GetID()+"  "+"Name: " + processManagement.processesList.get(i).GetName());
                                 }
                             }
                             break;
