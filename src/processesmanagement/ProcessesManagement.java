@@ -195,6 +195,20 @@ public class ProcessesManagement extends Process {
 
 		return stan;
 	}
+        
+        public int GetStateWithName(String Name) 
+        {
+            int stan=-1;
+		for(int i=0;i<processesList.size();i++)
+                {
+                    if(processesList.get(i).GetName()==Name)
+                    {
+                       stan= processesList.get(i).GetState();     
+                    }
+                }
+
+		return stan;
+	}
 		
 	public void SetState(int ID, int State) 
         {

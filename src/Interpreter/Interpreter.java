@@ -267,95 +267,94 @@ public class Interpreter {
                 break;
 
     //-----------------------------------------------------------------------   PLIKI
-
-            case "CE": // Tworzenie pliku pustego
-                if(What) {
-                	try  {
-                		filesystem.CreateEmptyFile(P1);
-                	}
-                	catch(IllegalFileNameException ex) {
-                        System.out.println("BLAD NAZWY PLIKU: " + ex.getMessage());
-                        Running.SetState(2);
-                	}
-                	catch(OutOfBlocksException ex2) {
-                		System.out.println("BLAD PAMIECI: " + ex2.getMessage());
-                        Running.SetState(2);
-                	}
-                	catch(Exception ex3) {
-                        System.out.println("BLAD TYPU NIEOKRESLONEGO: " + ex3.getMessage());
-                        Running.SetState(2);
-                	}
-                } 
-                break;
-
-
-           case "CF": // Tworzenie pliku z zawartoscia
-        	   	filesystem.OpenFile(P1, Running);
-    	   		if (What) {
-            		try {
-            			filesystem.CreateNewFile(P1,Integer.toString(GetValue(P2)));
-            		}
-            		catch (Exception ex) {
-            			System.out.println("Blad: " + ex.getMessage());
-            			Running.SetState(2);
-            		}
-                } 
-            	else {
-                	try {
-            			filesystem.CreateNewFile(P1,P2);
-            		}
-            		catch (Exception ex) {
-            			System.out.println("Blad: " + ex.getMessage());
-            			Running.SetState(2);
-            		}
-                }
-    	   		filesystem.CloseFile(P1, Running);
-                break;   
-
-
-            case "WF": // Dopisanie do pliku
+            case "OF": {	// Open File
             	try {
-            		filesystem.OpenFile(P1, process);
+            		filesystem.OpenFile(P1, Running);
             	}
             	catch(Exception ex) {
             		System.out.println("BLAD OTWIERANIA: " + ex.getMessage());
-            		Running.SetState(2);
+            		//Running.SetState(2);
             		break;
             	}
-            	if(What) {
-            		try {
-            			filesystem.AppendToFile(P1, P2);
-            		}
-            		catch(Exception ex2) {
-            			System.out.println("BLAD DOPISYWANIA: " + ex2.getMessage());
-            			Running.SetState(2);
-            			break;
-            		}            		
-            	}
-            	else {
-            		Running.SetState(2);
-            	}
+            	break;
+            }
+            case "CF": {	// Close File
             	try {
-            		filesystem.CloseFile(P1, process);
+            		filesystem.CloseFile(P1, Running);
             	}
             	catch(Exception ex2) {
             		System.out.println("BLAD ZAMYKANIA PLIKU: " + ex2.getMessage());
-            		Running.SetState(2);
+            		//Running.SetState(2);
             	}
+            	break;
+            }
+            case "CE": // Create Empty File
+            	try  {
+            		filesystem.CreateEmptyFile(P1);
+            	}
+            	catch(IllegalFileNameException ex) {
+                    System.out.println("BLAD NAZWY PLIKU: " + ex.getMessage());   
+            	}
+            	catch(OutOfBlocksException ex2) {
+            		System.out.println("BLAD PAMIECI: " + ex2.getMessage()); 
+            	}
+            	catch(Exception ex3) {
+                    System.out.println("BLAD TYPU NIEOKRESLONEGO: " + ex3.getMessage());
+            	}
+            
+                break;
+
+
+           case "CFC": // Create File Content
+        		try {
+        			filesystem.CreateNewFile(P1,P2);
+        		}
+        		catch (Exception ex) {
+        			System.out.println("Blad: " + ex.getMessage());
+        		}
+            	try {
+        			filesystem.CreateNewFile(P1,P2);
+        		}
+        		catch (Exception ex) {
+        			System.out.println("Blad: " + ex.getMessage());
+        		}
+            
+                break;   
+
+
+            case "WF": // Write File
+        		try {
+        			filesystem.AppendToFile(P1, P2);
+        		}
+        		catch(Exception ex2) {
+        			System.out.println("BLAD DOPISYWANIA: " + ex2.getMessage());
+        			break;
+        		}  
             	
             	break;
             	
-            case "DF": // Usuwanie pliku
-                filesystem.OpenFile(P1, Running);
+            case "DF": // Delete File
                 try {
                     filesystem.DeleteFile(P1);
                 }
                 catch(Exception ex) {
                 	System.out.println("BLAD USUWANIA PLIKU: " + ex.getMessage());
-                    Running.SetState(2);
                 }
                 break;
-                
+            case "RF":	// Read File
+            	try {
+            		if(!P1.isEmpty() && P2.isEmpty()) {
+                		System.out.println(filesystem.GetFilesContent(P1));
+                	}
+                	else if(!P2.isEmpty()) {
+                		System.out.println(filesystem.GetFilesContent(P1, Integer.parseInt(P2)));		//czytanie kilku kolejnych znakow
+                	}
+            	}
+            	catch(Exception ex2) {
+            		System.out.println("BLAD: " + ex2.getMessage());
+            		break;
+            	}
+            	break;
 
     //-----------------------------------------------------------------------   JUMPY I KONCZENIE
 
@@ -434,11 +433,11 @@ public class Interpreter {
                 memory.loadProcess(P1, P2, Integer.parseInt(P3));
                 break;
 
-            case "XF": // -- usuwanie procesu z pamięci
+            case "XF": // -- usuwanie procesu z pamieci
                 memory.deleteProcess(P1);
                 break;
 
-            case "WM": // -- pisanie do pamięci
+            case "WM": // -- pisanie do pamieci
                 if (What) {
                     String registerValue = Integer.toString(GetValue(P2));
                     for (int j = 0; j < registerValue.length(); j++) {
@@ -453,8 +452,8 @@ public class Interpreter {
                 }
                 break;
                 
-            case "RM": // -- czytanie z pamięci
-                System.out.print("Wczytano z pamięci: ");
+            case "RM": // -- czytanie z pamieci
+                System.out.print("Wczytano z pamieci: ");
                 for (int j = 0; j < Integer.parseInt(P2); j++) {
                     System.out.print(memory.readMemory(Integer.parseInt(P1) + j));
                 }
@@ -462,7 +461,7 @@ public class Interpreter {
                 break;
                 
             default:
-                System.out.println("Wczytano nieprawidłową instrukcję!");
+                System.out.println("Wczytano nieprawidlowa instrukcje!");
                 break;
             }
         }

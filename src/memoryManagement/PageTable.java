@@ -40,7 +40,7 @@ public class PageTable {
         this.valid[index] = valid;
     }
     
-    /*Wyświetlanie tablicy stronic*/
+    /*Wyswietlanie tablicy stronic*/
     public void printPageTable() {
         System.out.println("Tablica stronic:");
         for (int i = 0; i < frameNumber.length; i++) {

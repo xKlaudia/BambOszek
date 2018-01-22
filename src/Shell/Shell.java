@@ -10,11 +10,13 @@ import memoryManagement.VirtualMemory;
 import fileSystem.FAT;
 import Interpreter.Interpreter;
 import java.io.BufferedWriter;
+import syncMethod.Lock;
 
 	public class Shell {
 		//TUTAJ MUSZA SIE ZNALEZC OBIEKTY KLAS DO WYWOLYWANIA FUNKCJI
 	public	ProcessesManagement processManagement;
         public  VirtualMemory virtualMemory;
+        public Lock lock;
 	public  FAT fat;
         private int id=1;
         public static String currentProcess = "";
@@ -105,6 +107,10 @@ import java.io.BufferedWriter;
 		 	case("go"):{
 		 	//	interpreter.RUN(processManagement.);
                             processManagement.CheckStates();
+                            /*if(processManagement.GetStateWithName(currentProcess)==3)
+                            {
+                                lock.addToQueue(processManagement.getProcess(currentProcess));
+                            }*/
                             if (currentProcess.equals("") || currentProcess.equals("Idle") || processManagement.processesList.size() < 2) {
                                 interpreter.CPU();
                                 counter = 0;
@@ -179,13 +185,35 @@ import java.io.BufferedWriter;
 					System.out.println(content);
 		                            break;
 			 }
-			 
+                         
+                        case("pm"):{
+                            if (arr.length < 3) {
+                                virtualMemory.printVirtualMemory(0, 128);
+                            }
+                            else {
+                                virtualMemory.printVirtualMemory(Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
+                            }
+                            break;
+                        } //Wyswietla pamiec wirtualna
+                        
+                        case("ppt"):{
+                            if (arr[1] != null) {
+                                virtualMemory.printPageTable(arr[1]);
+                            }
+                            break;
+                        } //Wyswietla tablice stronic
+                        
 			 case("quit"):{d=false;break;}
 			 
 			 
 			 //-------------------------------------------------PLIKI I KATALOGI
 			 case("pd"): { 		
 				 fat.PrintDisk();
+				 break;
+			 }
+			 case("smc"): {
+				 System.out.println("ZAWARTOSC DYSKU: ");
+				 fat.ShowMainCatalog();
 				 break;
 			 }
 			 case("sf"): {
@@ -241,7 +269,7 @@ import java.io.BufferedWriter;
 				 //case("cp"):{System.out.println(komenda); break;} //kopiowanie pliku
 				 //procesy
                         default:
-                            System.out.println("Podano nieprawidłową komendę!");
+                            System.out.println("Podano nieprawidlowa komende");
                             break;
 		 //-------------------------------------------------------------------------
 		 }
