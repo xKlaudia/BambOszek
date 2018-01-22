@@ -41,7 +41,8 @@ public class interprocessCommunication
     //Zapisuje wiadomość do pliku
     public void write(String message, Process process)
     {
-
+        
+        
        lock.lock(process);
         try
         {
