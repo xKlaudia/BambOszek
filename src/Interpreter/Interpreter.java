@@ -380,7 +380,7 @@ public class Interpreter {
 
             case "XR": // czytanie komunikatu;
                 //if(communication.read(manager.getProcess(P1)==1){
-                    String message = communication.read(manager.getProcess(P1));
+                    String message = communication.read(P1);
                     Running.SetReceivedMsg(message);
                    // procesor.SetValue("B", Integer.parseInt(pom));
                 //}

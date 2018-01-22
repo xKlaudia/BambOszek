@@ -167,7 +167,8 @@ import syncMethod.Lock;
                                     System.out.println(processManagement.processesList.get(i).GetName());
                                 }
                             }
-                        }
+                            break;
+                        }//wyswietla liste procesow w stanie waiting
 			 case("kill"):{
 				 if(arr[1]!=null) {
 				 int id = Integer.parseInt(arr[1]);

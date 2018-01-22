@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+//<<<<<<< HEAD
 package syncMethod;
 
 import java.util.LinkedList;
@@ -61,6 +61,8 @@ public class Lock
 			}
 		}
 	}
+}
+ /*       
 =======
 package syncMethod;
 
@@ -125,4 +127,4 @@ public class Lock
 		}
 	}
 >>>>>>> 5c02b49c87795086c707fecb8ee1a79e27e9f485
-}
+}*/
