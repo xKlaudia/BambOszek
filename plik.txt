@@ -6,3 +6,4 @@ WF pr1.txt heszki heheszki;
 RF pr1.txt 5;
 RF pr1.txt 9;
 CF pr1.txt;
+EX;
