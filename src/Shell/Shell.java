@@ -118,6 +118,12 @@ import syncMethod.Lock;
                                 interpreter.CPU();
                                 counter = 0;
                             }
+                            if (processManagement.GetLockedWithID(processManagement.GetIDwithName(currentProcess)))
+                            {
+                                interpreter.CPU();
+                                counter = 0;
+                                
+                            }
                             setCurrentProcess();
                             System.out.println("Nazwa aktualnie wykonywanego procesu: " + currentProcess);
                             interpreter.RUN(processManagement.getProcess(currentProcess));
