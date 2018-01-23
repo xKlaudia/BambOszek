@@ -58,7 +58,7 @@ import Interpreter.Interpreter;
 			} }
 				 break;} //utworz plik o nazwie
 		 	case("go"):{
-		 		
+		 		System.out.println("wykonaj kolejne polecenie z pliku");
 		 	//	interpreter.RUN(processManagement.);
 			 
 			 break;
@@ -67,7 +67,7 @@ import Interpreter.Interpreter;
 			 fat.DoesFileExist(arr[1]);
 		 }
 		 
-		// System.out.println("sprawdzam plik o nazwie: "+arr[1]+" istnieje");
+		 System.out.println("sprawdzam plik o nazwie: "+arr[1]+" istnieje");
 		 break;} //sprawdz czy plik instnieje
 		
 		 case("cat"):{
@@ -78,16 +78,17 @@ import Interpreter.Interpreter;
 		 
 		 case("rm"):{if(arr[1]!=null) {
 			 fat.DeleteFile(arr[1]);
-		// System.out.println("usuwam plik o nazwie: "+arr[1]);
+		 System.out.println("usuwam plik o nazwie: "+arr[1]);
 			 }
 		 break;} //usuniecie pliku
-		 //case("cp"):{System.out.println(komenda); break;} //kopiowanie pliku
+		 case("cp"):{if(arr[1]!=null) {System.out.println("kopiowanie pliku o nazwie"+arr[1]);} break;} //kopiowanie pliku
 		 //procesy
 		 case("df"):{
 			 fat.PrintDisk();
-		 //System.out.println("wyswietlanie dysku: ");
+		 System.out.println("wyswietlanie dysku: ");
 		 break;}
-		 case("ps"):{processManagement.printProcessListInformations();
+		 case("ps"):{
+			 processManagement.printProcessListInformations();
 		 System.out.println("wyswietlam liste procesow");
 		 break;} //wyswietla procesy
 		 
@@ -126,6 +127,6 @@ import Interpreter.Interpreter;
 		 }
 		    
 		}
-			System.out.println("Zegnam");
+			System.out.println("System zakonczyl dzialanie");
 		}
 }
