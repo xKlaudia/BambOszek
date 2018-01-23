@@ -23,6 +23,8 @@ import syncMethod.Lock;
         private int id=1;
         public static String currentProcess = "";
         public static int counter = 0; //liczy kwanty wykonywanych rozkazów
+        public boolean processKilled = false;
+        public String killedProcessName = "";
         public Interpreter interpreter;
 		
 		public Shell() throws Exception {
@@ -101,10 +103,21 @@ import syncMethod.Lock;
               /*processManagement.NewProcess_XC("p1", 2);
               processManagement.SetHowManyPagesWithID(0,((46 - 1) / 16 + 1));
               virtualMemory.loadProcess("p1", "Silnia.txt", 46);*/
-              processManagement.NewProcess_XC(arr[1], Integer.parseInt(arr[3]));
-              processManagement.SetHowManyPagesWithID(id,((Integer.parseInt(arr[4]) - 1) / 16 + 1));
-              virtualMemory.loadProcess(arr[1], arr[2] + ".txt", Integer.parseInt(arr[4]));
-              id++;
+              if (processManagement.FindProcessWithName(arr[1]) == -1) {
+                try {  
+                    virtualMemory.loadProcess(arr[1], arr[2] + ".txt", Integer.parseInt(arr[4]));
+                    processManagement.NewProcess_XC(arr[1], Integer.parseInt(arr[3]));
+                    processManagement.SetHowManyPagesWithID(id,((Integer.parseInt(arr[4]) - 1) / 16 + 1));
+                    id++;
+                }
+                catch (Exception exception) {
+                    System.out.println(exception.getMessage());
+                    virtualMemory.deleteProcess(arr[1]);
+                }
+              }
+              else {
+                  System.out.println("Istnieje proces o podanej nazwie!");
+              }
               break;
             }
 		 	case("go"):{
@@ -122,7 +135,13 @@ import syncMethod.Lock;
                             {
                                 interpreter.CPU();
                                 counter = 0;
-                                
+                            }
+                            if (processKilled) {
+                                if (killedProcessName.equals(currentProcess)) {
+                                    interpreter.CPU();
+                                    counter = 0;
+                                }
+                                processKilled = false;
                             }
                             setCurrentProcess();
                             System.out.println("Nazwa aktualnie wykonywanego procesu: " + currentProcess);
@@ -158,13 +177,27 @@ import syncMethod.Lock;
                             }
                             break;
                          } // proces po nazwie
-			
+			case("pwp"):
+                        {
+                            System.out.println("Waiting processes:");
+                            for(int i=0;i<processManagement.processesList.size();i++)
+                            {
+                                if(processManagement.processesList.get(i).GetState()==3)
+                                {
+                                    System.out.println("ID: "+processManagement.processesList.get(i).GetID()+"  "+"Name: " + processManagement.processesList.get(i).GetName());
+                                }
+                            }
+                            break;
+                        }//wyswietla liste procesow w stanie waiting
 			 case("kill"):{
 				 if(arr[1]!=null) {
 				 int id = Integer.parseInt(arr[1]);
                                  if(id!=0)
                                  {
+                                     fat.checkLocks(processManagement.GetProcessWithID(id));
+                                     killedProcessName = processManagement.GetNameWithID(id);
 		                     processManagement.DeleteProcessWithID(id);
+                                     processKilled = true;
                                 System.out.println("usuniecie procesu o id: "+arr[1]);
                                  }
                                  else System.out.println("You cannot delete Idle process!");

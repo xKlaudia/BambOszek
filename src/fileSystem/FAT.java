@@ -34,6 +34,12 @@ public class FAT {
 		}
 	}
 	
+        public void checkLocks(Process process) {
+            for (int i = 0; i < mainCatalog.size(); i++) {
+                mainCatalog.get(i).lock.removeProcess(process);
+            }
+        }
+        
 	public boolean AppendToFile(String fullName, String content) throws Exception {
 		if(!DoesFileExist(fullName)) throw new Exception("Nie znaleziono pliku");
 		else {

@@ -1,6 +1,5 @@
 package Interpreter;
 
-
 import java.util.ArrayList;
 import fileSystem.FAT;
 import fileSystemExceptions.*;
@@ -80,7 +79,7 @@ public class Interpreter {
                 if(i!=highestProcessNumber)
                 {
                     if(manager.processesList.get(i).GetCurrentPriority()<15 && !manager.processesList.get(i).GetName().equals("Idle")) manager.processesList.get(i).SetCurrentPriority(manager.processesList.get(i).GetCurrentPriority()+1);
-                    if(manager.processesList.get(i).GetState()==2) manager.processesList.get(i).SetState(3);
+                    if(manager.processesList.get(i).GetState()==2) manager.processesList.get(i).SetState(1);
                 }
             }
         }
@@ -284,7 +283,8 @@ public class Interpreter {
             		filesystem.CloseFile(P1, Running);
             	}
             	catch(Exception ex2) {
-            		System.out.println("BLAD ZAMYKANIA PLIKU: " + ex2.getMessage());
+            		//System.out.println("BLAD ZAMYKANIA PLIKU: " + ex2.getMessage());
+                        ex2.printStackTrace();
             		//Running.SetState(2);
             	}
             	break;
@@ -379,7 +379,8 @@ public class Interpreter {
 
             case "XR": // czytanie komunikatu;
                 //if(communication.read(manager.getProcess(P1)==1){
-                    String pom = communication.read(manager.getProcess(P1));
+                    String message = communication.read(P1);
+                    Running.SetReceivedMsg(message);
                    // procesor.SetValue("B", Integer.parseInt(pom));
                 //}
                 //else {
@@ -389,7 +390,10 @@ public class Interpreter {
 
             case "XS": // -- Wys�anie komunikatu;
                 //if(communication.writePipe(P1, P2)==1) {
-                    communication.write(P1, manager.getProcess(P2));
+                if(P3.equals("") && P4.equals("")) communication.write(P1, manager.getProcess(P2));
+                else if(!P3.equals("") && P4.equals("")) communication.write(P1 + " " + P2, manager.getProcess(P3));
+                else if(!P3.equals("") && !P4.equals("")) communication.write(P1 + " " + P2 + " " + P3, manager.getProcess(P4));
+
                 //}
                 //else {
                   //  Running.Setstan(2);
@@ -419,9 +423,20 @@ public class Interpreter {
     //            break;
 
             case "XC": // -- tworzenie procesu (P1,P2);
-                manager.NewProcess_XC(P1, Integer.parseInt(P3));
-                manager.SetHowManyPagesWithID(Running.GetID(),((Integer.parseInt(P4) - 1) / 16 + 1));
-                memory.loadProcess(P1, P2 + ".txt", Integer.parseInt(P4));
+                if (manager.FindProcessWithName(P1) == -1) {
+                    try {
+                        memory.loadProcess(P1, P2 + ".txt", Integer.parseInt(P4));
+                        manager.NewProcess_XC(P1, Integer.parseInt(P3));
+                        manager.SetHowManyPagesWithID(Running.GetID(),((Integer.parseInt(P4) - 1) / 16 + 1));
+                    }
+                    catch (Exception exception) {
+                        System.out.println(exception.getMessage());
+                        memory.deleteProcess(P1);
+                    }
+                }
+                else {
+                    System.out.println("Istnieje proces o podanej nazwie!");
+                }
                 break;
 
             case "XZ": // -- wstrzymanie procesu

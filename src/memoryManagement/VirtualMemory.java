@@ -259,12 +259,10 @@ public class VirtualMemory {
     public void loadProcess(String processName, String program, int size) throws Exception, IOException {
         if (size < 1)
             throw new Exception("Podano nieprawidlowy rozmiar!");
-        processesNames.add(processName);
-        pageTables.add(new PageTable(size));
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(program));
         //Wczytywanie kodu programu
         String programCode;
         String line;
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(program));
         StringBuilder stringBuilder = new StringBuilder();
         line = bufferedReader.readLine();
         while (line != null) {
@@ -282,35 +280,39 @@ public class VirtualMemory {
             else
                 exchangeFile.writeCharacterToExchangeFile(exchangeFile.getExchangeFileLength(), ' ');
         }
+        processesNames.add(processName);
+        pageTables.add(new PageTable(size));
     }
     
     /*Usuwanie procesu z pliku wymiany*/
     public void deleteProcess(String processName) throws IOException {
-        int index = 0;
-        int frameNumber;
-        int firstPageNumber = 0;
-        int numberOfPages = 0;
-        //Szukanie tablicy stronic
-        for (int i = 0; i < processesNames.size(); i++) {
-            if (processesNames.get(i).equals(processName)) {
-                index = i;
-                numberOfPages = pageTables.get(i).getLength();
-                break;
+        if (processesNames.contains(processName)) {
+            int index = 0;
+            int frameNumber;
+            int firstPageNumber = 0;
+            int numberOfPages = 0;
+            //Szukanie tablicy stronic
+            for (int i = 0; i < processesNames.size(); i++) {
+                if (processesNames.get(i).equals(processName)) {
+                    index = i;
+                    numberOfPages = pageTables.get(i).getLength();
+                    break;
+                }
+                firstPageNumber += pageTables.get(i).getLength();
             }
-            firstPageNumber += pageTables.get(i).getLength();
-        }
-        for (int i = 0; i < pageTables.get(index).getLength(); i++) {
-            if (pageTables.get(index).getValid(i)) {
-                frameNumber = pageTables.get(index).getFrameNumber(i);
-                freeFrames[frameNumber] = true;
-                if (secondChance.contains(new SecondChanceElement(frameNumber, false)))
-                    secondChance.remove(new SecondChanceElement(frameNumber, false));
-                if (secondChance.contains(new SecondChanceElement(frameNumber, true)))
-                    secondChance.remove(new SecondChanceElement(frameNumber, true));
+            for (int i = 0; i < pageTables.get(index).getLength(); i++) {
+                if (pageTables.get(index).getValid(i)) {
+                    frameNumber = pageTables.get(index).getFrameNumber(i);
+                    freeFrames[frameNumber] = true;
+                    if (secondChance.contains(new SecondChanceElement(frameNumber, false)))
+                        secondChance.remove(new SecondChanceElement(frameNumber, false));
+                    if (secondChance.contains(new SecondChanceElement(frameNumber, true)))
+                        secondChance.remove(new SecondChanceElement(frameNumber, true));
+                }
             }
+            processesNames.remove(index);
+            pageTables.remove(index);
+            exchangeFile.deleteProcessPages(firstPageNumber, numberOfPages);
         }
-        processesNames.remove(index);
-        pageTables.remove(index);
-        exchangeFile.deleteProcessPages(firstPageNumber, numberOfPages);
     }
 }
