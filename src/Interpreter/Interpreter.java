@@ -1,6 +1,5 @@
 package Interpreter;
 
-
 import java.util.ArrayList;
 import fileSystem.FAT;
 import fileSystemExceptions.*;
@@ -424,9 +423,20 @@ public class Interpreter {
     //            break;
 
             case "XC": // -- tworzenie procesu (P1,P2);
-                manager.NewProcess_XC(P1, Integer.parseInt(P3));
-                manager.SetHowManyPagesWithID(Running.GetID(),((Integer.parseInt(P4) - 1) / 16 + 1));
-                memory.loadProcess(P1, P2 + ".txt", Integer.parseInt(P4));
+                if (manager.FindProcessWithName(P1) == -1) {
+                    try {
+                        memory.loadProcess(P1, P2 + ".txt", Integer.parseInt(P4));
+                        manager.NewProcess_XC(P1, Integer.parseInt(P3));
+                        manager.SetHowManyPagesWithID(Running.GetID(),((Integer.parseInt(P4) - 1) / 16 + 1));
+                    }
+                    catch (Exception exception) {
+                        System.out.println(exception.getMessage());
+                        memory.deleteProcess(P1);
+                    }
+                }
+                else {
+                    System.out.println("Istnieje proces o podanej nazwie!");
+                }
                 break;
 
             case "XZ": // -- wstrzymanie procesu

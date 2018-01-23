@@ -103,10 +103,21 @@ import syncMethod.Lock;
               /*processManagement.NewProcess_XC("p1", 2);
               processManagement.SetHowManyPagesWithID(0,((46 - 1) / 16 + 1));
               virtualMemory.loadProcess("p1", "Silnia.txt", 46);*/
-              processManagement.NewProcess_XC(arr[1], Integer.parseInt(arr[3]));
-              processManagement.SetHowManyPagesWithID(id,((Integer.parseInt(arr[4]) - 1) / 16 + 1));
-              virtualMemory.loadProcess(arr[1], arr[2] + ".txt", Integer.parseInt(arr[4]));
-              id++;
+              if (processManagement.FindProcessWithName(arr[1]) == -1) {
+                try {  
+                    virtualMemory.loadProcess(arr[1], arr[2] + ".txt", Integer.parseInt(arr[4]));
+                    processManagement.NewProcess_XC(arr[1], Integer.parseInt(arr[3]));
+                    processManagement.SetHowManyPagesWithID(id,((Integer.parseInt(arr[4]) - 1) / 16 + 1));
+                    id++;
+                }
+                catch (Exception exception) {
+                    System.out.println(exception.getMessage());
+                    virtualMemory.deleteProcess(arr[1]);
+                }
+              }
+              else {
+                  System.out.println("Istnieje proces o podanej nazwie!");
+              }
               break;
             }
 		 	case("go"):{
