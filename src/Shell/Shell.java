@@ -23,6 +23,7 @@ import syncMethod.Lock;
         private int id=1;
         public static String currentProcess = "";
         public static int counter = 0; //liczy kwanty wykonywanych rozkazów
+        public boolean processKilled = false;
         public Interpreter interpreter;
 		
 		public Shell() throws Exception {
@@ -123,6 +124,11 @@ import syncMethod.Lock;
                                 interpreter.CPU();
                                 counter = 0;
                             }
+                            if (processKilled) {
+                                interpreter.CPU();
+                                counter = 0;
+                                processKilled = false;
+                            }
                             setCurrentProcess();
                             System.out.println("Nazwa aktualnie wykonywanego procesu: " + currentProcess);
                             interpreter.RUN(processManagement.getProcess(currentProcess));
@@ -174,7 +180,9 @@ import syncMethod.Lock;
 				 int id = Integer.parseInt(arr[1]);
                                  if(id!=0)
                                  {
+                                     fat.checkLocks(processManagement.GetProcessWithID(id));
 		                     processManagement.DeleteProcessWithID(id);
+                                     processKilled = true;
                                 System.out.println("usuniecie procesu o id: "+arr[1]);
                                  }
                                  else System.out.println("You cannot delete Idle process!");

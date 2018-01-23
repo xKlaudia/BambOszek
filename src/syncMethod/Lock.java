@@ -61,6 +61,19 @@ public class Lock
 			//}
 		}
 	}
+        
+        public void removeProcess(Process process) {
+            if (lockingProces != null) {
+                if (lockingProces.equals(process)) {
+                    unlock(lockingProces);
+                }
+                else {
+                    if (queueWaitingProcesses.contains(process)) {
+                        queueWaitingProcesses.remove(process);
+                    }
+                }
+            }
+        }
 }
  /*       
 =======
