@@ -8,16 +8,16 @@ public class PCB {
 	protected int ProcessState;
 	protected int BaseProcessPriority;
 	protected int CurrentProcessPriority;
-	protected boolean locked;
-	protected int howLongWaiting;
-        protected int whenCameToList;
-	protected int commandCounter;
-	protected String receivedMsg;
-        protected long firstPageNumber;
-	protected int howManyPages;
-	protected int A;
-	protected int B;
-	protected int C;
-	protected int D;
+	protected boolean blocked;
+	protected int whenCameToList;
+	protected int howLongWaiting;	
+	public int commandCounter;
+	public String receivedMsg;
+        public long firstPageNumber;
+	public int howManyPages;
+	public int A;
+	public int B;
+	public int C;
+	public int D;
 
 }

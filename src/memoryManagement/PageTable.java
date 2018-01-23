@@ -4,7 +4,6 @@ public class PageTable {
     private Integer frameNumber[];
     private boolean valid[];
     
-    /*Konstruktor*/
     public PageTable(int size) {
         if (size < 1) {
             frameNumber = new Integer[0];
@@ -40,7 +39,6 @@ public class PageTable {
         this.valid[index] = valid;
     }
     
-    /*Wyswietlanie tablicy stronic*/
     public void printPageTable() {
         System.out.println("Tablica stronic:");
         for (int i = 0; i < frameNumber.length; i++) {

@@ -1,7 +1,0 @@
-MV A 15;
-MV B 20;
-MV C 30;
-MV D 40;
-AD A B;
-AD C D;
-EX;

@@ -1,6 +1,8 @@
 package interprocessCommunication;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileWriter;
+import processesmanagement.ProcessesManagement;
 import syncMethod.Lock;
 import processesmanagement.Process;
 
@@ -38,8 +41,7 @@ public class interprocessCommunication
     //Zapisuje wiadomość do pliku
     public void write(String message, Process process)
     {
-        
-        
+
        lock.lock(process);
         try
         {
@@ -73,10 +75,10 @@ public class interprocessCommunication
     }
 
     //zczytuje wiadomość z pliku
-    public String read(String process)
+    public String read(Process process)
     {
 
-        //lock.lock(process);
+        lock.lock(process);
         String message = "";
         try
         {
@@ -91,7 +93,7 @@ public class interprocessCommunication
             }
             reader.close();
             out.close();
-            //lock.unlock(process);
+            lock.unlock(process);
 
             if(messages_array.isEmpty())
             {

@@ -4,23 +4,25 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Scanner;
+<<<<<<< HEAD
 import java.util.stream.Stream;
 
 import java.io.File;
 import java.io.FileWriter;
+=======
+
+>>>>>>> 245077d09bdb70152475d8aa016705a50b8fe039
 import processesmanagement.Process;
 import processesmanagement.ProcessesManagement;
 import memoryManagement.VirtualMemory;
-import interprocessCommunication.interprocessCommunication;
 import fileSystem.FAT;
 import Interpreter.Interpreter;
-import java.io.BufferedWriter;
-import syncMethod.Lock;
 
 	public class Shell {
 		//TUTAJ MUSZA SIE ZNALEZC OBIEKTY KLAS DO WYWOLYWANIA FUNKCJI
 	public	ProcessesManagement processManagement;
         public  VirtualMemory virtualMemory;
+<<<<<<< HEAD
         public interprocessCommunication interprocessCommunication;
         public Lock lock;
 	public  FAT fat;
@@ -31,15 +33,18 @@ import syncMethod.Lock;
         public String killedProcessName = "";
         public Interpreter interpreter;
         
+=======
+	public  FAT fat;	
+		public Interpreter interpreter;
+		
+>>>>>>> 245077d09bdb70152475d8aa016705a50b8fe039
 		public Shell() throws Exception {
-                        this.virtualMemory = new VirtualMemory();
-                        this.interprocessCommunication = new interprocessCommunication();
 			this.processManagement=new ProcessesManagement(virtualMemory);
 			this.fat=new FAT();
-                        this.interpreter=new Interpreter(this.processManagement, this.fat, this.virtualMemory, this.interprocessCommunication);
 		Dzialaj();	
 		}
 	public static boolean d=true;
+<<<<<<< HEAD
         
             public void setCurrentProcess()
             {
@@ -65,35 +70,11 @@ import syncMethod.Lock;
         	    }
         	    return contentBuilder.toString();
         	}
+=======
+>>>>>>> 245077d09bdb70152475d8aa016705a50b8fe039
 		public void Dzialaj() throws Exception {
-                    if(processManagement.processesList.size()==0)
-                    {
-                        File file = new File("idle.txt");
-                        if(!file.isFile())
-                        {
-                            FileWriter writer = new FileWriter(file, true);
-                            BufferedWriter in = new BufferedWriter(writer);
-                            in.write("JP 0;");
-                            in.close();
-                            writer.close();
-                        }
-                        processManagement.NewIdleProcess();
-                        processManagement.SetHowManyPagesWithID(0,1);
-                        virtualMemory.loadProcess("Idle","idle.txt",6);
-                    }
-                
+		
 			while(d) {
-                                for(Process p : processManagement.processesList)
-                {
-                    if(p.GetState()==2)
-                    {
-                        currentProcess = p.GetName();
-                        break;
-                    }
-                }
-                                processManagement.CheckStates();
-                            try
-                            {
 			String komenda; 
 			System.out.print("$>");
 		    Scanner odczyt = new Scanner(System.in); //obiekt do odebrania danych od u�ytkownika
@@ -114,77 +95,70 @@ import syncMethod.Lock;
 		 
 		 case("ls"):{ break;} //wyswietla zawartosc katalogu
 		*/
-                
-            case("cp"):{
-              /*processManagement.NewProcess_XC("p1", 2);
-              processManagement.SetHowManyPagesWithID(0,((46 - 1) / 16 + 1));
-              virtualMemory.loadProcess("p1", "Silnia.txt", 46);*/
-              if (processManagement.FindProcessWithName(arr[1]) == -1) {
-                try {  
-                    processManagement.NewProcess_XC(arr[1], Integer.parseInt(arr[3]));
-                    processManagement.SetHowManyPagesWithID(id,((Integer.parseInt(arr[4]) - 1) / 16 + 1));
-                    virtualMemory.loadProcess(arr[1], arr[2] + ".txt", Integer.parseInt(arr[4]));
-                    id++;
-                }
-                catch (Exception exception) {
-                    System.out.println(exception.getMessage());
-                    processManagement.DeleteProcessWithID(id);
-                    id++;
-                }
-              }
-              else {
-                  System.out.println("Istnieje proces o podanej nazwie!");
-              }
-              break;
-            }
+		 case("cf"):{if(arr[1]!=null) {
+			 if(arr.length>2) {
+				String content = "";
+				for(int i=2;i<arr.length;i++) { content=content+' '+arr[i];}
+				 fat.CreateNewFile(arr[1],content);
+				//System.out.println("utworzono plik o nazwie: "+arr[1]+ "i zawartosci"+ content); 
+			 } 
+			if(arr.length==2) {if(arr[1]!=null) {
+				fat.CreateEmptyFile(arr[1]);
+			}
+			//System.out.println("utworzono plik o nazwie: "+arr[1]);
+			} }
+				 break;} //utworz plik o nazwie
 		 	case("go"):{
+<<<<<<< HEAD
 
 		 		System.out.println("wykonaj kolejne polecenie z pliku");
 
+=======
+		 		
+>>>>>>> 245077d09bdb70152475d8aa016705a50b8fe039
 		 	//	interpreter.RUN(processManagement.);
-                            processManagement.CheckStates();
-                            /*if(processManagement.GetStateWithName(currentProcess)==3)
-                            {
-                                lock.addToQueue(processManagement.getProcess(currentProcess));
-                            }*/
-                            if (currentProcess.equals("") || currentProcess.equals("Idle") || processManagement.processesList.size() < 2) {
-                                interpreter.CPU();
-                                counter = 0;
-                            }
-                            if (processManagement.GetLockedWithID(processManagement.GetIDwithName(currentProcess)))
-                            {
-                                interpreter.CPU();
-                                counter = 0;
-                            }
-                            if (processKilled) {
-                                if (killedProcessName.equals(currentProcess)) {
-                                    interpreter.CPU();
-                                    counter = 0;
-                                }
-                                processKilled = false;
-                            }
-                            setCurrentProcess();
-                            System.out.println("Nazwa aktualnie wykonywanego procesu: " + currentProcess);
-                            interpreter.RUN(processManagement.getProcess(currentProcess));
-	                    if (counter < 1)
-                                counter++;
-	                    else
-	                    {
-	                        counter = 0;
-	                        interpreter.CPU();                      
-	                    }
-                            break;
+			 
+			 break;
 		 	}
+<<<<<<< HEAD
 		 	
 	
 		 
 	
 		 
+=======
+		 case("find"):{if(arr[1]!=null) {
+			 fat.DoesFileExist(arr[1]);
+		 }
+		 
+		// System.out.println("sprawdzam plik o nazwie: "+arr[1]+" istnieje");
+		 break;} //sprawdz czy plik instnieje
+		
+		 case("cat"):{
+			 if(arr[1]!=null) {
+			 fat.PrintFilesContent(arr[1]);
+		 System.out.println("wyswietlam zawartosc pliku o nazwie: "+arr[1]);}
+		 break;} //wypisz zawartosc pliku
+		 
+		 case("rm"):{if(arr[1]!=null) {
+			 fat.DeleteFile(arr[1]);
+		// System.out.println("usuwam plik o nazwie: "+arr[1]);
+			 }
+		 break;} //usuniecie pliku
+		 //case("cp"):{System.out.println(komenda); break;} //kopiowanie pliku
+		 //procesy
+>>>>>>> 245077d09bdb70152475d8aa016705a50b8fe039
 		 case("df"):{
 			 fat.PrintDisk();
-		 System.out.println("wyswietlanie dysku: ");
+		 //System.out.println("wyswietlanie dysku: ");
 		 break;}
+<<<<<<< HEAD
 		 
+=======
+		 case("ps"):{processManagement.printProcessListInformations();
+		 System.out.println("wyswietlam liste procesow");
+		 break;} //wyswietla procesy
+>>>>>>> 245077d09bdb70152475d8aa016705a50b8fe039
 		 
 		 case("pi"):{if(arr[1]!=null) {
 			 int id = Integer.parseInt(arr[1]);processManagement.printProcessInformations(id);
@@ -196,6 +170,7 @@ import syncMethod.Lock;
 		 System.out.println("dane procesu o nazwie: "+arr[1]);}
 		 break;} // proces po nazwie
 		
+<<<<<<< HEAD
 		 
 			 case("ps"):
                          {
@@ -582,16 +557,59 @@ import syncMethod.Lock;
                			 
                		 }
 
+=======
+		 case("kill"):{
+			 if(arr[1]!=null) {
+			 int id = Integer.parseInt(arr[1]); processManagement.DeleteProcessWithID(id);
+		 System.out.println("usuniecie procesu o nazwie: "+arr[1]);
+			 }
+		 break;} //zabija proces po id
+		 
+		 case("nice"):{if(arr[1]!=null) {
+			 int id = Integer.parseInt(arr[1]);
+			 int priorytet = Integer.parseInt(arr[2]);
+			 processManagement.SetCurrentPririty(id, priorytet);
+			 System.out.println("zmiana priorytetu procesu o nazwie: "+arr[1]);}
+			 break;} //zmiana priorytetu procesu
+		 //shell
+		 
+		 case("echo"):{
+			 String content = "";
+				for(int i=2;i<arr.length;i++) { content=content+' '+arr[i];}
+				System.out.println(content);
+		 }
+		 
+		 case("quit"):{d=false;break;}
+		 }
+		    
+>>>>>>> 245077d09bdb70152475d8aa016705a50b8fe039
 		}
+<<<<<<< HEAD
 			System.out.println("System zakonczyl dzialanie");
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 245077d09bdb70152475d8aa016705a50b8fe039
 			
 		 }catch(Exception e)
                 {
                     e.printStackTrace();
                 }
+<<<<<<< HEAD
 		
                         System.out.println("Zegnam");
                 }
 		}
 		}
 
+=======
+>>>>>>> f8443c6b9883c497ac3294af62337e47cb36f857
+=======
+>>>>>>> parent of 1f1f7d6... Merge branch 'master' of https://github.com/xKlaudia/BambOszek
+=======
+			System.out.println("Zegnam");
+>>>>>>> parent of 59f2f1b... lol
+		}
+}
+>>>>>>> 245077d09bdb70152475d8aa016705a50b8fe039
