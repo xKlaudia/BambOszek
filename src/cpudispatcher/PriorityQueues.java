@@ -45,11 +45,11 @@ public class PriorityQueues {
     public void printPriorities(){
         for(int i = 31; i >= 0; i--){
             if (queues[i].isEmpty() == true){
-             System.out.println(i+" xxx");
+            // System.out.println(i+" xxx");
             }
             else{
                 Process buff = (Process) queues[i].peek();
-                System.out.println("Priorytet procesu na początku kolejki " + buff.GetCurrentPriority() );
+              //  System.out.println("Priorytet procesu na początku kolejki " + buff.GetCurrentPriority() );
                 
                 
             }
@@ -71,7 +71,7 @@ public class PriorityQueues {
                 else
                     buff.SetCurrentPriority(buff.GetCurrentPriority()+buff.GetHowLongWaiting());
             
-                System.out.println("Postarzono " + buff.GetName() + " z " + (buff.GetBasePriority()) + " na " + buff.GetCurrentPriority());
+               // System.out.println("Postarzono " + buff.GetName() + " z " + (buff.GetBasePriority()) + " na " + buff.GetCurrentPriority());
                 queues[buff.GetCurrentPriority()].add(buff);
             }
             

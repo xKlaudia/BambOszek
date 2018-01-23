@@ -1,20 +1,27 @@
 package Interpreter;
 
-
 import java.util.ArrayList;
-//import memorymanagement.Memory;
 import fileSystem.FAT;
+import fileSystemExceptions.*;
 import interprocessCommunication.interprocessCommunication;
 import processesmanagement.ProcessesManagement;
 import processesmanagement.Process;
+import processesmanagement.ProcessStateOverseer;
 import processesmanagement.PCB;
 import memoryManagement.VirtualMemory;
 import cpudispatcher.CPUDispatcher;
 import java.io.IOException;
+import Shell.Shell;
 
 public class Interpreter {
 
     private int Reg_A=0, Reg_B=0, Reg_C=0, Reg_D = 0;
+    /*public static final int NEWBIE = ProcessStateOverseer.newbie,
+    						READY = ProcessStateOverseer.ready,
+    						ACTIVE = ProcessStateOverseer.active,
+    						WAITING = ProcessStateOverseer.waiting,
+    						FINISHED = ProcessStateOverseer.finished;*/
+    						
     //private bool Flag_E = 0;      //Flaga do bledu wykonywania rozkazu
     private Procesor procesor;
     private CPUDispatcher processor;
@@ -24,8 +31,8 @@ public class Interpreter {
     private FAT filesystem;
     private PCB PCB;            //Zmienna do kopii PCB procesu
     private Process process;
-    private int CMDCounter;     //Licznik rozkazu do czytania z pami�ci
-    private int CCKCounter;     //licznik do sprawdzania czy program się skończył
+    private int CMDCounter;     //Licznik rozkazu do czytania z pamieci
+    private int CCKCounter;     //licznik do sprawdzania czy program sie skonczyl
 
 //-------------------------------------------------------------------------------------------------------------------
 
@@ -42,13 +49,43 @@ public class Interpreter {
 
 
 
-    public Interpreter(ProcessesManagement manager, FAT filesystem, VirtualMemory memory) {                   //Memory memory, bez tego
+    public Interpreter(ProcessesManagement manager, FAT filesystem, VirtualMemory memory, interprocessCommunication communication) {                   //Memory memory, bez tego
+        this.communication=communication;
         this.memory=memory;
         this.manager=manager;
         this.filesystem=filesystem;
         procesor=new Procesor();
     }
 
+    public void CPU() throws Exception
+    {
+        if(manager.processesList.size()!=0)
+        {
+            int max = 0; //manager.processesList.get(0).GetCurrentPriority();
+            int highestProcessNumber = 0;
+            
+            for(int i=0; i<manager.processesList.size(); i++)
+            {
+                if(manager.processesList.get(i).GetCurrentPriority()>max && manager.processesList.get(i).GetState() != 4 && !manager.processesList.get(i).GetLocked())
+                {
+                    max = manager.processesList.get(i).GetCurrentPriority();
+                    highestProcessNumber = i;
+                }
+            }
+            manager.processesList.get(highestProcessNumber).SetState(2);
+        
+            for(int i=0; i<manager.processesList.size(); i++)
+            {
+                if(i!=highestProcessNumber)
+                {
+                    if(manager.processesList.get(i).GetCurrentPriority()<15 && !manager.processesList.get(i).GetName().equals("Idle")) manager.processesList.get(i).SetCurrentPriority(manager.processesList.get(i).GetCurrentPriority()+1);
+                    if(manager.processesList.get(i).GetState()==2) manager.processesList.get(i).SetState(1);
+                }
+            }
+        }
+        else throw new Exception("Processes list is empty");
+    }
+    
 //-------------------------------------------------------------------------------------------------------------------
 
     public int RUN(Process Running) throws Exception {
@@ -60,18 +97,33 @@ public class Interpreter {
 
         this.Reg_A = Running.GetRegA(); //Pobieranie stanu rejestru A
         this.Reg_B = Running.GetRegB(); //Pobieranie stanu rejestru B
-        this.Reg_C = Running.GetRegC();//Pobieranie stanu rejestru C
-        this.Reg_D = Running.GetRegD();//Pobieranie stanu rejestru D 
+        this.Reg_C = Running.GetRegC(); //Pobieranie stanu rejestru C
+        this.Reg_D = Running.GetRegD(); //Pobieranie stanu rejestru D 
 
         
-        procesor.Set_A(Reg_A);          //Ustawianie wartosci rejestru A do pami�ci
-        procesor.Set_B(Reg_B);          //Ustawianie wartosci rejestru B do pami�ci
-        procesor.Set_C(Reg_C);
-        procesor.Set_D(Reg_D);  //Ustawianie wartosci rejestru C do pami�ci
+        procesor.Set_A(Reg_A);          //Ustawianie wartosci rejestru A do pamieci
+        procesor.Set_B(Reg_B);          //Ustawianie wartosci rejestru B do pamieci
+        procesor.Set_C(Reg_C);		//Ustawianie wartosci rejestru C do pamieci	
+        procesor.Set_D(Reg_D); 		//Ustawianie wartosci rejestru D do pamieci
 
         String Instruction = "";
 
-        Instruction = GetInstruction(Running.GetPCB());   //Zmienna pomocnicza do �adowania instrukcji z pami�ci
+        //Instruction = GetInstruction(Running.GetPCB());   //Zmienna pomocnicza do ladowania instrukcji z pamieci
+        for (;;) {
+            Instruction += memory.readMemory(CMDCounter);
+            CMDCounter++;
+            if (Instruction.charAt(Instruction.length() - 1) == ';')
+                break;
+        }
+        for (;;) {
+            if (Instruction.startsWith(" ")) {
+                Instruction = Instruction.substring(1);
+            }
+            else {
+                break;
+            }
+        }
+        System.out.println("Wczytano instrukcję: " + Instruction);
         Execute(Instruction,Running);
 
         ReturnToPCB(Running);
@@ -88,16 +140,16 @@ public class Interpreter {
         String P1 = "";
         String P2 = "";
         String P3 = "";
+        String P4 = "";
 
 //-----------------------------------------------------------------------
 
-        while(i < 5) {
+        while(i < 6) {
             if(i == 1) {
                 while(Instruction.charAt(x)!=' ' && Instruction.charAt(x)!=',' && Instruction.charAt(x)!=';') {
                     CMD += Instruction.charAt(x);
                     CCKCounter++;
                     x++;
-
                 }
                 if(Instruction.charAt(x)==' '){
                     i++;
@@ -150,6 +202,23 @@ public class Interpreter {
                     CCKCounter++;
                     x++;
                 }
+                if(Instruction.charAt(x)==' '){
+                    i++;
+                    x++;
+                }
+                else if(Instruction.charAt(x)==','){
+                    break;
+                }
+                else if(Instruction.charAt(x)==';'){
+                    break;
+                }
+            }
+            else if(i == 5) {
+                while(Instruction.charAt(x)!=' ' && Instruction.charAt(x)!=',' && Instruction.charAt(x)!=';') {
+                    P4 += Instruction.charAt(x);
+                    CCKCounter++;
+                    x++;
+                }
                 CCKCounter++;
                 i++;
             }
@@ -160,190 +229,263 @@ public class Interpreter {
         }
         CCKCounter++;
 
-        Boolean What = CheckP2(P2);
+        boolean What = CheckP2(P2);
 
 //-----------------------------------------------------------------------   ARYTMETYKA
 
         switch (CMD) {
-        case "AD": // Dodawanie wartosci
-            if (What) {
-                procesor.SetValue(P1, GetValue(P1) + GetValue(P2));
-            } else {
-                procesor.SetValue(P1, GetValue(P1) + Integer.parseInt(P2));
-            }
-            break;
-
-        case "SB": // Odejmowanie wartosci
-            if (What) {
-                procesor.SetValue(P1, GetValue(P1) - GetValue(P2));
-            } else {
-                procesor.SetValue(P1, GetValue(P1) - Integer.parseInt(P2));
-            }
-            break;
-
-        case "ML": // Mnozenie wartosci
-            if (What) {
-                procesor.SetValue(P1, GetValue(P1) * GetValue(P2));
-            } else {
-                procesor.SetValue(P1, GetValue(P1) * Integer.parseInt(P2));
-            }
-            break;
-
-        case "MV": // Umieszczenie wartosci
-            if (What) {
-                procesor.SetValue(P1, GetValue(P2));
-            } else {
-                procesor.SetValue(P1, Integer.parseInt(P2));
-            }
-            break;
-
-//-----------------------------------------------------------------------   PLIKI
-
-        case "CE": // Tworzenie pliku
-            if(filesystem.CreateEmptyFile(P1)==true) {
-                //filesystem.createEmptyFile(P1);
-            }
-            else {
-                Running.SetState(2);
-            }
-            break;
-
-        case "CF": // Tworzenie pliku z zawartoscia
-            if (What) {
-                if(filesystem.CreateNewFile(P1,Integer.toString(GetValue(P2)))==true) {
-                    //filesystem.CreateNewFile(P1,Integer.toString(GetValue(P2)));
+            case "AD": // Dodawanie wartosci
+                if (What) {
+                    procesor.SetValue(P1, GetValue(P1) + GetValue(P2));
+                } else {
+                    procesor.SetValue(P1, GetValue(P1) + Integer.parseInt(P2));
                 }
-                else{
-                    Running.SetState(2);
+                break;
+
+            case "SB": // Odejmowanie wartosci
+                if (What) {
+                    procesor.SetValue(P1, GetValue(P1) - GetValue(P2));
+                } else {
+                    procesor.SetValue(P1, GetValue(P1) - Integer.parseInt(P2));
                 }
-            } else {
-                if(filesystem.CreateNewFile(P1, P2)==true) {
-                    //filesystem.createFile(P1, P2);
+                break;
+
+            case "ML": // Mnozenie wartosci
+                if (What) {
+                    procesor.SetValue(P1, GetValue(P1) * GetValue(P2));
+                } else {
+                    procesor.SetValue(P1, GetValue(P1) * Integer.parseInt(P2));
                 }
-                else {
-                    Running.SetState(2);
+                break;
+
+            case "MV": // Umieszczenie wartosci
+                if (What) {
+                    procesor.SetValue(P1, GetValue(P2));
+                } else {
+                    procesor.SetValue(P1, Integer.parseInt(P2));
                 }
+                break;
+
+    //-----------------------------------------------------------------------   PLIKI
+            case "OF": {	// Open File
+            	try {
+            		filesystem.OpenFile(P1, Running);
+            	}
+            	catch(Exception ex) {
+            		System.out.println("BLAD OTWIERANIA: " + ex.getMessage());
+            		//Running.SetState(2);
+            		break;
+            	}
+            	break;
             }
-            break;
+            case "CF": {	// Close File
+            	try {
+            		filesystem.CloseFile(P1, Running);
+            	}
+            	catch(Exception ex2) {
+            		//System.out.println("BLAD ZAMYKANIA PLIKU: " + ex2.getMessage());
+                        ex2.printStackTrace();
+            		//Running.SetState(2);
+            	}
+            	break;
+            }
+            case "CE": // Create Empty File
+            	try  {
+            		filesystem.CreateEmptyFile(P1);
+            	}
+            	catch(IllegalFileNameException ex) {
+                    System.out.println("BLAD NAZWY PLIKU: " + ex.getMessage());   
+            	}
+            	catch(OutOfBlocksException ex2) {
+            		System.out.println("BLAD PAMIECI: " + ex2.getMessage()); 
+            	}
+            	catch(Exception ex3) {
+                    System.out.println("BLAD TYPU NIEOKRESLONEGO: " + ex3.getMessage());
+            	}
+            
+                break;
 
-        /*case "WF": // Dopisanie do pliku
-            filesystem.OpenFile(P1);
-            if (What) {
-                if(filesystem.appendToFile(P1,Integer.toString(GetValue(P2)))==1){
-                    filesystem.appendToFile(P1,Integer.toString(GetValue(P2)));
+
+           case "CFC": // Create File Content
+        		try {
+        			filesystem.CreateNewFile(P1,P2);
+        		}
+        		catch (Exception ex) {
+        			System.out.println("Blad: " + ex.getMessage());
+        		}
+            	try {
+        			filesystem.CreateNewFile(P1,P2);
+        		}
+        		catch (Exception ex) {
+        			System.out.println("Blad: " + ex.getMessage());
+        		}
+            
+                break;   
+
+
+            case "WF": // Write File
+        		try {
+        			filesystem.AppendToFile(P1, P2);
+        		}
+        		catch(Exception ex2) {
+        			System.out.println("BLAD DOPISYWANIA: " + ex2.getMessage());
+        			break;
+        		}  
+            	
+            	break;
+            	
+            case "DF": // Delete File
+                try {
+                    filesystem.DeleteFile(P1);
                 }
-                else {
-                    Running.Setstan(2);
+                catch(Exception ex) {
+                	System.out.println("BLAD USUWANIA PLIKU: " + ex.getMessage());
                 }
-            }
-            else {
-                if(filesystem.appendToFile(P1,P2)==1) {
-                    filesystem.appendToFile(P1, P2);
+                break;
+            case "RF":	// Read File
+            	try {
+            		if(!P1.isEmpty() && P2.isEmpty()) {
+                		System.out.println(filesystem.GetFilesContent(P1));
+                	}
+                	else if(!P2.isEmpty()) {
+                		System.out.println(filesystem.GetFilesContent(P1, Integer.parseInt(P2)));		//czytanie kilku kolejnych znakow
+                	}
+            	}
+            	catch(Exception ex2) {
+            		System.out.println("BLAD: " + ex2.getMessage());
+            		break;
+            	}
+            	break;
+
+    //-----------------------------------------------------------------------   JUMPY I KONCZENIE
+
+            case "JP": // Skok do rozkazu
+                CMDCounter = Integer.parseInt(P1);
+                break;
+
+            case "JX": // Skok do rozkazu, je�li rejestr != 0
+                if(GetValue(P1)!=0) {
+                    CMDCounter = Integer.parseInt(P2);
                 }
-                else {
-                    Running.Setstan(2);
-                }
-            }
-            filesystem.closeFile(P1);
-            break;
+                break;
 
-        case "DF": // Usuwanie pliku
-            filesystem.openFile(P1);
-            if((filesystem.deleteFile(P1))==1) {
-                filesystem.deleteFile(P1);
-            }
-            else {
-                Running.Setstan(2);
-            }
-            break;*/
+            case "EX": // Koniec programu
+                Running.SetState(4);
+                CPU();
+                Shell.counter = 0;
+                break;
 
-//-----------------------------------------------------------------------   JUMPY I KONCZENIE
+    //-----------------------------------------------------------------------   PROCESY
 
-        case "JP": // Skok do rozkazu
-            CMDCounter = Integer.parseInt(P1);
-            break;
-
-        case "JX": // Skok do rozkazu, je�li rejestr != 0
-            if(GetValue(P1)!=0) {
-                CMDCounter = Integer.parseInt(P2) + Running.GetCommandCounter();
-            }
-            break;
-
-        case "EX": // Koniec programu
-            Running.SetState(4);
-            break;
-
-//-----------------------------------------------------------------------   PROCESY
-
-        case "XR": // czytanie komunikatu;
-            //if(communication.read(manager.getProcess(P1)==1){
-                communication.read(manager.getProcess(P1));
-                String pom = "";
-                procesor.SetValue("B", Integer.parseInt(pom));
-            //}
-            //else {
-              //  Running.Setstan(2);
+            case "XR": // czytanie komunikatu;
+                //if(communication.read(manager.getProcess(P1)==1){
+                    String message = communication.read(P1);
+                    Running.SetReceivedMsg(message);
+                   // procesor.SetValue("B", Integer.parseInt(pom));
                 //}
-            break;
+                //else {
+                  //  Running.Setstan(2);
+                    //}
+                break;
 
-        case "XS": // -- Wys�anie komunikatu;
-            //if(communication.writePipe(P1, P2)==1) {
-                communication.write(P1,manager.getProcess(P2));
-            //}
-            //else {
-              //  Running.Setstan(2);
-           // }
-            break;
-    /*
-        case "XF": // -- znalezienie ID procesu (P1);
-            processor.Set_A(manager.GetIDwithName(P1));
-            break;
-    */
-//        case "XP": // -- Stworzenie potoku
-//            if(communication.createPipe(P1)==1) {
-//                communication.createPipe(P1);
-//            }
-//            else {
-//                Running.Setstan(2);
-//            }
-//            break;
-//
-//        case "XE": // -- Usuwanie potoku
-//            if(communication.deletePipe(P1)==1) {
-//                communication.deletePipe(P1);
-//            }
-//            else {
-//                Running.Setstan(2);
-//            }
-//            break;
+            case "XS": // -- Wys�anie komunikatu;
+                //if(communication.writePipe(P1, P2)==1) {
+                if(P3.equals("") && P4.equals("")) communication.write(P1, manager.getProcess(P2));
+                else if(!P3.equals("") && P4.equals("")) communication.write(P1 + " " + P2, manager.getProcess(P3));
+                else if(!P3.equals("") && !P4.equals("")) communication.write(P1 + " " + P2 + " " + P3, manager.getProcess(P4));
 
-        case "XC": // -- tworzenie procesu (P1,P2);
-            //if(manager.createprocess(P1,P2)==1) {
-            //memory.loadProcess(P1, P2, Integer.getInteger(P3));
-            manager.NewProcess_XC(P1, Integer.getInteger(P2));
-            //}
-            //else {
-            //    Running.Setstan(2);
-            //}
-            break;
+                //}
+                //else {
+                  //  Running.Setstan(2);
+               // }
+                break;
+        /*
+            case "XF": // -- znalezienie ID procesu (P1);
+                processor.Set_A(manager.GetIDwithName(P1));
+                break;
+        */
+    //        case "XP": // -- Stworzenie potoku
+    //            if(communication.createPipe(P1)==1) {
+    //                communication.createPipe(P1);
+    //            }
+    //            else {
+    //                Running.Setstan(2);
+    //            }
+    //            break;
+    //
+    //        case "XE": // -- Usuwanie potoku
+    //            if(communication.deletePipe(P1)==1) {
+    //                communication.deletePipe(P1);
+    //            }
+    //            else {
+    //                Running.Setstan(2);
+    //            }
+    //            break;
 
-        case "XZ": // -- wstrzymanie procesu
-            Running.SetState(1);
-            break;
+            case "XC": // -- tworzenie procesu (P1,P2);
+                if (manager.FindProcessWithName(P1) == -1) {
+                    try {
+                        manager.NewProcess_XC(P1, Integer.parseInt(P3));
+                        manager.SetHowManyPagesWithID(Running.GetID(),((Integer.parseInt(P4) - 1) / 16 + 1));
+                        memory.loadProcess(P1, P2 + ".txt", Integer.parseInt(P4));
+                    }
+                    catch (Exception exception) {
+                        System.out.println(exception.getMessage());
+                        manager.DeleteProcessWithID(manager.GetIDwithName(P1));
+                    }
+                }
+                else {
+                    System.out.println("Istnieje proces o podanej nazwie!");
+                }
+                break;
+
+            case "XZ": // -- wstrzymanie procesu
+                Running.SetState(1);
+                break;
+
+    //-----------------------------------------------------------------------   PAMIĘĆ WIRTUALNA
+
+            case "XA": // -- wczytywanie procesu do pliku wymiany
+                memory.loadProcess(P1, P2, Integer.parseInt(P3));
+                break;
+
+            case "XF": // -- usuwanie procesu z pamieci
+                memory.deleteProcess(P1);
+                break;
+
+            case "WM": // -- pisanie do pamieci
+                if (What) {
+                    String registerValue = Integer.toString(GetValue(P2));
+                    for (int j = 0; j < registerValue.length(); j++) {
+                        memory.writeMemory(Integer.parseInt(P1) + j, registerValue.charAt(j));
+                    }
+                }
+                else {
+                    String text = Instruction.substring(P1.length() + P2.length() + 2, Instruction.length() - 1);
+                    for (int j = 0; j < text.length(); j++) {
+                        memory.writeMemory(Integer.parseInt(P1) + j, text.charAt(j));
+                    }
+                }
+                break;
+                
+            case "RM": // -- czytanie z pamieci
+                System.out.print("Wczytano z pamieci: ");
+                for (int j = 0; j < Integer.parseInt(P2); j++) {
+                    System.out.print(memory.readMemory(Integer.parseInt(P1) + j));
+                }
+                System.out.println();
+                break;
+                
+            default:
+                System.out.println("Wczytano nieprawidlowa instrukcje!");
+                break;
+            }
         }
-
-        }
-
 
 //-------------------------------------------------------------------------------------------------------------------
 
     private boolean CheckP2(String P2) {
-        if(P2 == "A" || P2 == "B" || P2 == "C") {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return P2.equals("A") || P2.equals("B") || P2.equals("C") || P2.equals("D");
     }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -359,17 +501,17 @@ public class Interpreter {
 
 //-------------------------------------------------------------------------------------------------------------------
 
-    private String GetInstruction(PCB Running) throws IOException {
+    private String GetInstruction(PCB Running) throws Exception, IOException {
         String Instruction = "";
         int Counter=0;
 
         do{
-            //Instruction += Running.PageTable.readFromMemory(CMDCounter); //pobieranie z pami�ci znaku o danym numerze, oraz nale��cego do danego procesu
+            //Instruction += Running.PageTable.readFromMemory(CMDCounter); //pobieranie z pamieci znaku o danym numerze, oraz nalezacego do danego procesu
 
             Instruction += memory.readMemory(CMDCounter);
             CMDCounter++;
             Counter++;
-        }while (Instruction.charAt(Counter)!=',' && Instruction.charAt(Counter)!=';');
+        }while (Instruction.charAt(Counter) != ',' && Instruction.charAt(Counter) != ';');
         return Instruction;
     }
 

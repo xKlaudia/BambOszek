@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import memoryManagement.VirtualMemory;
+import memoryManagement.ExchangeFile;
 
 public class ProcessesManagement extends Process {
 
@@ -10,64 +11,83 @@ public class ProcessesManagement extends Process {
 	
 	//***ZMIENNE*****************************************************************************************
 	
-	public List<Process> processesList;
-        
-	private ID_Overseer idoverseer;
-	
-	private ProcessStateOverseer stateOverseer;
-	
-	private List<Integer> finishedProcessList;
-	
-	VirtualMemory RAM = new VirtualMemory();
-	
-	private int processNumber;
-
+	public List<Process> processesList;        
+	private ID_Overseer idoverseer;	
+	private ProcessStateOverseer stateOverseer;	
+	private List<Integer> finishedProcessList;	
+	VirtualMemory virtualMemory;        
+        private int processNumber=0;
 	//---Konstruktor-------------------------------------------------------------------------------------
 	
-	public ProcessesManagement(VirtualMemory RAM) {
-		this.RAM = RAM;
+	public ProcessesManagement(VirtualMemory virtualMemory) throws IOException 
+        {
+        this.virtualMemory = new VirtualMemory();
+		this.virtualMemory = virtualMemory;
 		processesList = new LinkedList<Process>();
 		idoverseer = new ID_Overseer();
 		stateOverseer = new ProcessStateOverseer();
 		finishedProcessList = new LinkedList<Integer>();
-		processNumber = 1;
 	}
 	
 	//---Dodaj/Usun Procesy-------------------------------------------------------------------------------
 	
-	public int NewProcess_XC(String Name, int priority) throws IOException{
-		int i = FindProcessWithName(Name);
+	/*public int NewProcess_XC(String Name, int priority) throws IOException
+        {
+		//int i = FindProcessWithName(Name);
 		  
-		  if(i != -1) {
+		  /*if(i != -1) {
 		   
-		   System.out.println("You can't create two programs with the same name while using command XC");
+		   System.out.println("You can't create two programs with the same name");
 		   return -1;
 		  }
 
 		  Process process = new Process();
 		  int id = idoverseer.PickID();
 		  String s = Integer.toString(id);
-		  process.CreateProcess(id,Name, processNumber, priority);
+		  process.CreateProcess(id,Name, priority, processNumber);
 		  processesList.add(process); 
- 
+                  processNumber++;
+		  CheckStates();
+		 return 0;
+	}*/
+        
+        public int NewProcess_XC(String Name,int priority) throws IOException
+        {
+		int i = FindProcessWithName(Name);
+		  
+		  if(i != -1) {		   
+		   System.out.println("You can't create two programs with the same name");
+		   return -1;
+		  }
+
+		  Process process = new Process();
+		  int id = idoverseer.PickID();
+		  String s = Integer.toString(id);
+		  process.CreateProcess(id,Name, priority, processNumber);
+		  processesList.add(process); 
+                  processNumber++;
 		  CheckStates();
 		 return 0;
 	}
 
-	public  Process NewProcess_EmptyProcess(String Name) throws IOException {
+	public  Process NewIdleProcess() throws IOException 
+        {
 		Process process = new Process();
-		process.CreateProcess(-1, Name, -1,0);
+                int id = idoverseer.PickID();
+		process.CreateProcess(id, "Idle",0,0);
 		process.SetBasePriority(0);
 		process.SetCurrentPriority(0);
+                processesList.add(process); 
 		CheckStates();
 		return process;
 	}
 
-	private void  DeleteProcess() throws IOException {
+	private void  DeleteProcess() throws IOException 
+        {
 		for (int i = 0; i < finishedProcessList.size(); i++) {
                         
 			int index = FindProcessWithID(finishedProcessList.get(i));
-			RAM.deleteProcess(GetNameWithID(finishedProcessList.get(i))); 
+			virtualMemory.deleteProcess(GetNameWithID(finishedProcessList.get(i))); 
                         for(int j=0;j<processesList.size();j++)
                         {
                             if(processesList.get(index).GetFirstPageNumber()<processesList.get(j).GetFirstPageNumber())
@@ -80,7 +100,8 @@ public class ProcessesManagement extends Process {
 		}
 		finishedProcessList.clear();
 	}
-        public void DeleteProcessWithID(int ID) throws IOException {
+        public void DeleteProcessWithID(int ID) throws IOException 
+        {
                 for(int i=0;i<processesList.size();i++)
                 {
                     if(processesList.get(i).GetID()==ID)
@@ -92,7 +113,8 @@ public class ProcessesManagement extends Process {
 
 	}
 
-	public void CheckStates() throws IOException {
+	public void CheckStates() throws IOException 
+        {
 		for (int i = 0; i < processesList.size(); i++) {
 			if(processesList.get(i).pcb.ProcessState == stateOverseer.finished) {
 				finishedProcessList.add(processesList.get(i).pcb.ProcessID);
@@ -104,7 +126,8 @@ public class ProcessesManagement extends Process {
 	
 	//---Szukanie procesow-----------------------------------------------------------------------
 
-	public int FindProcessWithID(int ID) {
+	public int FindProcessWithID(int ID) 
+        {
 		Process proces_kopia;
 		
 		for(int i = 0; i < processesList.size(); i++) {
@@ -117,7 +140,8 @@ public class ProcessesManagement extends Process {
 		return -1;
 	}
 
-	public int FindProcessWithName(String name) {
+	public int FindProcessWithName(String name) 
+        {
 		for(int i = 0; i < processesList.size(); i++) {
 			if(processesList.get(i).GetName().equals(name)) {
 				return i;
@@ -128,19 +152,25 @@ public class ProcessesManagement extends Process {
         
 	//-----Get/Set---------------------------------------------------------
 
-	public int GetIDwithName(String name) {
+	public int GetIDwithName(String name) 
+        {
             int Identyfikator=-1;
+            int pom=0;
 		for(int i=0;i<processesList.size();i++)
                 {
                     if(processesList.get(i).GetName()==name)
                     {
-                        Identyfikator = processesList.get(i).GetID();     
+                        Identyfikator = processesList.get(i).GetID();
+                        pom++;
                     }
-                }                
+                }
+            if(pom>1)
+                System.out.println("Found more processes with the same name! Only the ID of last one is going to be returned");
             return Identyfikator;
 	}
 
-	public String GetNameWithID(int ID) {
+	public String GetNameWithID(int ID)
+        {
             String nazwa = "Brak procesu o takim ID";
 		for(int i=0;i<processesList.size();i++)
                 {
@@ -152,30 +182,8 @@ public class ProcessesManagement extends Process {
                 return nazwa;
 	}
 
-	public int GetWhenCameToListWithID(int ID) {
-			 int przybycie = 0;
-		for(int i=0;i<processesList.size();i++)
-                {
-                    if(processesList.get(i).GetID()==ID)
-                    {
-                        przybycie = processesList.get(i).GetWhenCameToList();     
-                    }
-                }
-                return przybycie;
-	}
-		
-	public void SetWhenCameToListWithID(int ID, int whenCametoList) {
-		for(int i=0;i<processesList.size();i++)
-                {
-                    if(processesList.get(i).GetID()==ID)
-                    {
-                        processesList.get(i).SetWhenCameToList(whenCametoList);     
-                    }
-                }
-		
-	}
-
-	public int GetStateWithID(int ID) {
+	public int GetStateWithID(int ID) 
+        {
             int stan=-1;
 		for(int i=0;i<processesList.size();i++)
                 {
@@ -187,8 +195,23 @@ public class ProcessesManagement extends Process {
 
 		return stan;
 	}
+        
+        public int GetStateWithName(String Name) 
+        {
+            int stan=-1;
+		for(int i=0;i<processesList.size();i++)
+                {
+                    if(processesList.get(i).GetName()==Name)
+                    {
+                       stan= processesList.get(i).GetState();     
+                    }
+                }
+
+		return stan;
+	}
 		
-	public void SetState(int ID, int State) {
+	public void SetState(int ID, int State) 
+        {
 		for(int i=0;i<processesList.size();i++)
                 {
                     if(processesList.get(i).GetID()==ID)
@@ -239,7 +262,8 @@ public class ProcessesManagement extends Process {
 
 	}
 
-	public int GetBasePriorityWithID(int ID) {
+	public int GetBasePriorityWithID(int ID)
+        {
 		  int priorytet=-1;
 		for(int i=0;i<processesList.size();i++)
                 {
@@ -252,7 +276,8 @@ public class ProcessesManagement extends Process {
 		return priorytet;
 	}
 	
-	public void SetBasePriorityWithID(int ID, int priority) {
+	public void SetBasePriorityWithID(int ID, int priority) 
+        {
 		for(int i=0;i<processesList.size();i++)
                 {
                     if(processesList.get(i).GetID()==ID)
@@ -263,7 +288,8 @@ public class ProcessesManagement extends Process {
 
 	}
 
-	public int GetCurrentPrirityWithID(int ID) {
+	public int GetCurrentPrirityWithID(int ID)
+        {
 		  int priorytet=-1;
 		for(int i=0;i<processesList.size();i++)
                 {
@@ -276,17 +302,22 @@ public class ProcessesManagement extends Process {
 		return priorytet;
 	}
 		
-	public void SetCurrentPririty(int ID, int priority) {
+	public void SetCurrentPririty(int ID, int priority)
+        {
 		for(int i=0;i<processesList.size();i++)
                 {
                     if(processesList.get(i).GetID()==ID)
                     {
-                       processesList.get(i).SetCurrentPriority(priority);     
+                        if(processesList.get(i).GetCurrentPriority()<16)
+                            processesList.get(i).SetCurrentPriority(priority);
+                        else if(processesList.get(i).GetCurrentPriority()>16)
+                            System.out.println("You cannot change realt time process priority");
                     }
                 }
 	}
 
-	public int GetHowLongWaitingWithID(int ID) {
+	public int GetHowLongWaitingWithID(int ID) 
+        {
 		  int jakDlugo=-1;
 		for(int i=0;i<processesList.size();i++)
                 {
@@ -300,8 +331,8 @@ public class ProcessesManagement extends Process {
 		
 	}
 		
-	public void SetHowLongWaitingWithID(int ID, int howLong) {
-			
+	public void SetHowLongWaitingWithID(int ID, int howLong)
+        {			
 		for(int i=0;i<processesList.size();i++)
                 {
                     if(processesList.get(i).GetID()==ID)
@@ -310,7 +341,8 @@ public class ProcessesManagement extends Process {
                     }
                 }
 	}
-        public int GetHowManyPagesWithID(int ID) {
+        public int GetHowManyPagesWithID(int ID) 
+        {
 		  int jakDuzo=-1;
 		for(int i=0;i<processesList.size();i++)
                 {
@@ -320,12 +352,11 @@ public class ProcessesManagement extends Process {
                     }
                 }
 
-		return jakDuzo;	
-		
+		return jakDuzo;			
 	}
 		
-	public void SetHowManyPagesWithID(int ID, int howMany) {
-			
+	public void SetHowManyPagesWithID(int ID, int howMany) 
+        {			
 		for(int i=0;i<processesList.size();i++)
                 {
                     if(processesList.get(i).GetID()==ID)
@@ -335,32 +366,44 @@ public class ProcessesManagement extends Process {
                 }
 	}
 
-	public boolean GetBlockedWithID(int ID) {
-		
+	public boolean GetLockedWithID(int ID)
+        {		
 		  boolean zablokowany=false;
 		for(int i=0;i<processesList.size();i++)
                 {
                     if(processesList.get(i).GetID()==ID)
                     {
-                       zablokowany= processesList.get(i).GetBlocked();     
+                       zablokowany= processesList.get(i).GetLocked();     
                     }
                 }
 
 		return zablokowany;
 	}
 	
-	public void SetBlocked(int ID, boolean blockedState) {
-		
+	public void SetLockedWithID(int ID) 
+        {		
 		for(int i=0;i<processesList.size();i++)
                 {
                     if(processesList.get(i).GetID()==ID)
                     {
-                       processesList.get(i).SetBlocked(blockedState);     
+                       processesList.get(i).SetLocked();     
+                    }
+                }
+	}
+        
+        public void SetUnlockedWithID(int ID) 
+        {		
+		for(int i=0;i<processesList.size();i++)
+                {
+                    if(processesList.get(i).GetID()==ID)
+                    {
+                       processesList.get(i).SetUnlocked();     
                     }
                 }
 	}
 
-	public PCB GetPCBWithName(String name) {
+	public PCB GetPCBWithName(String name) 
+        {
             int pomoc=0;
 		for(int i=0;i<processesList.size();i++)
                 {
@@ -372,16 +415,66 @@ public class ProcessesManagement extends Process {
                 return processesList.get(pomoc).pcb; 
 	}
 
-	public void printProcessListInformations() {
-		System.out.println("------------------------------");
-		System.out.println("Processes list:");
-		
-		for(int i = 0; i < processesList.size(); i++) {
-			System.out.println( i + ". " + processesList.get(i).GetID() + ", " + processesList.get(i).GetName());
-		}
+	public void printProcessListInformations() 
+        {		
+            System.out.println("------------------------------");
+            System.out.println("Processes list:");
+            System.out.println("Normal: ");
+            for(int i = 0; i < processesList.size(); i++) 
+            {
+                if(processesList.get(i).GetState()!=3)
+                {
+                    if(processesList.get(i).GetCurrentPriority()<=15)           
+                    {
+                        System.out.println( i + ". " + processesList.get(i).GetID() + ", " + processesList.get(i).GetName());
+                    }
+                }      
+            }
+            
+            System.out.println("Real Time: ");
+            for(int i = 0; i < processesList.size(); i++) 
+            {
+                if(processesList.get(i).GetState()!=3)
+                {
+                    if(processesList.get(i).GetCurrentPriority()>15)           
+                    {
+                        System.out.println( i + ". " + processesList.get(i).GetID() + ", " + processesList.get(i).GetName());
+                    }
+                }                                     
+            }
+	}
+        
+        public void printWaitingProcessListInformations() 
+        {		
+            System.out.println("------------------------------");
+            System.out.println("Waiting Processes list:");
+            System.out.println("Normal: ");
+            for(int i = 0; i < processesList.size(); i++) 
+            {
+                if(processesList.get(i).GetState()==3)
+                {
+                    if(processesList.get(i).GetCurrentPriority()<=15)           
+                    {
+                        System.out.println( i + ". " + processesList.get(i).GetID() + ", " + processesList.get(i).GetName());
+                    }
+                }
+            }
+            
+            System.out.println("Real Time: ");
+            for(int i = 0; i < processesList.size(); i++) 
+            {
+                if(processesList.get(i).GetState()==3)
+                {
+                    if(processesList.get(i).GetCurrentPriority()>15)           
+                    {
+                        System.out.println( i + ". " + processesList.get(i).GetID() + ", " + processesList.get(i).GetName());
+                    }
+                }
+            }
 	}
 
-	public void printProcessInformations(int ID) {
+	public void printProcessInformations(int ID) 
+        {
                 int a=0;
 		for(int i=0;i<processesList.size();i++)
                 {
@@ -394,15 +487,28 @@ public class ProcessesManagement extends Process {
                 }
                 if (a==0)
 			System.out.println("This process does not exist");
-
 	}
 
-	public Process getProcess(String name) {
+	public Process getProcess(String name) 
+        {
 		return processesList.get(FindProcessWithName(name));
 	}
         
-        public long GetFirstPageNumberWithID(int ID) throws IOException {
-		
+        public Process GetProcessWithID(int ID)
+        {
+            Process proces_pom = null;
+            for(int i=0;i<processesList.size();i++)
+            {
+                if(processesList.get(i).GetID()==ID)
+                {
+                    proces_pom=processesList.get(i);
+                }
+            }
+            return proces_pom;
+        }
+        
+        public long GetFirstPageNumberWithID(int ID) throws IOException 
+        {		
 		  long pierwszastrona=0;
 		for(int i=0;i<processesList.size();i++)
                 {
@@ -414,9 +520,9 @@ public class ProcessesManagement extends Process {
 
 		return pierwszastrona;
 	}
-        public void SetFirstPageNumberWithID(int ID,long firstPageNumber) throws IOException {
-		
-	
+        
+        public void SetFirstPageNumberWithID(int ID,long firstPageNumber) throws IOException 
+        {	
 		for(int i=0;i<processesList.size();i++)
                 {
                     if(processesList.get(i).GetID()==ID)
@@ -424,10 +530,10 @@ public class ProcessesManagement extends Process {
                        processesList.get(i).SetFirstPageNumber(firstPageNumber);     
                     }
                 }
-
 	}
-        public String GetReceivedMsgWithID(int ID)  {
-		
+        
+        public String GetReceivedMsgWithID(int ID)  
+        {		
 		  String wiadomosc="";
 		for(int i=0;i<processesList.size();i++)
                 {
@@ -439,9 +545,9 @@ public class ProcessesManagement extends Process {
 
 		return wiadomosc;
 	}
-        public void SetReceivedMsgWithID(int ID,String wiadomosc) throws IOException {
-		
-	
+        
+        public void SetReceivedMsgWithID(int ID,String wiadomosc) throws IOException 
+        {	
 		for(int i=0;i<processesList.size();i++)
                 {
                     if(processesList.get(i).GetID()==ID)
@@ -449,6 +555,105 @@ public class ProcessesManagement extends Process {
                       processesList.get(i).SetReceivedMsg(wiadomosc);     
                     }
                 }
+	}
+        
+        public int GetRegAwithID(int ID)  
+        {		
+		int value=0;
+		for(int i=0;i<processesList.size();i++)
+                {
+                    if(processesList.get(i).GetID()==ID)
+                    {
+                       value= processesList.get(i).GetRegA();     
+                    }
+                }
 
+		return value;
+	}
+        
+        public void SetRegAwithID(int ID, int reg)
+        {	
+		for(int i=0;i<processesList.size();i++)
+                {
+                    if(processesList.get(i).GetID()==ID)
+                    {
+                      processesList.get(i).SetRegA(reg);     
+                    }
+                }
+	}
+         
+        public int GetRegBwithID(int ID)  
+        {		
+		int value=0;
+		for(int i=0;i<processesList.size();i++)
+                {
+                    if(processesList.get(i).GetID()==ID)
+                    {
+                       value= processesList.get(i).GetRegB();     
+                    }
+                }
+
+		return value;
+	}
+        
+        public void SetRegBwithID(int ID, int reg)
+        {	
+		for(int i=0;i<processesList.size();i++)
+                {
+                    if(processesList.get(i).GetID()==ID)
+                    {
+                      processesList.get(i).SetRegB(reg);     
+                    }
+                }
+	}
+         
+        public int GetRegCwithID(int ID)  
+        {		
+		int value=0;
+		for(int i=0;i<processesList.size();i++)
+                {
+                    if(processesList.get(i).GetID()==ID)
+                    {
+                       value= processesList.get(i).GetRegC();     
+                    }
+                }
+
+		return value;
+	}
+        
+        public void SetRegCwithID(int ID, int reg)
+        {	
+		for(int i=0;i<processesList.size();i++)
+                {
+                    if(processesList.get(i).GetID()==ID)
+                    {
+                      processesList.get(i).SetRegC(reg);     
+                    }
+                }
+	}
+         
+        public int GetRegDwithID(int ID)  
+        {		
+		int value=0;
+		for(int i=0;i<processesList.size();i++)
+                {
+                    if(processesList.get(i).GetID()==ID)
+                    {
+                       value= processesList.get(i).GetRegD();     
+                    }
+                }
+
+		return value;
+	}
+        
+        public void SetRegDwithID(int ID, int reg)
+        {	
+		for(int i=0;i<processesList.size();i++)
+                {
+                    if(processesList.get(i).GetID()==ID)
+                    {
+                      processesList.get(i).SetRegD(reg);     
+                    }
+                }
 	}
 }

@@ -1,5 +1,4 @@
 /Interpreter/
-<<<<<<< HEAD
 /Shell/
 /fileSystem/
 /memoryManagement/
@@ -8,14 +7,3 @@
 /cpudispatcher/
 /interprocessCommunication/
 /test.txt
-=======
-/Main.class
-/Shell/
-/cpudispatcher/
-/fileSystem/
-/fileSystemExceptions/
-/interprocessCommunication/
-/memoryManagement/
-/processesmanagement/
-/syncMethod/
->>>>>>> 245077d09bdb70152475d8aa016705a50b8fe039

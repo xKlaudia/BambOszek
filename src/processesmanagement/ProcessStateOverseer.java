@@ -1,12 +1,12 @@
 
 package processesmanagement;
 
+
 public class ProcessStateOverseer {
     
-    	public final int newbie = 0;
-	public final int ready = 1;
-	public final int active = 2;
-	public final int waiting = 3;
-	public final int finished = 4;
-        
+    	public int newbie = 0;
+	public int ready = 1;
+	public int running = 2;
+	public int waiting = 3;
+	public int finished = 4;     
 }
