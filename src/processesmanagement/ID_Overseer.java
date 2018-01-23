@@ -6,14 +6,10 @@ public class ID_Overseer {
     private int FirstID = 0;
     private int currentID;
     private int ID;
-    
-    public ID_Overseer() 
-    {
+    public ID_Overseer() {
 
-    }
-    
-    public int PickID() 
-    {
+	}
+    public int PickID() {
         currentID=FirstID;
         ID=currentID;
         FirstID++;

@@ -13,14 +13,17 @@ public class PriorityOverseer {
 	private Random wylosowana_liczba = new Random();
         private Random wylosowana_liczba2 = new Random();
 
-	public int RollPriority() 
-        {		
-		priorytet = wylosowana_liczba.nextInt(max_priorytet)+min_priorytet;		
+	public int RollPriority() {
+		
+		priorytet = wylosowana_liczba.nextInt(max_priorytet)+min_priorytet;
+		
 		return priorytet;
 	}
         public int RollRealTimePriority()
-        {           
-            priorytet2 = wylosowana_liczba2.nextInt(max_priorytet2)+min_priorytet2;		
+        {
+           
+            priorytet2 = wylosowana_liczba2.nextInt(max_priorytet2)+min_priorytet2;
+		
             return priorytet2;
         }
 }
