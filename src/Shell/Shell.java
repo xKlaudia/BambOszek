@@ -24,6 +24,7 @@ import syncMethod.Lock;
         public static String currentProcess = "";
         public static int counter = 0; //liczy kwanty wykonywanych rozkazów
         public boolean processKilled = false;
+        public String killedProcessName = "";
         public Interpreter interpreter;
 		
 		public Shell() throws Exception {
@@ -125,8 +126,10 @@ import syncMethod.Lock;
                                 counter = 0;
                             }
                             if (processKilled) {
-                                interpreter.CPU();
-                                counter = 0;
+                                if (killedProcessName.equals(currentProcess)) {
+                                    interpreter.CPU();
+                                    counter = 0;
+                                }
                                 processKilled = false;
                             }
                             setCurrentProcess();
@@ -181,6 +184,7 @@ import syncMethod.Lock;
                                  if(id!=0)
                                  {
                                      fat.checkLocks(processManagement.GetProcessWithID(id));
+                                     killedProcessName = processManagement.GetNameWithID(id);
 		                     processManagement.DeleteProcessWithID(id);
                                      processKilled = true;
                                 System.out.println("usuniecie procesu o id: "+arr[1]);
