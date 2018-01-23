@@ -112,7 +112,6 @@ import syncMethod.Lock;
                 }
                 catch (Exception exception) {
                     System.out.println(exception.getMessage());
-                    virtualMemory.deleteProcess(arr[1]);
                     processManagement.DeleteProcessWithID(id);
                 }
               }
