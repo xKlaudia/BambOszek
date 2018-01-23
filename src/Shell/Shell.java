@@ -113,6 +113,7 @@ import syncMethod.Lock;
                 catch (Exception exception) {
                     System.out.println(exception.getMessage());
                     processManagement.DeleteProcessWithID(id);
+                    id++;
                 }
               }
               else {
