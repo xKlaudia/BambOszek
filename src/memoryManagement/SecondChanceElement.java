@@ -6,6 +6,7 @@ public class SecondChanceElement {
     private final int frameNumber;
     private boolean secondChance;
     
+    /*Konstruktor*/
     public SecondChanceElement(int frameNumber, boolean secondChance) {
         this.frameNumber = frameNumber;
         this.secondChance = secondChance;

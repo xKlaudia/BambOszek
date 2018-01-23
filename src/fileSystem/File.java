@@ -3,16 +3,15 @@ package fileSystem;
 import syncMethod.Lock;
 
 public class File {
-	private final int BLOCK_ERROR = -1;
+	//private final int BLOCK_ERROR = -1;
 	
-	private String name, extension;
-	private int firstBlock, size;
+	private String name;
+	private int firstBlock, size, readChars;
 	
 	protected Lock lock;
 	
-	File(String fullName, int firstBlock, int size) throws Exception {
-		this.name = fullName.substring(0, fullName.length()-4);
-		this.extension = fullName.substring(fullName.length()-3, fullName.length());
+	File(String name, int firstBlock, int size) throws Exception {
+		this.name = name;
 		if(firstBlock < 0 || firstBlock > (FAT.BLOCKS-1)) {
 			throw new Exception("Niepoprawny nr bloku");
 		}
@@ -26,6 +25,7 @@ public class File {
 			this.size = size;
 		}
 		lock = new Lock("");
+		readChars = 0;
 	}
 	
 	protected File() {
@@ -36,32 +36,29 @@ public class File {
 	
 	protected File(File file) {
 		this.name = file.name;
-		this.extension = file.extension;
 		this.size = file.size;
 		this.firstBlock = file.firstBlock;
 	}
 	
-	protected int GetFirstBlock() {
-		return this.firstBlock;
-	}
+	protected int GetFirstBlock() { return this.firstBlock; }
 	
-	protected int SetFirstBlock(int firstBlock) {
-		if(firstBlock < 0 || firstBlock > (FAT.BLOCKS-1)) return BLOCK_ERROR;
+	protected int GetReadChars() { return readChars; }
+	
+	protected void SetFirstBlock(int firstBlock) throws Exception {
+		if(firstBlock < 0 || firstBlock > (FAT.BLOCKS-1)) throw new Exception("BLAD PRZYDZIALU BLOKU");
 		else {
 			this.firstBlock = firstBlock;
-			return firstBlock;
 		}
 	}
 	
-	protected void SetSize(int size) {
-		this.size = size;
+	protected void SetReadChars(int x) throws Exception {
+		if(x < 0 || (readChars+x) > size) throw new Exception("Blad wskaznika odczytu pliku");
+		else readChars += x;
 	}
 	
-	public String GetFullName(){
-		return this.name + '.' + this.extension;
-	}
+	protected void SetSize(int size) { this.size = size; }
 	
-	public int GetSize() {
-		return this.size;
-	}
+	public String GetFullName() { return this.name; }
+	
+	public int GetSize() { return this.size; }
 }

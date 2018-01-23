@@ -10,10 +10,12 @@ package cpudispatcher;
  * @author Osa
  */
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import processesmanagement.Process;
 
         
-public class CPUDispatcher {
+public abstract class CPUDispatcher implements Runnable{
 
     public static PriorityQueues queues = new PriorityQueues();
     
@@ -21,11 +23,22 @@ public class CPUDispatcher {
     public void addProcessToQueues(Process p){
         queues.addProcess(p);
     }
+    
+                @Override
+                public void run() {
+        try {
+            this.startDispatcher();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(CPUDispatcher.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                }
+            
     //Metoda startująca działanie algorytmu
     public void startDispatcher() throws InterruptedException{
+        System.out.println("---------------------------------------------");
      while (true){
             queues.printPriorities();
-            System.out.println("---------------------------------------------");
+            //System.out.println("---------------------------------------------");
             for(int i = 31; i >= 0; i--){
                 if (queues.getQueue(i).isEmpty() != true){
                     Process exec = (Process) queues.getQueue(i).remove();
@@ -35,10 +48,10 @@ public class CPUDispatcher {
                     //Thread.sleep(1000);
                     exec.SetState(4);
                     System.out.println("Zmieniono stan na " + +exec.GetState());
-                    System.out.println("---------------------------------------------");
+                    //System.out.println("---------------------------------------------");
                      
                     queues.aging();
-                    System.out.println("---------------------------------------------");
+                    //System.out.println("---------------------------------------------");
                     queues.printPriorities();
                     
                 }
