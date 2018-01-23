@@ -105,9 +105,9 @@ import syncMethod.Lock;
               virtualMemory.loadProcess("p1", "Silnia.txt", 46);*/
               if (processManagement.FindProcessWithName(arr[1]) == -1) {
                 try {  
-                    virtualMemory.loadProcess(arr[1], arr[2] + ".txt", Integer.parseInt(arr[4]));
                     processManagement.NewProcess_XC(arr[1], Integer.parseInt(arr[3]));
                     processManagement.SetHowManyPagesWithID(id,((Integer.parseInt(arr[4]) - 1) / 16 + 1));
+                    virtualMemory.loadProcess(arr[1], arr[2] + ".txt", Integer.parseInt(arr[4]));
                     id++;
                 }
                 catch (Exception exception) {
