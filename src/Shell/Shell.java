@@ -319,7 +319,8 @@ import syncMethod.Lock;
 			
 		 }catch(Exception e)
                 {
-                    e.printStackTrace();
+                    System.out.println("Wystapil blad! " + e.getMessage());
+                    //e.printStackTrace();
                 }
 		}
                         System.out.println("Zegnam");
