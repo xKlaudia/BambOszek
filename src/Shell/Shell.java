@@ -374,8 +374,7 @@ import syncMethod.Lock;
 			
 		 }catch(Exception e)
                 {
-                    System.out.println("Wystapil blad! " + e.getMessage());
-                    //e.printStackTrace();
+                    e.printStackTrace();
                 }
 >>>>>>> f8443c6b9883c497ac3294af62337e47cb36f857
 		}
