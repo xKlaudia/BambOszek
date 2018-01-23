@@ -490,8 +490,9 @@ import syncMethod.Lock;
                	                                processManagement.getProcess(currentProcess).printInformations();
                					 break;}
                				case("echo"):{
+               					System.out.println("echo: "+ run[1]);
                				 String content = "";
-               					for(int z=2;z<run.length;z++) { content=content+' '+run[z];}
+               					for(int z=1;z<run.length;z++) { content=content+' '+run[z];}
                					System.out.println(content); break;
                			 }
                	                         
