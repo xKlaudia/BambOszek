@@ -37,15 +37,16 @@ public class Lock
 	
 	public void lock(Process procesWhichCloses) {
 		if(!isState()) {
-			//zamek jest otwarty, proces zamyka zamek i rusza dalej
-			setState(true);
-			this.lockingProces = procesWhichCloses;
+                    //zamek jest otwarty, proces zamyka zamek i rusza dalej
+                    setState(true);
+                    this.lockingProces = procesWhichCloses;
 		} else {
+                    if (!(lockingProces.GetName().equals(procesWhichCloses.GetName()) || queueWaitingProcesses.contains(procesWhichCloses))) {
 			//zamek jest zamkniety wiec proces wedruje do kolejki i ustawiany jest jego bit blocked
 			queueWaitingProcesses.offer(procesWhichCloses);
 			procesWhichCloses.SetLocked();
 			procesWhichCloses.SetState(3);
-			
+                    }
 		}
 	}
 	
