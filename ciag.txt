@@ -1,0 +1,13 @@
+MV A 0;
+MV B 5;
+MV C 0;
+MV D 1;
+AD C D;
+MV A D;
+MV D C;
+MV C A;
+SB B 1;
+JX B 32;
+WM 105 A;
+RM 105 4;
+EX;

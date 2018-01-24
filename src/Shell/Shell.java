@@ -152,7 +152,6 @@ import syncMethod.Lock;
 				 		System.out.println("wykonaj kolejne polecenie z pliku");
 		
 				 		//	interpreter.RUN(processManagement.);
-                        processManagement.CheckStates();
                         /*if(processManagement.GetStateWithName(currentProcess)==3)
                         {
                             lock.addToQueue(processManagement.getProcess(currentProcess));
