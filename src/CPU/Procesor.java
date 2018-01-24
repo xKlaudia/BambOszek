@@ -1,4 +1,4 @@
-package Interpreter;
+package CPU;
 
 public class Procesor {
     private int A=0,B=0,C=0,D=0;
