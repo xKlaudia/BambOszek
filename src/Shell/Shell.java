@@ -16,6 +16,8 @@ import fileSystem.FAT;
 import Interpreter.Interpreter;
 import java.io.BufferedWriter;
 import syncMethod.Lock;
+import CPU.Procesor;
+import CPU.cpu;
 
 	public class Shell {
 	
@@ -25,6 +27,7 @@ import syncMethod.Lock;
 	    public interprocessCommunication interprocessCommunication;
 	    public Lock lock;
 		public  FAT fat;
+                
         private int id=1;
         public static String currentProcess = "";
         public static int counter = 0; //liczy kwanty wykonywanych rozkazów

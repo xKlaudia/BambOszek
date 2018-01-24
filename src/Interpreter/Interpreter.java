@@ -1,5 +1,7 @@
 package Interpreter;
 
+import CPU.Procesor;
+import CPU.cpu;
 import java.util.LinkedList;
 import fileSystem.FAT;
 import fileSystemExceptions.*;
@@ -25,6 +27,7 @@ public class Interpreter {
     //private bool Flag_E = 0;      //Flaga do bledu wykonywania rozkazu
     private Procesor procesor;
     private CPUDispatcher processor;
+    private cpu cpu;
     private VirtualMemory memory;
     private interprocessCommunication communication;
     private ProcessesManagement manager;
