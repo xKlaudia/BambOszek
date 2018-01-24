@@ -246,7 +246,7 @@ public class Interpreter {
             }
         }
         
-        if(CMD.equals("WF")) {
+        if(CMD.equals("WF") || CMD.equals("CFC")) {
         	P2 = Instruction.substring(4+P1.length(), Instruction.length()-1);
         }
 
