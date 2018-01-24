@@ -228,12 +228,14 @@ public class FAT {
 			int fileSize = GetFile(fullName).GetSize();
 			int readChars = 0;
 	                    
-	                    if((howManyChars + currentReadChars) > fileSize)
-	                        throw new Exception("Liczba znakow do przeczytania przekracza rozmiar pliku");
-	                    while(currentReadChars >= BLOCK_SIZE) {
-	                        blockToRead = FAT[blockToRead];
-	                        currentReadChars -= BLOCK_SIZE;
-	                    }
+            if((howManyChars + currentReadChars) > fileSize)
+                throw new Exception("Liczba znakow do przeczytania przekracza rozmiar pliku");
+           
+            while(currentReadChars >= BLOCK_SIZE) {
+                blockToRead = FAT[blockToRead];
+                currentReadChars -= BLOCK_SIZE;
+            }
+            
 			do {
 				for(int i=currentReadChars; i<BLOCK_SIZE && fileSize!=0 && howManyChars!=0; i++) {
 					content += disk[i+blockToRead*BLOCK_SIZE];
