@@ -17,7 +17,7 @@ public class interprocessCommunication
     //-------------------------ZMIENNE STATYCZNE-------------------------------
 
     private static int FIFO_LINES = -1;
-    private static String FILE_NAME = "communcation.txt";
+    private static final String FILE_NAME = "communcation.txt";
 
     //-------------------------ZMIENNE-----------------------------------------
 
@@ -39,7 +39,7 @@ public class interprocessCommunication
     public void write(String message, Process process)
     {
         
-        
+       
        lock.lock(process);
         try
         {
@@ -69,11 +69,11 @@ public class interprocessCommunication
         {
             System.out.println("Error: " + ex.getMessage());
         }
-        lock.unlock(process);
+        //lock.unlock(process);
     }
 
     //zczytuje wiadomość z pliku
-    public String read(String process)
+    public String read(Process process)
     {
 
         //lock.lock(process);
@@ -91,7 +91,7 @@ public class interprocessCommunication
             }
             reader.close();
             out.close();
-            //lock.unlock(process);
+            lock.unlock(process);
 
             if(messages_array.isEmpty())
             {

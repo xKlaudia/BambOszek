@@ -1,2 +1,2 @@
-XS lol 1;
+XS lol p2;
 EX;

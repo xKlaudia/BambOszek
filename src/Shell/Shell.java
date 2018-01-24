@@ -594,7 +594,8 @@ import syncMethod.Lock;
                     e.printStackTrace();
                 }
 		
-                        //System.out.println("Zegnam");
-                }
+                 }
+                        System.out.println("Zegnam");
+
 		}}
 		
