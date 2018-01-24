@@ -245,6 +245,7 @@ import syncMethod.Lock;
                          }
                          else System.out.println("You cannot delete Idle process!");
 						 }
+                                                 
 						 break;
 					 } //zabija proces po id
 			 
