@@ -34,7 +34,7 @@ public class FAT {
 		}
 	}
         
-	public boolean AppendToFile(String fullName, String content) throws Exception {
+	public boolean AppendToFile(String fullName, String content) throws Exception, OutOfBlocksException {
 		if(!DoesFileExist(fullName)) throw new Exception("Nie znaleziono pliku");
 		else {
 			int contentSize;
@@ -100,7 +100,7 @@ public class FAT {
 		}
 	}
 	
-	public boolean CreateEmptyFile(String fullName) throws Exception {
+	public boolean CreateEmptyFile(String fullName) throws Exception, IllegalFileNameException, OutOfBlocksException {
 		if(!CheckFileName(fullName)) {
 			throw new IllegalFileNameException("Podano nieprawidlowa nazwe. Nazwa musi zawierac 1 do 8 znakow (male, duze litery i cyfry) + kropke i nazwe rozszerzenia (txt)");
 		}
@@ -121,7 +121,7 @@ public class FAT {
 		return true;
 	}
 		
-	public boolean CreateNewFile(String fullName, String content) throws Exception {
+	public boolean CreateNewFile(String fullName, String content) throws OutOfBlocksException, Exception, IllegalFileNameException {
 		if(!CheckFileName(fullName)) {
 			throw new IllegalFileNameException("Podano nieprawidlowa nazwe. Nazwa musi zawierac 1 do 3 znakow (male, duze litery i cyfry) + kropke i nazwe rozszerzenia (txt)");
 		}
@@ -133,8 +133,11 @@ public class FAT {
 				NewFileRecord(fullName, content);
 				RefreshSize(fullName);
 			}
-			catch(Exception e) {
-				throw e;
+			catch(OutOfBlocksException ex) {
+				throw ex;
+			}
+			catch(Exception ex2) {
+				throw ex2;
 			}
 		}
 		return true;
@@ -223,6 +226,7 @@ public class FAT {
 			int blockToRead = FilesFirstBlock(fullName);
 			String content = "";
 			int fileSize = GetFile(fullName).GetSize();
+			int readChars = 0;
 	                    
 	                    if((howManyChars + currentReadChars) > fileSize)
 	                        throw new Exception("Liczba znakow do przeczytania przekracza rozmiar pliku");
@@ -231,15 +235,18 @@ public class FAT {
 	                        currentReadChars -= BLOCK_SIZE;
 	                    }
 			do {
-				for(int i=0; i<BLOCK_SIZE && fileSize!=0 && howManyChars!=0; i++) {
+				for(int i=currentReadChars; i<BLOCK_SIZE && fileSize!=0 && howManyChars!=0; i++) {
 					content += disk[i+blockToRead*BLOCK_SIZE];
 					fileSize--;
-	                                    howManyChars--;
+	                howManyChars--;
+	                readChars++;
 				}
 				if(FAT[blockToRead] != LAST_BLOCK && fileSize != 0 && howManyChars!=0) {
 					blockToRead = FAT[blockToRead];
 				}
 			} while (howManyChars != 0);
+			
+			GetFile(fullName).SetReadChars(readChars);
 			return content;
 	    }
         else throw new Exception("Plik nie istnieje");
@@ -351,7 +358,7 @@ public class FAT {
 		return CountFreeBlocks() * BLOCK_SIZE;
 	}
 	
-	private int NewFileRecord(String fullName, String content) throws Exception {
+	private int NewFileRecord(String fullName, String content) throws OutOfBlocksException, Exception {
 		int freeBlock = FindFreeBlock();
 		int firstBlock = freeBlock;
 		int fileSize = content.length();

@@ -243,9 +243,13 @@ public class Interpreter {
             }
             else {
                 break;
-                }
-
+            }
         }
+        
+        if(CMD.equals("WF")) {
+        	P2 = Instruction.substring(4+P1.length(), Instruction.length()-1);
+        }
+
         CCKCounter++;
 
         boolean What = CheckP2(P2);
@@ -302,9 +306,8 @@ public class Interpreter {
             		filesystem.CloseFile(P1, Running);
             	}
             	catch(Exception ex2) {
-            		//System.out.println("BLAD ZAMYKANIA PLIKU: " + ex2.getMessage());
-                        ex2.printStackTrace();
-            		//Running.SetState(2);
+            		System.out.println("BLAD ZAMYKANIA PLIKU: " + ex2.getMessage());
+                    //ex2.printStackTrace();
             	}
             	break;
             }
@@ -329,22 +332,24 @@ public class Interpreter {
         		try {
         			filesystem.CreateNewFile(P1,P2);
         		}
-        		catch (Exception ex) {
-        			System.out.println("Blad: " + ex.getMessage());
+        		catch(IllegalFileNameException ex) {
+        			System.out.println("BLAD NAZWY: " + ex.getMessage());
         		}
-            	try {
-        			filesystem.CreateNewFile(P1,P2);
+        		catch(OutOfBlocksException ex2) {
+        			System.out.println("BLAD PAMIECI: " + ex2.getMessage());
         		}
-        		catch (Exception ex) {
-        			System.out.println("Blad: " + ex.getMessage());
+        		catch(Exception ex3) {
+        			System.out.println("BLAD TYPU NIEZDEFINIOWANEGO: " + ex3.getMessage());
         		}
-            
                 break;   
 
 
             case "WF": // Write File
         		try {
         			filesystem.AppendToFile(P1, P2);
+        		}
+        		catch(OutOfBlocksException ex) {
+        			System.out.println("BLAD PAMIECI: " + ex.getMessage());
         		}
         		catch(Exception ex2) {
         			System.out.println("BLAD DOPISYWANIA: " + ex2.getMessage());
