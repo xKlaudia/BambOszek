@@ -588,16 +588,13 @@ import syncMethod.Lock;
                			 
                		 }
 
-		
-			System.out.println("System zakonczyl dzialanie");
-			
 		 }}
 		 catch(Exception e)
                 {
                     e.printStackTrace();
                 }
 		
-                        System.out.println("Zegnam");
+                        //System.out.println("Zegnam");
                 }
 		}}
 		
