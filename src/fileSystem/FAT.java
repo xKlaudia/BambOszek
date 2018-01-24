@@ -82,7 +82,7 @@ public class FAT {
 		return true;
 	}
 	
-	public void checkLocks(Process process) {
+	public void CheckLocks(Process process) {
 	    for (int i = 0; i < mainCatalog.size(); i++) {
 	        mainCatalog.get(i).lock.removeProcess(process);
 	    }
