@@ -49,9 +49,9 @@ public class Process {
 		System.out.println("state - " + pcb.ProcessState);
 		System.out.println("base priority - " + pcb.BaseProcessPriority);
 		System.out.println("current priority - " + pcb.CurrentProcessPriority);
-		System.out.println("waiting time - " + pcb.howLongWaiting);
-                System.out.println("when came to list - " + pcb.whenCameToList);
-		System.out.println("lock state - " + pcb.locked);
+		//System.out.println("waiting time - " + pcb.howLongWaiting);
+                //System.out.println("when came to list - " + pcb.whenCameToList);
+		//System.out.println("lock state - " + pcb.locked);
                 System.out.println("first page number - " + pcb.firstPageNumber);
 		System.out.println("number of pages - " + pcb.howManyPages);
                 System.out.println("received message - " + pcb.receivedMsg);
@@ -59,7 +59,7 @@ public class Process {
 		System.out.println("Register B - " + pcb.B);
 		System.out.println("Register C - " + pcb.C);
 		System.out.println("Register D - " + pcb.D);
-		System.out.println("done command counter - " + pcb.commandCounter);
+		System.out.println("command counter - " + pcb.commandCounter);
 	}
 
 	public int GetID() 

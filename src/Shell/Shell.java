@@ -152,7 +152,7 @@ import CPU.cpu;
 		            
 		            case("go"):{
 
-				 		System.out.println("wykonaj kolejne polecenie z pliku");
+				 		//System.out.println("wykonaj kolejne polecenie z pliku");
 		
 				 		//	interpreter.RUN(processManagement.);
                         /*if(processManagement.GetStateWithName(currentProcess)==3)
