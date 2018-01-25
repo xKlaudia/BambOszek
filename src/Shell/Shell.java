@@ -452,8 +452,8 @@ import CPU.cpu;
                			 	} //informacje o procesie po id
                			 
                			 	case("pn"):{if(run[1]!=null) {
-               			 		processManagement.getProcess(run[1]);
                			 		System.out.println("dane procesu o nazwie: "+run[1]);}
+                                                processManagement.getProcess(run[1]).printInformations();
                			 		break;
                			 	} // proces po nazwie
                			
