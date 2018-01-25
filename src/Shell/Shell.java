@@ -467,7 +467,7 @@ import CPU.cpu;
                			 
                			 	case("pn"):{if(run[1]!=null) {
                			 		System.out.println("dane procesu o nazwie: "+run[1]);}
-                                                processManagement.getProcess(arr[1]).printInformations();
+                                                processManagement.getProcess(run[1]).printInformations();
                			 		break;
                			 	} // proces po nazwie
                			
