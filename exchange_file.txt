@@ -1,1 +1,1 @@
-JP 0;           CE pr1.txt; OF pr1.txt; WF pr1.txt lubieplackibosapyszneismaczne; RF pr1.txt; WF pr1.txt heszki heheszki; RF pr1.txt 5; RF pr1.txt 9; CF pr1.txt; EX;                                                           OF pr1.txt; RF pr1.txt 6; RF pr1.txt 15; RF pr1.txt 32; CF pr1.txt; EX;                                                                                                                                         
+JP 0;           

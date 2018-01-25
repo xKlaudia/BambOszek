@@ -94,7 +94,7 @@ public class FAT {
 			for(File file : mainCatalog) {
 				if(file.GetFullName().equals(fullName)) {
 					file.lock.unlock(process);
-					file.SetReadChars(0);
+					file.ResetReadChars();
 				}
 			}
 		}
@@ -146,6 +146,9 @@ public class FAT {
 	public void DeleteFile(String fullName) throws Exception {
 		if(!DoesFileExist(fullName)) throw new Exception("Brak pliku o podanej nazwie");
 		else {
+			for(File file : mainCatalog) {
+				if(file.lock.isState()) throw new Exception("Nie mozna usunac otwartego pliku!");
+			}
 			int blockToDelete = FilesFirstBlock(fullName);
 			int nextBlockToDelete;
 			
@@ -245,6 +248,7 @@ public class FAT {
 				}
 				if(FAT[blockToRead] != LAST_BLOCK && fileSize != 0 && howManyChars!=0) {
 					blockToRead = FAT[blockToRead];
+					currentReadChars = 0;
 				}
 			} while (howManyChars != 0);
 			

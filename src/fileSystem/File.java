@@ -56,6 +56,8 @@ public class File {
 		else readChars += x;
 	}
 	
+	protected void ResetReadChars() { readChars = 0; }
+	
 	protected void SetSize(int size) { this.size = size; }
 	
 	public String GetFullName() { return this.name; }
