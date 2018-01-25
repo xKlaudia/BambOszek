@@ -188,14 +188,6 @@ import CPU.cpu;
                         
 	                    break;
 	            	}
-		 	
-					 case("df"):
-					 {
-						 fat.PrintDisk();
-						 System.out.println("wyswietlanie dysku: ");
-						 break;
-					 }
-		 
 		 
 					 case("pi"):{if(arr[1]!=null)
 					 {
@@ -315,7 +307,8 @@ import CPU.cpu;
 			 
 			 
 					//-------------------------------------------------PLIKI I KATALOGI
-                    case("pd"): { 		
+                    case("df"): { 	
+                    	System.out.println("ZAWARTOSC DYSKU: ");
                     	fat.PrintDisk();
 						break;
 					}
@@ -451,13 +444,6 @@ import CPU.cpu;
        		                    }
        	                        break;
                			 	}
-              
-               			 	case("df"):{
-               			 		fat.PrintDisk();
-               			 		System.out.println("wyswietlanie dysku: ");
-               			 		break;
-               			 	}
-               			 
                			 
                			 	case("pi"):{if(run[1]!=null) {
                			 		int id = Integer.parseInt(run[1]);processManagement.printProcessInformations(id);
@@ -557,12 +543,12 @@ import CPU.cpu;
                				 
                				 
                				//-------------------------------------------------PLIKI I KATALOGI
-               				case("pd"): { 		
+               				case("df"): { 		
                					fat.PrintDisk();
                					break;
                				}
-               				case("smc"): {
-               					System.out.println("ZAWARTOSC DYSKU: ");
+               				case("ls"): {
+               					System.out.println("ZAWARTOSC GLOWNEGO KATALOGU: ");
                					 fat.ShowMainCatalog();
                					 break;
                				}
@@ -571,7 +557,7 @@ import CPU.cpu;
                						 fat.ShowFileInfo(run[1]);
                					 }
                					 catch(Exception ex) {
-               						 System.out.println("BLAD OTWIERANIA PLIKU " + ex.getMessage());
+               						 System.out.println("BLAD WYSWIETLANIA INFO: " + ex.getMessage());
                					 }
                					 break;
                				}
@@ -592,12 +578,12 @@ import CPU.cpu;
                					} 
                					break;
                				}
-               				case("cat"):{
+               				/*case("cat"):{
                					if(run[1]!=null) {
                						System.out.println(fat.GetFilesContent(run[1]));
                						System.out.println("wyswietlam zawartosc pliku o nazwie: "+run[1]);}
                						break;
-               				}
+               				}*/
                				case("find"):{if(run[1]!=null) {
                					Boolean exist = fat.DoesFileExist(run[1]);
                				    	if(exist==true) System.out.println("Plik istnieje");
