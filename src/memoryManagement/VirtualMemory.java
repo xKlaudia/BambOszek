@@ -16,7 +16,6 @@ public class VirtualMemory {
     private Queue<SecondChanceElement> secondChance = new LinkedList<>();
     private ExchangeFile exchangeFile = new ExchangeFile();
     
-    
     /*Konstruktor*/
     public VirtualMemory() throws IOException {
         //Inicjalizacja pamieci wirtualnej
